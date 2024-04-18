@@ -2,18 +2,392 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
+  <groupId>com.xiaosi</groupId>
   <artifactId>dss</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <version>1.0</version>
+  <packaging>pom</packaging>
 
   <name>dss</name>
   <url>http://maven.apache.org</url>
 
   <properties>
+    <revision>2.0</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>17</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+
+    <spring-boot.version>3.2.3</spring-boot.version>
+    <spring-cloud.version>2023.0.0</spring-cloud.version>
+    <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
+    <jasypt.version>3.0.5</jasypt.version>
+    <spring-boot-admin.version>3.2.2</spring-boot-admin.version>
+    <jaxb.version>2.3.5</jaxb.version>
+    <easyexcel.version>3.3.4</easyexcel.version>
+
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+    <lombok.version>1.18.30</lombok.version>
+    <hutool.version>5.8.26</hutool.version>
+
+    <docker.plugin.version>0.32.0</docker.plugin.version>
+    <docker.host>http://192.168.0.100:2375</docker.host>
+    <docker.registry>registry.cn-shanghai.aliyuncs.com</docker.registry>
+    <docker.namespace>pig4cloud</docker.namespace>
+    <docker.username>username</docker.username>
+    <docker.password>password</docker.password>
+
+    <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <git.commit.plugin>6.0.0</git.commit.plugin>
+    <spring.checkstyle.plugin>0.0.39</spring.checkstyle.plugin>
+
+
+    <spring.authorization.version>1.2.2</spring.authorization.version>
+    <screw.version>0.0.3</screw.version>
+    <captcha.version>2.2.3</captcha.version>
+    <aws.version>1.12.261</aws.version>
+    <velocity.version>2.3</velocity.version>
+    <velocity.tool.version>3.1</velocity.tool.version>
+    <configuration.version>1.10</configuration.version>
+    <swagger.fox.version>3.0.0</swagger.fox.version>
+    <xxl-job.version>2.4.0</xxl-job.version>
+
+    <testng.version>7.1.0</testng.version>
+    <commons-lang3>3.9</commons-lang3>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
+    </dependency>
+    <!--配置文件处理器-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <!--配置文件加解密-->
+    <dependency>
+      <groupId>com.github.ulisesbocchio</groupId>
+      <artifactId>jasypt-spring-boot-starter</artifactId>
+      <version>${jasypt.version}</version>
+    </dependency>
+    <!--监控-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <!--监控客户端-->
+    <dependency>
+      <groupId>de.codecentric</groupId>
+      <artifactId>spring-boot-admin-starter-client</artifactId>
+      <version>${spring-boot-admin.version}</version>
+    </dependency>
+    <!--Lombok-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+      <version>${lombok.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
+      <version>${hutool.version}</version>
+    </dependency>
+    <!-- JAVA 17 -->
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>${jaxb.version}</version>
+    </dependency>
+    <!--测试依赖-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3}</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <!--pig 公共版本定义-->
+      <dependency>
+        <groupId>com.xiaosi</groupId>
+        <artifactId>bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- spring boot 依赖 -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- spring cloud 依赖 -->
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- spring cloud alibaba 依赖 -->
+      <dependency>
+        <groupId>com.alibaba.cloud</groupId>
+        <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+        <version>${spring-cloud-alibaba.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <finalName>${project.name}-${revision}</finalName>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+          <include>**/*.properties</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <filtering>true</filtering>
+        <excludes>
+          <exclude>**/*.xlsx</exclude>
+          <exclude>**/*.xls</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <filtering>false</filtering>
+        <includes>
+          <include>**/*.xlsx</include>
+          <include>**/*.xls</include>
+        </includes>
+        <!--<targetPath>./</targetPath>-->
+      </resource>
+      <resource>
+        <directory>${project.basedir}/src/main/webapp</directory>
+        <includes>
+          <include>WEB-INF/**.xml</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <configuration>
+            <includeSystemScope>true</includeSystemScope>
+            <finalName>${project.build.finalName}</finalName>
+            <layers>
+              <enabled>true</enabled>
+            </layers>
+            <excludes>
+              <exclude>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+              </exclude>
+            </excludes>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>repackage</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>io.fabric8</groupId>
+          <artifactId>docker-maven-plugin</artifactId>
+          <version>${docker.plugin.version}</version>
+          <configuration>
+            <!-- Docker Remote Api-->
+            <dockerHost>${docker.host}</dockerHost>
+            <!-- Docker 镜像私服-->
+            <registry>${docker.registry}</registry>
+            <!-- 认证信息-->
+            <authConfig>
+              <push>
+                <username>${docker.username}</username>
+                <password>${docker.password}</password>
+              </push>
+            </authConfig>
+            <images>
+              <image>
+                <!-- 镜像名称： 172.17.0.111/library/pig-gateway:2.6.3-->
+                <name>${docker.registry}/${docker.namespace}/${project.name}:${project.version}</name>
+                <build>
+                  <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                </build>
+              </image>
+            </images>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <!-- 统一 revision 版本 -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>${flatten-maven-plugin.version}</version>
+        <configuration>
+          <flattenMode>resolveCiFriendliesOnly</flattenMode>
+          <updatePomFile>true</updatePomFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <parameters>true</parameters>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <!-- This is needed when using Lombok 1.18.16 and above -->
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok-mapstruct-binding</artifactId>
+              <version>${lombok-mapstruct-binding.version}</version>
+            </path>
+            <!-- Mapstruct should follow the lombok path(s) -->
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <nonFilteredFileExtensions>
+            <!-- 过滤后缀为如下*的证书文件 -->
+            <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+            <nonFilteredFileExtension>xls</nonFilteredFileExtension>
+            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+            <nonFilteredFileExtension>cer</nonFilteredFileExtension>
+            <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+            <nonFilteredFileExtension>py</nonFilteredFileExtension>
+            <nonFilteredFileExtension>keystore</nonFilteredFileExtension>
+          </nonFilteredFileExtensions>
+        </configuration>
+      </plugin>
+      <!--打包jar 与git commit 关联插件-->
+      <plugin>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>${git.commit.plugin}</version>
+        <executions>
+          <execution>
+            <id>get-the-git-infos</id>
+            <phase>initialize</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <failOnNoGitDirectory>false</failOnNoGitDirectory>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <!--因为项目定制了jackson的日期时间序列化/反序列化格式，因此这里要进行配置,不然通过management.info.git.mode=full进行完整git信息监控时会存在问题-->
+          <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>
+          <includeOnlyProperties>
+            <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+            <includeOnlyProperty>^git.commit.(id|message|time).*$</includeOnlyProperty>
+          </includeOnlyProperties>
+        </configuration>
+      </plugin>
+      <!--
+          代码格式插件，默认使用spring 规则，可运行命令进行项目格式化：./mvnw spring-javaformat:apply 或 mvn spring-javaformat:apply，可在IDEA中安装插件以下插件进行自动格式化：
+          https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin
+      -->
+      <plugin>
+        <groupId>io.spring.javaformat</groupId>
+        <artifactId>spring-javaformat-maven-plugin</artifactId>
+        <version>${spring.checkstyle.plugin}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <inherited>true</inherited>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <!-- 环境标识，需要与配置文件的名称相对应 -->
+        <profiles.active>dev</profiles.active>
+        <nacos.username>nacos</nacos.username>
+        <nacos.password>nacos</nacos.password>
+        <nacos.addr>127.0.0.1:8848</nacos.addr>
+        <nacos.namespace>public</nacos.namespace>
+        <nacos.group>css</nacos.group>
+        <!-- 本地开发环境 -->
+        <env>dev</env>
+      </properties>
+      <activation>
+        <!-- 默认环境 -->
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+  </profiles>
+
 </project>
