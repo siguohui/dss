@@ -4,11 +4,14 @@
 
   <groupId>com.xiaosi</groupId>
   <artifactId>dss</artifactId>
-  <version>1.0</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
 
   <name>dss</name>
   <url>http://maven.apache.org</url>
+  <modules>
+    <module>common</module>
+  </modules>
 
   <properties>
     <revision>2.0</revision>
