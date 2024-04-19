@@ -36,10 +36,9 @@
         <dynamic-ds.version>4.3.0</dynamic-ds.version>
         <sms.version>3.0.0</sms.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <druid.version>1.2.20</druid.version>
         <hutool.version>5.8.26</hutool.version>
         <shardingsphere.version>5.4.1</shardingsphere.version>
-
-
 
         <seata.version>1.7.0</seata.version>
         <asm.version>7.1</asm.version>
@@ -55,6 +54,11 @@
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
+                <version>${druid.version}</version>
             </dependency>
             <!--springdoc -->
             <dependency>
