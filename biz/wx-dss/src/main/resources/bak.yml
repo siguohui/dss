@@ -1,0 +1,121 @@
+debug: true
+logging:
+  level:
+    root: debug
+server:
+  port: 8080
+
+spring:
+  datasource:
+    dynamic:
+      druid:
+        #     配置初始化大小、最小、最大线程数
+        initialSize: 5
+        minIdle: 5
+        #     CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+        maxActive: 20
+        #     最大等待时间，内网：800，外网：1200（三次握手1s）
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        #     配置一个连接在池中最大空间时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1
+        testWhileIdle: true
+        #     设置从连接池获取连接时是否检查连接有效性，true检查，false不检查
+        testOnBorrow: true
+        #     设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+        testOnReturn: true
+        #     可以支持PSCache（提升写入、查询效率）
+        poolPreparedStatements: true
+        #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        filters: stat,wall,slf4j
+        #     保持长连接
+        keepAlive: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        useGlobalDataSourceStat: true
+        #connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        web-stat-filter:
+          # 是否启用StatFilter默认值true
+          enabled: true
+          # 添加过滤规则
+          url-pattern: /*
+          # 忽略过滤的格式
+          exclusions: /druid/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico
+
+        stat-view-servlet:
+          # 是否启用StatViewServlet默认值true
+          enabled: true
+          # 访问路径为/druid时，跳转到StatViewServlet
+          url-pattern: /druid/*
+          # 是否能够重置数据
+          reset-enable: false
+          # 需要账号密码才能访问控制台，默认为root
+          login-username: druid
+          login-password: druid
+          # IP白名单
+          allow: 127.0.0.1
+          # IP黑名单（共同存在时，deny优先于allow）
+          deny:
+
+
+      #  dynamic主从设置
+      primary: first  #设置默认的数据源或者数据源组,默认值即为master
+      strict: false  #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
+      datasource:
+        first:
+          driver-class-name: org.h2.Driver
+          url: jdbc:h2:tcp://localhost/D:/ProgramFiles/h2database/data/test;MODE=MYSQL;
+          username:
+          password:
+          type: com.alibaba.druid.pool.DruidDataSource
+        second:
+          driver-class-name: org.h2.Driver
+          url: jdbc:h2:tcp://localhost/D:/ProgramFiles/h2database/data/test;MODE=MYSQL;
+          username:
+          password:
+          type: com.alibaba.druid.pool.DruidDataSource
+
+mybatis-plus:
+  # 所有实体类所在包路径
+  type-aliases-package: com.wen3.**.po
+  # mapper.xmml文件路径，多个使用逗号分隔
+  mapper-locations: classpath*:resources/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+
+
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.xiaosi.wx
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+  openapi:
+    title: 测式文档
+    description:
+    email: 8857807@163.com
+    concat: 四国辉
+    url: https://docs.xiaosi.com
+    version: v2.0
+    license: Apache 2.0
+    license-url: https://stackoverflow.com/
+    terms-of-service-url: https://stackoverflow.com/
+    group:
+      test1:
+        group-name: 一个分组
+        api-rule: package
+        api-rule-resources:
+          - com.xiaosi.wx

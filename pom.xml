@@ -53,7 +53,7 @@
     <captcha.version>2.2.3</captcha.version>
     <aws.version>1.12.261</aws.version>
 
-    <plus-generator-version>3.5.3.1</plus-generator-version>
+    <plus-generator-version>3.5.5</plus-generator-version>
     <velocity.version>2.3</velocity.version>
     <velocity.tool.version>3.1</velocity.tool.version>
     <configuration.version>1.10</configuration.version>
