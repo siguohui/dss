@@ -2,6 +2,9 @@ jasypt:
   encryptor:
     password: xiongbangwen
 spring:
+  cache:
+    redis:
+      key-prefix: wx
   data:
     redis:
       host: localhost

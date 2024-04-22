@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,14 @@ public class LoginController {
     @Setter(onMethod_ = @Autowired)
     private StuMapper stuMapper;
 
+    @Cacheable(value = "dept",key = "#name")
     @Operation(summary = "登录接口")
     @GetMapping("/login")
-    public List<Stu> login(){
-        ValueOperations<String, Object> op = redisTemplate.opsForValue();
-        op.set("name","xiaosi");
+    public List<Stu> login(String name){
+//        ValueOperations<String, Object> op = redisTemplate.opsForValue();
+//        op.set("name","xiaosi");
         return stuMapper.selectList(null);
     }
+
+
 }
