@@ -1,6 +1,7 @@
 package com.xiaosi.wx.utils;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class RedisUtil {
 
+    @Qualifier("dssRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
     //=============================common============================

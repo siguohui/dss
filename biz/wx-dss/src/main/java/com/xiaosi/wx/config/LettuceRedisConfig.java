@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.xiaosi.wx.utils.JacksonRedisUtils;
 import com.xiaosi.wx.utils.RedisUtil;
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.*;
@@ -25,9 +27,16 @@ import org.springframework.data.redis.serializer.*;
 @EnableCaching
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(RedisAutoConfiguration.class)
-public class LettuceRedisConfig extends CachingConfigurerSupport {
+public class LettuceRedisConfig extends CachingConfigurerSupport implements BeanClassLoaderAware {
 
-    @Bean
+    private ClassLoader classLoader;
+
+    @Override
+    public void setBeanClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+   /* @Bean
     @ConditionalOnMissingBean(RedisSerializer.class)
     public RedisSerializer<Object> redisSerializer() {
         Jackson2JsonRedisSerializer jdkRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
@@ -37,13 +46,8 @@ public class LettuceRedisConfig extends CachingConfigurerSupport {
         om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         jdkRedisSerializer.setObjectMapper(om);
         return jdkRedisSerializer;
-    }
-
-    /*@Bean
-    @ConditionalOnMissingBean(RedisSerializer.class)
-    public RedisSerializer<Object> redisSerializer() {
-        return new JdkSerializationRedisSerializer();
     }*/
+
     /*@Bean
     @ConditionalOnMissingBean(RedisTemplate.class)
     public RedisTemplate<?, ?> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory, RedisSerializer<Object> redisSerializer) {
@@ -62,38 +66,32 @@ public class LettuceRedisConfig extends CachingConfigurerSupport {
         return redisTemplate;
     }*/
 
-    @Bean
-    @ConditionalOnMissingBean(RedisTemplate.class)
-    public RedisTemplate<?, ?> redisTemplate(LettuceConnectionFactory factory) {
+    @Bean("dssRedisTemplate")
+    public RedisTemplate<?, ?> dssRedisTemplate(LettuceConnectionFactory factory) {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
-        RedisSerializer<String> redisKeySerializer = new StringRedisSerializer();
-        // key 序列化
-        redisTemplate.setKeySerializer(redisKeySerializer);
-        redisTemplate.setHashKeySerializer(redisKeySerializer);
-        // value 序列化
+        /*RedisSerializer<String> redisKeySerializer = new StringRedisSerializer();*/
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
         GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer();
         redisTemplate.setValueSerializer(redisSerializer);
         redisTemplate.setHashValueSerializer(redisSerializer);
-
         redisTemplate.setConnectionFactory(factory);
         redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 
-    /*@Bean
-    public RedisTemplate<?, ?> redisTemplate(LettuceConnectionFactory factory) {
-        RedisTemplate<?,?>redisTemplate = new RedisTemplate<>();
+    @Bean
+    public RedisTemplate<?,?> redisTemplate(LettuceConnectionFactory factory) {
+        RedisTemplate<?,?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
-        RedisSerializer redisSerializer = new StringRedisSerializer();
-        redisTemplate.setKeySerializer(redisSerializer);
-        redisTemplate.setHashKeySerializer(redisSerializer);
-        Jackson2JsonRedisSerializer jdkRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        redisTemplate.setValueSerializer(jdkRedisSerializer);
-        redisTemplate.setHashValueSerializer(jdkRedisSerializer);
-        redisTemplate.afterPropertiesSet();
+        redisTemplate.setKeySerializer( RedisSerializer.string());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
+        RedisSerializer<Object> java = RedisSerializer.java(this.classLoader);
+        redisTemplate.setValueSerializer(java);
+        redisTemplate.setHashValueSerializer(java);
         return redisTemplate;
-    }*/
+    }
 
     @Bean(name = "redisUtil")
     @ConditionalOnBean(RedisTemplate.class)
