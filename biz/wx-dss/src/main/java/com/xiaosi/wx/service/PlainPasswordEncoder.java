@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class PlainPasswordEncoder implements PasswordEncoder {
 
     @Override
