@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import com.xiaosi.wx.page.BasePage;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sgh
@@ -18,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("stu")
-public class Stu implements Serializable {
+public class Stu {
 
     private static final long serialVersionUID = 1L;
 

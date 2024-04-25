@@ -1,14 +1,15 @@
 package com.xiaosi.wx.controller;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xiaosi.wx.annotation.PageX;
 import com.xiaosi.wx.entity.Stu;
 import com.xiaosi.wx.mapper.StuMapper;
+import com.xiaosi.wx.service.StuService;
+import com.xiaosi.wx.vo.StuVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,11 +26,10 @@ import java.util.List;
 @RequestMapping("/stu")
 public class StuController {
 
-    private final StuMapper stuMapper;
+    private final StuService stuService;
 
-    @PageX
-    @GetMapping("/list")
-    public String getList() {
-        return "1";
+    @PostMapping("/list")
+    public List<Stu> getList(@RequestBody StuVo stu) {
+        return stuService.getListPage(stu);
     }
 }

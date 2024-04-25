@@ -1,41 +1,41 @@
 package com.xiaosi.wx.aspect;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xiaosi.wx.annotation.PageX;
-import jakarta.servlet.http.HttpServletRequest;
+import com.github.pagehelper.PageInfo;
+import com.xiaosi.wx.page.BasePage;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import java.util.List;
 
 @Aspect
 @Component
 public class PageAspect {
 
-    @Pointcut("@annotation(com.xiaosi.wx.annotation.PageX)")
+    @Pointcut("@annotation(com.xiaosi.wx.annotation.PageX) || execution(* *..*Service.*Page(..))")
     public void point(){}
 
     @Around("point()")
-    public Object around(ProceedingJoinPoint pjp) throws Throwable {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        String pageNo = request.getParameter("pageNo");
-        String pageSize = request.getParameter("pageSize");
-
-        if (pageSize !=null && pageNo!= null){
-            int page_no = Integer.valueOf(pageNo);
-            int page_size = Integer.valueOf(pageSize);
-            PageHelper.startPage(page_no,page_size);
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object[] args = joinPoint.getArgs();
+        BasePage basePage = null;
+        for (Object param : args) {
+            if (param instanceof BasePage) {
+                basePage = (BasePage) param;
+                break;
+            }
         }
-
-        Object proceed = pjp.proceed();
-        if (proceed instanceof Page){
-            proceed = (Page) proceed;
+        if (basePage != null && basePage.isPage()) {
+            PageHelper.startPage(basePage.getNo(), basePage.getSize());
         }
-
-        System.out.println("环绕后");
-        return proceed;
+        Object returnValue = joinPoint.proceed(args);
+        if (basePage != null && basePage.isPage()) {
+            if (null != returnValue && returnValue instanceof List) {
+                List list = (List) returnValue;
+                PageInfo pageInfo = new PageInfo(list);
+                basePage.setTotal((int) pageInfo.getTotal());
+            }
+        }
+        return returnValue;
     }
 }

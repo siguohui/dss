@@ -1,6 +1,7 @@
 package com.xiaosi.wx.support.advice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.xiaosi.wx.annotation.IgnoreResult;
 import com.xiaosi.wx.annotation.PageX;
@@ -38,7 +39,7 @@ public class RestResponseBodyAdviceHandler implements ResponseBodyAdvice<Object>
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
 
-        if(returnType.hasMethodAnnotation(PageX.class) && !(body instanceof PageInfo) && body instanceof List){
+        if(returnType.hasMethodAnnotation(PageX.class) || ((body instanceof Page) && body instanceof List)){
             body = new PageInfo<>((List<?>) body);
         }
 
