@@ -1,9 +1,11 @@
 package com.xiaosi.wx.mapper;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.xiaosi.wx.model.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-@Mapper
+
+@DS("master")
 public interface SysUserMapper {
     int deleteByPrimaryKey(Integer id);
 

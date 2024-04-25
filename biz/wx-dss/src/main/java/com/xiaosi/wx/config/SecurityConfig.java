@@ -2,21 +2,32 @@ package com.xiaosi.wx.config;
 
 import com.xiaosi.wx.support.sms.SmsAuthenticationProvider;
 import com.xiaosi.wx.support.sms.SmsLoginConfigurer2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.util.AntPathMatcher;
+
+import java.util.Collection;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -25,9 +36,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 //@EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    CustomSecurityMetadataSource customSecurityMetadataSource;
+
+    @Autowired
+    UrlAccessDecisionManager urlAccessDecisionManager;
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        // 使用BCrypt加密密码
+    public PasswordEncoder passwordEncoder() {
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return new BCryptPasswordEncoder();
     }
 
@@ -37,10 +54,58 @@ public class SecurityConfig {
                                                                  AuthenticationFailureHandler failureHandler,
                                                                  AuthenticationEntryPoint entryPoint,
                                                                  @Qualifier("bssSecurityContextRepository") SecurityContextRepository securityContextRepository) throws Exception {
-         http
+        ApplicationContext applicationContext =
+                http.getSharedObject(ApplicationContext.class);
+        http
                 .authorizeHttpRequests(r -> r
 //                        .requestMatchers("/index").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest()
+                                .access((authentication, object) -> {
+                                    //表示请求的 URL 地址和数据库的地址是否匹配上了
+                                    boolean isMatch = true;
+                                    AntPathMatcher antPathMatcher = new AntPathMatcher();
+                                    //获取当前请求的 URL 地址
+                                    String requestURI = object.getRequest().getRequestURI();
+                                    /*List<MenuWithRoleVO> menuWithRole = menuService.getMenuWithRole();
+                                    for (MenuWithRoleVO m : menuWithRole) {
+                                        if (antPathMatcher.match(m.getUrl(), requestURI)) {
+                                            isMatch = true;
+                                            //说明找到了请求的地址了
+                                            //这就是当前请求需要的角色
+                                            List<Role> roles = m.getRoles();
+                                            //获取当前登录用户的角色
+                                            Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
+                                            for (GrantedAuthority authority : authorities) {
+                                                for (Role role : roles) {
+                                                    if (authority.getAuthority().equals(role.getName())) {
+                                                        //说明当前登录用户具备当前请求所需要的角色
+                                                        return new AuthorizationDecision(true);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }*/
+                                    if (!isMatch) {
+                                        //说明请求的 URL 地址和数据库的地址没有匹配上，对于这种请求，统一只要登录就能访问
+                                        if (authentication.get() instanceof AnonymousAuthenticationToken) {
+                                            return new AuthorizationDecision(false);
+                                        } else {
+                                            //说明用户已经认证了
+                                            return new AuthorizationDecision(true);
+                                        }
+                                    }
+                                    return new AuthorizationDecision(true);
+                        })
+//                                .authenticated()
+                       /* .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                            public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
+                                fsi.setSecurityMetadataSource(customSecurityMetadataSource);
+                                fsi.setAccessDecisionManager(urlAccessDecisionManager);
+                                return fsi;
+                            }
+                        })*/
+                )
+
                 .formLogin(f -> f.successHandler(successHandler)
                                 .failureHandler(failureHandler)
                                 .securityContextRepository(securityContextRepository))
@@ -51,6 +116,7 @@ public class SecurityConfig {
                 .exceptionHandling(e->e.authenticationEntryPoint(entryPoint))
                 .headers(h-> h.frameOptions(withDefaults()).disable())
                 .sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 
 
         /*Field field = HttpSecurity.class.getDeclaredField("filterOrders");
@@ -71,6 +137,25 @@ public class SecurityConfig {
         return http.build();
 
     }
+
+   /* @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        ApplicationContext applicationContext =
+                http.getSharedObject(ApplicationContext.class);
+        http.apply(new UrlAuthorizationConfigurer<>(applicationContext))
+                .withObjectPostProcessor(new
+                                                 ObjectPostProcessor<FilterSecurityInterceptor>() {
+                                                     @Override
+                                                     public <O extends FilterSecurityInterceptor> O
+                                                     postProcess(O object) {
+                                                         object.setSecurityMetadataSource(customSecurityMetadataSource);
+                                                         return object;
+                                                     }
+                                                 });
+        http.formLogin()
+                .and()
+                .csrf().disable();
+    }*/
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
