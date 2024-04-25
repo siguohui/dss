@@ -1,17 +1,22 @@
 package com.xiaosi.wx.exception;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xiaosi.wx.pojo.BaseResponse;
 import com.xiaosi.wx.pojo.JsonResult;
 import com.xiaosi.wx.pojo.ResultEnum;
 import com.xiaosi.wx.utils.ResponseUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ElementKind;
 import jakarta.validation.Path;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -24,6 +29,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice
@@ -175,5 +181,35 @@ public class ExceptionHandling {
         //处理异常
         String requestURL = e.getRequestURL();
         return JsonResult.fail(ResultEnum.NO_HANDLER_FOUND, requestURL);
+    }
+
+
+    //1、处理参数验证异常 MethodArgumentNotValidException
+    @SneakyThrows
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public JsonResult handleValidException(HttpServletRequest request, MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+        FieldError firstFieldError = CollectionUtil.getFirst(bindingResult.getFieldErrors());
+        String exceptionStr = Optional.ofNullable(firstFieldError)
+                .map(FieldError::getDefaultMessage)
+                .orElse(StrUtil.EMPTY);
+        log.error("[{}] {} [ex] {}", request.getMethod(),"URL:", exceptionStr);
+        return JsonResult.fail(exceptionStr);
+    }
+
+    // 处理自定义异常:AbstractException
+    @ExceptionHandler(value = {AbstractException.class})
+    public JsonResult handleAbstractException(HttpServletRequest request, AbstractException ex) {
+        String requestURL = "URL地址";
+        log.error("[{}] {} [ex] {}", request.getMethod(), requestURL, ex.toString());
+        return JsonResult.fail(ex.toString());
+    }
+
+    // 兜底处理：Throwable
+    @ExceptionHandler(value = Throwable.class)
+    public JsonResult handleThrowable(HttpServletRequest request, Throwable throwable) {
+//        String requestURL = getUrl(request);
+        log.error("[{}] {} ", request.getMethod(), "URL地址", throwable);
+        return JsonResult.fail(ResultEnum.RESULT_FAIL.getMsg());
     }
 }
