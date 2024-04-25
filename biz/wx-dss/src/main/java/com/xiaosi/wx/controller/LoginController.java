@@ -3,6 +3,7 @@ package com.xiaosi.wx.controller;
 import com.xiaosi.wx.annotation.IgnoreResult;
 import com.xiaosi.wx.entity.Stu;
 import com.xiaosi.wx.mapper.StuMapper;
+import com.xiaosi.wx.pojo.JsonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class LoginController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
-    public String index(String bookName) {
-        return "index";
+    public JsonResult index(String bookName) {
+        return JsonResult.success("index");
     }
 }

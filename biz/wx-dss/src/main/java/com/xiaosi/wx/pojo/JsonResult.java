@@ -13,6 +13,10 @@ public class JsonResult<T> implements Serializable {
     private String msg = "操作成功";
     private T data;
 
+    public static <T> JsonResult<T> success() {
+        return create(true,ResultEnum.RESULT_SUCCESS.getCode(),ResultEnum.RESULT_SUCCESS.getMsg(),null);
+    }
+
     public static <T> JsonResult<T> success(String msg, T data) {
         return create(true,ResultEnum.RESULT_SUCCESS.getCode(),msg,data);
     }
