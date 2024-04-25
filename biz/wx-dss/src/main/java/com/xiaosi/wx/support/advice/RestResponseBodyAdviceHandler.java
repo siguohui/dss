@@ -1,7 +1,9 @@
 package com.xiaosi.wx.support.advice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.pagehelper.PageInfo;
 import com.xiaosi.wx.annotation.IgnoreResult;
+import com.xiaosi.wx.annotation.PageX;
 import com.xiaosi.wx.pojo.JsonResult;
 import com.xiaosi.wx.utils.ResponseUtils;
 import lombok.SneakyThrows;
@@ -14,6 +16,8 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
@@ -33,6 +37,10 @@ public class RestResponseBodyAdviceHandler implements ResponseBodyAdvice<Object>
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
+
+        if(returnType.hasMethodAnnotation(PageX.class) && !(body instanceof PageInfo) && body instanceof List){
+            body = new PageInfo<>((List<?>) body);
+        }
 
         if (returnType.getParameterType().isAssignableFrom(void.class)) {
             return JsonResult.success();

@@ -2,6 +2,7 @@ package com.xiaosi.wx.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xiaosi.wx.annotation.PageX;
 import com.xiaosi.wx.entity.Stu;
 import com.xiaosi.wx.mapper.StuMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public class StuController {
 
     private final StuMapper stuMapper;
 
+    @PageX
     @GetMapping("/list")
-    public PageInfo getList() {
-        PageHelper.startPage(1,10);
-        return new PageInfo(stuMapper.selectList(null));
+    public String getList() {
+        return "1";
     }
 }
