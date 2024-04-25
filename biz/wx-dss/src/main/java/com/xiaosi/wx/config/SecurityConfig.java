@@ -60,13 +60,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(r -> r
 //                        .requestMatchers("/index").permitAll()
                         .anyRequest()
-                                .access((authentication, object) -> {
+                                /*.access((authentication, object) -> {
                                     //表示请求的 URL 地址和数据库的地址是否匹配上了
                                     boolean isMatch = true;
                                     AntPathMatcher antPathMatcher = new AntPathMatcher();
                                     //获取当前请求的 URL 地址
                                     String requestURI = object.getRequest().getRequestURI();
-                                    /*List<MenuWithRoleVO> menuWithRole = menuService.getMenuWithRole();
+                                    *//*List<MenuWithRoleVO> menuWithRole = menuService.getMenuWithRole();
                                     for (MenuWithRoleVO m : menuWithRole) {
                                         if (antPathMatcher.match(m.getUrl(), requestURI)) {
                                             isMatch = true;
@@ -84,7 +84,7 @@ public class SecurityConfig {
                                                 }
                                             }
                                         }
-                                    }*/
+                                    }*//*
                                     if (!isMatch) {
                                         //说明请求的 URL 地址和数据库的地址没有匹配上，对于这种请求，统一只要登录就能访问
                                         if (authentication.get() instanceof AnonymousAuthenticationToken) {
@@ -95,8 +95,8 @@ public class SecurityConfig {
                                         }
                                     }
                                     return new AuthorizationDecision(true);
-                        })
-//                                .authenticated()
+                        })*/
+                                .authenticated()
                        /* .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                             public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
                                 fsi.setSecurityMetadataSource(customSecurityMetadataSource);

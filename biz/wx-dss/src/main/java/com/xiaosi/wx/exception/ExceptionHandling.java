@@ -42,12 +42,12 @@ public class ExceptionHandling {
      * @param e
      * @return
      */
-    @ExceptionHandler
+   /* @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public JsonResult handler(Throwable e) {
+    public JsonResult handler1(Throwable e) {
         log.error(e.getMessage(), e);
         return JsonResult.fail(ResultEnum.BUSY);
-    }
+    }*/
 
     /**
      * 捕获系统中的自定义异常
@@ -59,7 +59,7 @@ public class ExceptionHandling {
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonResult<BaseResponse> handler(ServiceException e) {
+    public JsonResult<BaseResponse> handler2(ServiceException e) {
         //处理异常
         log.warn(e.getMessage(), e);
         return JsonResult.fail(e.getMessage());
@@ -75,7 +75,7 @@ public class ExceptionHandling {
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonResult<BaseResponse> handler(ConstraintViolationException e) {
+    public JsonResult<BaseResponse> handler3(ConstraintViolationException e) {
         //处理异常
         ArrayNode arrayNode = ResponseUtils.objectMapper.createArrayNode();
         e.getConstraintViolations().forEach(constraintViolation -> {
@@ -108,9 +108,9 @@ public class ExceptionHandling {
      * @param e
      * @return
      */
-    @ExceptionHandler
+    /*@ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonResult<BaseResponse> handler(MethodArgumentNotValidException e) {
+    public JsonResult<BaseResponse> handler4(MethodArgumentNotValidException e) {
         //处理异常
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
         ArrayNode arrayNode = ResponseUtils.objectMapper.createArrayNode();
@@ -134,7 +134,7 @@ public class ExceptionHandling {
         }
 
         return JsonResult.fail(ResultEnum.PARAMETER_NOT_VALID.getCode(), msg);
-    }
+    }*/
 
     /**
      * RequestParam 注解中 required = true 的情况拦截
@@ -146,7 +146,7 @@ public class ExceptionHandling {
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonResult<BaseResponse> handler(MissingServletRequestParameterException e) {
+    public JsonResult<BaseResponse> handler5(MissingServletRequestParameterException e) {
         //处理异常
         String parameterName = e.getParameterName();
         String parameterType = e.getParameterType();
@@ -162,7 +162,7 @@ public class ExceptionHandling {
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public JsonResult handler(HttpRequestMethodNotSupportedException e) {
+    public JsonResult handler6(HttpRequestMethodNotSupportedException e) {
         //处理异常
         List<String> supportedMethods = Arrays.asList(e.getSupportedMethods());
         return JsonResult.fail(ResultEnum.METHOD_NOT_SUPPORT, supportedMethods);
@@ -177,7 +177,7 @@ public class ExceptionHandling {
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public JsonResult handler(NoHandlerFoundException e) {
+    public JsonResult handler7(NoHandlerFoundException e) {
         //处理异常
         String requestURL = e.getRequestURL();
         return JsonResult.fail(ResultEnum.NO_HANDLER_FOUND, requestURL);

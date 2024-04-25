@@ -66,7 +66,7 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
         UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
 
         String token = Jwts.builder()
-                .expiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(2).toMillis()))
+                .expiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(10).toMillis()))
                 .claim("userId", userDetails.getUsername())
                 .claim("authorities", String.join(",",AuthorityUtils.authorityListToSet(context.getAuthentication().getAuthorities())))
                 .signWith(key).compact();

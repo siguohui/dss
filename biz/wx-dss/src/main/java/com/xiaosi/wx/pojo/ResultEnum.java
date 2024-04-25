@@ -18,7 +18,8 @@ public enum ResultEnum implements IResult, Serializable {
     METHOD_NOT_SUPPORT(602,"方法不支持"),
     NO_HANDLER_FOUND(603,"接口不存在"),
     PARAMETER_NOT_VALID(604,"参数格式错误"),
-    SYSTEM_ERROR(700, "系统错误");
+    SYSTEM_ERROR(700, "系统错误"),
+    SERIAL_ERROR(701, "序列化失败");
 
     private Integer code;
     private String msg;

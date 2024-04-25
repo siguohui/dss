@@ -26,8 +26,8 @@ public class SysUser implements Serializable, UserDetails {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "username")
-    private String username;
+    @TableField(value = "name")
+    private String name;
 
     /** 用户昵称 **/
     @Schema(description = "用户昵称")
@@ -96,6 +96,11 @@ public class SysUser implements Serializable, UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import com.xiaosi.wx.exception.ServiceException;
 import com.xiaosi.wx.pojo.JsonResult;
+import com.xiaosi.wx.pojo.ResultEnum;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public final class ResponseUtils {
 
             response.getWriter().write(objectMapper.writeValueAsString(jsonResult));
         } catch (IOException e) {
-            throw new ServiceException("序列化失败： {} " + e.getMessage(), e);
+            throw new ServiceException(ResultEnum.SERIAL_ERROR,"序列化失败： {} " + e.getMessage(), e);
         }
     }
 }
