@@ -13,4 +13,9 @@
     <name>biz</name>
     <url>http://maven.apache.org</url>
 
+    <modules>
+        <module>wx-dss</module>
+        <module>ss-dss</module>
+    </modules>
+
 </project>
