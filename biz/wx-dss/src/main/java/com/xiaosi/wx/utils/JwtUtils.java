@@ -17,6 +17,7 @@ import java.util.UUID;
  * @version 1.0
  * @date 2020/9/2 22:28
  */
+@Deprecated
 public class JwtUtils {
 
     private static final String JWT_PAYLOAD_USER_KEY = "user";
@@ -32,25 +33,8 @@ public class JwtUtils {
     public static String generateTokenExpireInMinutes(Object userInfo, PrivateKey privateKey, int expire) {
         return Jwts.builder()
                 .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
-                .setId(createJTI())
-                .setExpiration(new Date(System.currentTimeMillis()+ Duration.ofMinutes(10).toMillis()))
-                .signWith(privateKey, SignatureAlgorithm.RS256)
-                .compact();
-    }
-
-    /**
-     * 私钥加密token
-     *
-     * @param userInfo   载荷中的数据
-     * @param privateKey 私钥
-     * @param expire     过期时间，单位秒
-     * @return JWT
-     */
-    public static String generateTokenExpireInSeconds(Object userInfo, PrivateKey privateKey, int expire) {
-        return Jwts.builder()
-                .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
-                .setId(createJTI())
-                .setExpiration(new Date(System.currentTimeMillis()+ Duration.ofMinutes(10).toMillis()))
+                .id(createJTI())
+                .expiration(new Date(System.currentTimeMillis()+ Duration.ofMinutes(10).toMillis()))
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
     }

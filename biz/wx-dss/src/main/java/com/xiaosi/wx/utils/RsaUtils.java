@@ -20,6 +20,7 @@ import java.util.Base64;
 public class RsaUtils {
 
     private static final int DEFAULT_KEY_SIZE = 2048;
+    private static final String ALGORITHM_RSA = "RSA";
 
     /**从文件中读取公钥
      * @author 赖柄沣 bingfengdev@aliyun.com
@@ -58,10 +59,10 @@ public class RsaUtils {
      * @throws Exception
      * @version 1.0
      */
-    private static PublicKey getPublicKey(byte[] bytes) throws Exception {
+    public static PublicKey getPublicKey(byte[] bytes) throws Exception {
         bytes = Base64.getDecoder().decode(bytes);
         X509EncodedKeySpec spec = new X509EncodedKeySpec(bytes);
-        KeyFactory factory = KeyFactory.getInstance("RSA");
+        KeyFactory factory = KeyFactory.getInstance(ALGORITHM_RSA);
         return factory.generatePublic(spec);
 
     }
@@ -75,10 +76,10 @@ public class RsaUtils {
      * @throws Exception
      * @version 1.0
      */
-    private static PrivateKey getPrivateKey(byte[] bytes) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public static PrivateKey getPrivateKey(byte[] bytes) throws InvalidKeySpecException, NoSuchAlgorithmException {
         bytes = Base64.getDecoder().decode(bytes);
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(bytes);
-        KeyFactory factory = KeyFactory.getInstance("RSA");
+        KeyFactory factory = KeyFactory.getInstance(ALGORITHM_RSA);
         return factory.generatePrivate(spec);
 
     }
@@ -92,7 +93,7 @@ public class RsaUtils {
      * @param secret             生成密钥的密文
      */
     public static void generateKey(String publicKeyFilename, String privateKeyFilename, String secret, int keySize) throws Exception {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM_RSA);
         SecureRandom secureRandom = new SecureRandom(secret.getBytes());
         keyPairGenerator.initialize(Math.max(keySize, DEFAULT_KEY_SIZE), secureRandom);
         KeyPair keyPair = keyPairGenerator.genKeyPair();

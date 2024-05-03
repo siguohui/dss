@@ -1,10 +1,12 @@
 package com.xiaosi.wx.support;
 
 import com.xiaosi.wx.support.wx.JwtAuthenticationToken;
+import com.xiaosi.wx.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +25,9 @@ import java.util.Date;
 
 @Component
 public class JwtSecurityContextRepository implements SecurityContextRepository {
+
+    @Resource
+    private JwtUtil jwtUtil;
 
     /**
      * SECRET 是签名密钥，只生成一次即可，生成方法：
@@ -43,15 +48,17 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
             return securityContext;
         }
 
-        Jws<Claims> claimsJws = null;
+        /*Jws<Claims> claimsJws = null;
         try {
             claimsJws = Jwts.parser().verifyWith(key).build().parseSignedClaims(authorization);
         } catch (JwtException e) {
             return securityContext;
         }
-        Claims payload = claimsJws.getPayload();
+        Claims payload = claimsJws.getPayload();*/
 
-        JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),(String) payload.get("userId"));
+        Claims payload = jwtUtil.parsePayload(authorization);
+
+        JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),payload.getSubject());
 
         if(authorization == null){
             return securityContext;
@@ -64,12 +71,7 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
     public void saveContext(SecurityContext context, HttpServletRequest request, HttpServletResponse response) {
 
         UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
-
-        String token = Jwts.builder()
-                .expiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(10).toMillis()))
-                .claim("userId", userDetails.getUsername())
-                .claim("authorities", String.join(",",AuthorityUtils.authorityListToSet(context.getAuthentication().getAuthorities())))
-                .signWith(key).compact();
+        String token = jwtUtil.createToken(userDetails.getUsername(),String.join(",",AuthorityUtils.authorityListToSet(context.getAuthentication().getAuthorities())));
         request.setAttribute("accessToken",token);
     }
 
@@ -80,7 +82,9 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
             return false;
         }
 
-        Jws<Claims> claimsJws = null;
+        return jwtUtil.validateToken(authorization);
+
+        /*Jws<Claims> claimsJws = null;
         try {
             claimsJws = Jwts.parser().verifyWith(key).build().parseSignedClaims(authorization);
         } catch (JwtException e) {
@@ -88,6 +92,6 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
         }
         Claims payload = claimsJws.getPayload();
 
-        return true;
+        return true;*/
     }
 }

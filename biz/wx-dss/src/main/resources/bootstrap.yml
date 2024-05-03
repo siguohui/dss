@@ -225,3 +225,11 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+rsa:
+  key:
+    publicKey: classpath:/keys/rsa_key.pub
+    privateKey: classpath:/keys/rsa_key
+jjwt:
+  token:
+    expireTime: 10
+    secretKey: test
