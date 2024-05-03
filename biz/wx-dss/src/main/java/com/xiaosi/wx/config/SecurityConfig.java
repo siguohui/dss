@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,11 +55,12 @@ public class SecurityConfig {
                                                                  AuthenticationSuccessHandler successHandler,
                                                                  AuthenticationFailureHandler failureHandler,
                                                                  AuthenticationEntryPoint entryPoint,
-                                                                 @Qualifier("bssSecurityContextRepository") SecurityContextRepository securityContextRepository) throws Exception {
+                                                                 @Qualifier("jwtSecurityContextRepository") SecurityContextRepository securityContextRepository) throws Exception {
         ApplicationContext applicationContext =
                 http.getSharedObject(ApplicationContext.class);
         http
                 .authorizeHttpRequests(r -> r
+//                                .requestMatchers(HttpMethod.POST, "/web/authenticate").permitAll()
 //                        .requestMatchers("/index").permitAll()
                         .anyRequest()
                                 /*.access((authentication, object) -> {
@@ -116,6 +119,7 @@ public class SecurityConfig {
                 .exceptionHandling(e->e.authenticationEntryPoint(entryPoint))
                 .headers(h-> h.frameOptions(withDefaults()).disable())
                 .sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//        .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
 
@@ -157,10 +161,17 @@ public class SecurityConfig {
                 .csrf().disable();
     }*/
 
+
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/index","/list");
     }
+
+   /* @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }*/
 
     /*@Bean
     AuthenticationManager authenticationManager() {
@@ -168,5 +179,23 @@ public class SecurityConfig {
         daoAuthenticationProvider.setUserDetailsService(userService);
         ProviderManager pm = new ProviderManager(daoAuthenticationProvider);
         return pm;
+    }*/
+
+   /* @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        // DaoAuthenticationProvider 从自定义的 userDetailsService.loadUserByUsername 方法获取UserDetails
+        authProvider.setUserDetailsService(userDetailsService());
+        // 设置密码编辑器
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }*/
+
+    /*@Autowired
+    private UserDetailsService userDetailsService;
+    @Bean
+    public UserDetailsService userDetailsService() {
+        // 调用 JwtUserDetailService实例执行实际校验
+        return username -> userDetailsService.loadUserByUsername(username);
     }*/
 }
