@@ -36,6 +36,7 @@ public class JwtUtils {
                 .id(createJTI())
                 .expiration(new Date(System.currentTimeMillis()+ Duration.ofMinutes(10).toMillis()))
                 .signWith(privateKey, SignatureAlgorithm.RS256)
+//                .compressWith(CompressionCodecs.DEFLATE)
                 .compact();
     }
 

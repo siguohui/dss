@@ -1,10 +1,7 @@
 package com.xiaosi.wx.utils;
 
 import com.xiaosi.wx.config.RsaKeyProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 
 import jakarta.annotation.Resource;
 import lombok.Data;
@@ -37,10 +34,20 @@ public class JwtUtil {
                 .claims(initClaims(username, authorities))
                 .expiration(expiration())
                 .signWith(rsaKeyProperties.getPrivateRsaKey(),Jwts.SIG.RS512)
+//                .compressWith(CompressionCodecs.DEFLATE)
                 .compact();
     }
 
     private Map<String,Object> initClaims(String username,String authorities){
+
+       /* iss (issuer)：签发人
+        sub (subject)：主题
+        aud (audience)：受众
+        exp (expiration time)：过期时间
+        nbf (Not Before)：生效时间，在此之前是无效的
+        iat (Issued At)：签发时间
+        jti (JWT ID)：编号*/
+
         Map<String, Object> claims = new HashMap<>();
         //"iss" (Issuer): 代表 JWT 的签发者。在这个字段中填入一个字符串，表示该 JWT 是由谁签发的。例如，可以填入你的应用程序的名称或标识符。
         claims.put("iss","jx");

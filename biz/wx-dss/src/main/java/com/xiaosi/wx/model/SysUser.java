@@ -1,24 +1,23 @@
 package com.xiaosi.wx.model;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.xiaosi.wx.base.DataEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Data
 @TableName(value = "sys_user",autoResultMap = true)
 @Schema(description = "用户")
-public class SysUser implements Serializable, UserDetails {
+@Accessors(chain = true)
+public class SysUser extends DataEntity implements UserDetails {
 
     /** 主键ID **/
     @Schema(description = "主键ID")
@@ -26,42 +25,88 @@ public class SysUser implements Serializable, UserDetails {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "name")
-    private String name;
+    @TableField(value = "username")
+    @Getter(AccessLevel.NONE)
+    private String username;
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    /** 密码 **/
+    @Schema(description = "密码")
+    @TableField(value = "password")
+    @Getter(AccessLevel.NONE)
+    private String password;
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    /** 开启 **/
+    @Schema(description = "开启或者关闭")
+    @TableField(value = "enabled")
+    @Getter(AccessLevel.NONE)
+    private boolean enabled;
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    /** 账号过期 **/
+    @Schema(description = "账号过期")
+    @TableField(value = "account_non_expired")
+    @Getter(AccessLevel.NONE)
+    private boolean accountNonExpired;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    /** 账号锁定 **/
+    @Schema(description = "账号锁定")
+    @TableField(value = "account_non_locked")
+    @Getter(AccessLevel.NONE)
+    private boolean accountNonLocked;
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    /** 凭证过期 **/
+    @Schema(description = "凭证过期")
+    @TableField(value = "credentials_non_expired")
+    @Getter(AccessLevel.NONE)
+    private boolean credentialsNonExpired;
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @TableField(exist = false)
+    @Getter(AccessLevel.NONE)
+    private Collection<GrantedAuthority> authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
     /** 用户昵称 **/
     @Schema(description = "用户昵称")
     @TableField(value = "nickname")
     private String nickname;
 
-    /** 密码 **/
-    @Schema(description = "密码")
-    @TableField(value = "password")
-    private String password;
-
-    /** 开启 **/
-    @Schema(description = "开启或者关闭")
-    @Getter(AccessLevel.NONE)
-    @TableField(value = "enabled")
-    private boolean enabled;
-
-    /** 账号过期 **/
-    @Schema(description = "账号过期")
-    @Getter(AccessLevel.NONE)
-    @TableField(value = "account_non_expired")
-    private boolean accountNonExpired;
-
-    /** 账号锁定 **/
-    @Schema(description = "账号锁定")
-    @Getter(AccessLevel.NONE)
-    @TableField(value = "account_non_locked")
-    private boolean accountNonLocked;
-
-    /** 凭证过期 **/
-    @Schema(description = "凭证过期")
-    @Getter(AccessLevel.NONE)
-    @TableField(value = "credentials_non_expired")
-    private boolean credentialsNonExpired;
+    /** 性别：0、女 1、男 **/
+    @Schema(description = "性别：0、女 1、男")
+    @TableField(value = "sex")
+    private int sex;
 
     /** 手机号 **/
     @Schema(description = "手机号")
@@ -89,71 +134,4 @@ public class SysUser implements Serializable, UserDetails {
 //    @Schema(hidden = true)
 //    @TableField(exist = false)
 //    private List<Perm> perms;
-
-    @TableField(exist = false)
-    private List<GrantedAuthority> authorities;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return name;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    public void setAuthorities(List<GrantedAuthority> authorities) {
-        this.authorities = authorities;
-    }
-
-    /** 创建者 **/
-    @Schema(description = "创建者")
-    @TableField(value = "create_by",fill = FieldFill.INSERT)
-    private String createBy;
-
-    /** 更新者 **/
-    @Schema(description = "更新者")
-    @TableField(value = "update_by",fill = FieldFill.INSERT_UPDATE)
-    private String updateBy;
-
-    /** 创建时间 **/
-    @Schema(description = "创建时间")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(value = "createTime",fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
-    /** 更新时间 **/
-    @Schema(description = "更新时间")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(value = "updateTime",fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-
-    /** 删除状态：0、已删除 1、未删除 **/
-    @Schema(description = "删除状态：0、已删除 1、未删除")
-    @TableField(value = "delete")
-    private int delete;
-
 }

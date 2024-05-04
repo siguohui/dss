@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @Author jx
- * @Date 2023/11/27
- * @Version 1.0
  * @Description: jwt工具类，JSON WEB TOKEN，分别由：Header（头部）、Payload（负载）、Signature（签名）组成
  */
 
@@ -23,19 +20,21 @@ public class JwtTokenUtil {
 
     //如果您不想考虑位长度要求，或者只是想让您的生活更轻松，
     //JWT 提供了方便的构建器类，可以为任何给定的密钥生成足够安全的密钥
-//    SecretKey secretKey = Jwts.SIG.HS256.key().build();
+    //SecretKey secretKey = Jwts.SIG.HS256.key().build();
     //自定义秘钥也可以 , 不同的算法需要的秘钥长度不同
-    //SecretKey key = Keys.hmacShaKeyFor("AWEQWEWE23123156qqqq465wqeqweqweqwewqeqweqweqweq4".getBytes(StandardCharsets.UTF_8)); // 你的密钥
+    //SecretKey key = Keys.hmacShaKeyFor("AWEQWEWE23123156qqqq465wqeqweqweqwewqeqweqweqweq4".getBytes(StandardCharsets.UTF_8));
 
     private final static SecureDigestAlgorithm<SecretKey, SecretKey> ALGORITHM = Jwts.SIG.HS256;
     private static SecretKey key = Jwts.SIG.HS256.key().build();
+
     /**
-     * 私钥 / 生成签名的时候使用的秘钥secret，一般可以从本地配置文件中读取，切记这个秘钥不能外露，只在服务端使用，在任何场景都不应该流露出去。
      * 一旦客户端得知这个secret, 那就意味着客户端是可以自我签发jwt了。
      * 应该大于等于 256位(长度32及以上的字符串)，并且是随机的字符串
      */
     private final static String SECRET = "secretKey";
     public static final SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+
+
     private  long expireTime = 10;
 
     /**
@@ -101,11 +100,11 @@ public class JwtTokenUtil {
                 .and()
     // 设置自定义负载信息payload
                 .claim("username", username)
-    // 令牌ID
+                // 令牌ID
                 .id(uuid)
-    // 过期日期
+                // 过期日期
                 .expiration(exprireDate)
-    // 签发时间
+                // 签发时间
                 .issuedAt(new Date())
             // 主题
             .subject(SUBJECT)

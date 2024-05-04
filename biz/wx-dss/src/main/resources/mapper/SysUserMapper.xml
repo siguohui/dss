@@ -16,7 +16,8 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
     <select id="selectByUserName" resultType="com.xiaosi.wx.model.SysUser">
-      select * from sys_user where `name` = #{userName,jdbcType=VARCHAR}
+      select * from sys_user
+               where `username` = #{userName,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_user

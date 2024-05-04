@@ -35,7 +35,7 @@ public class LoginController {
         return stuMapper.selectList(null);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
     public JsonResult index(String bookName) {
         return JsonResult.success("index");

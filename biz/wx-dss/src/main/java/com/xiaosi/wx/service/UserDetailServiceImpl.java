@@ -44,7 +44,7 @@ public class UserDetailServiceImpl  implements UserDetailsService {
         }
 //        UserDetails userDetails = User.withUsername(user.getName()).password(user.getPassword()).authorities(authorities).build();
 //        return userDetails;
-        return new User(user.getUsername(), user.getPassword(), authorities);
+        return user.setAuthorities(authorities);
 //        return new User(username,"123456", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN"));
     }
 
