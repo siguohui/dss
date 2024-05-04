@@ -33,6 +33,8 @@ public class BaseEntityInterceptor implements Interceptor {
             if (Objects.equals(SqlCommandType.INSERT, mappedStatement.getSqlCommandType())) {
                 baseEntity.setCreateBy(currentUsername);
                 baseEntity.setCreateTime(LocalDateTime.now());
+                baseEntity.setUpdateBy(currentUsername);
+                baseEntity.setUpdateTime(LocalDateTime.now());
             } else if (Objects.equals(SqlCommandType.UPDATE, mappedStatement.getSqlCommandType())) {
                 baseEntity.setUpdateBy(currentUsername);
                 baseEntity.setUpdateTime(LocalDateTime.now());

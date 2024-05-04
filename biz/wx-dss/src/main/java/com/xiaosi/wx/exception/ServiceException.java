@@ -10,6 +10,11 @@ public class ServiceException extends AbstractException{
     public ServiceException(ResultEnum resultEnum) {
         this(resultEnum, null, null);
     }
+
+    public ServiceException(String msg) {
+        this(null, msg, null);
+    }
+
     public ServiceException(ResultEnum resultEnum,String msg) {
         this(resultEnum, msg, null);
     }

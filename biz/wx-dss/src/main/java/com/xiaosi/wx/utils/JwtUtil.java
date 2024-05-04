@@ -1,9 +1,12 @@
 package com.xiaosi.wx.utils;
 
 import com.xiaosi.wx.config.RsaKeyProperties;
+import com.xiaosi.wx.exception.CustomException;
+import com.xiaosi.wx.pojo.ResultEnum;
 import io.jsonwebtoken.*;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,10 +75,19 @@ public class JwtUtil {
     }
 
     public Jws<Claims> parseClaim(String token) {
-        return Jwts.parser()
-                .verifyWith(rsaKeyProperties.getPublicRsaKey())
-                .build()
-                .parseSignedClaims(token);
+
+        Jws<Claims> claimsJws;
+        try {
+            claimsJws = Jwts.parser()
+                    .verifyWith(rsaKeyProperties.getPublicRsaKey())
+                    .build()
+                    .parseSignedClaims(token);
+
+        } catch (Exception e) {
+           throw new CustomException(ResultEnum.PARAMETER_TOKEN_VALID);
+        }
+
+        return claimsJws;
     }
 
     public JwsHeader parseHeader(String token) {
@@ -163,6 +175,11 @@ public class JwtUtil {
                 .expiration(expiration())
                 .signWith(rsaKeyProperties.getPrivateRsaKey(),Jwts.SIG.RS512)
                 .compact();
+    }
+
+    public final static String getToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        return token;
     }
 
     /**

@@ -33,12 +33,12 @@ public class BaseEntity<T> extends Model {
 
     /** 更新者 **/
     @Schema(description = "更新者")
-    @TableField(value = UPDATE_BY_FIELD,fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = UPDATE_BY_FIELD,fill = FieldFill.INSERT_UPDATE, select = false)
     private String updateBy;
 
     /** 创建时间 **/
     @Schema(description = "更新时间")
-    @TableField(value = UPDATE_TIME_FIELD, fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = UPDATE_TIME_FIELD, fill = FieldFill.INSERT_UPDATE, select = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat (pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;

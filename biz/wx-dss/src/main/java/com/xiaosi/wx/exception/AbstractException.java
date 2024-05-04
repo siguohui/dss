@@ -13,6 +13,7 @@ public abstract  class AbstractException  extends RuntimeException{
     public AbstractException(ResultEnum resultEnum, String msg,
                              Throwable throwable){
         super(msg,throwable);
+        resultEnum = Optional.ofNullable(resultEnum).orElseGet(()->ResultEnum.RESULT_FAIL);
         this.code = resultEnum.getCode();
         this.msg = Optional.ofNullable(msg).orElse(resultEnum.getMsg());
     }

@@ -5,6 +5,7 @@ import com.xiaosi.wx.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @TableName(value = "sys_user",autoResultMap = true)
 @Schema(description = "用户")
 @Accessors(chain = true)

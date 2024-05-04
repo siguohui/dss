@@ -39,10 +39,10 @@ public class StuController {
 
     @PostMapping("/add")
     public int getList(@RequestBody SysUser sysUser) throws IOException {
-        System.out.println(rsaKeyProperties.getPrivateRsaKey());
+//        System.out.println(rsaKeyProperties.getPrivateRsaKey());
         Resource publicKey = rsaKeyProperties.getPublicKey();
-        System.out.println(IOUtils.toString(publicKey.getInputStream(), StandardCharsets.UTF_8));
-        System.out.println(rsaKeyProperties.getPublicRsaKey());
+//        System.out.println(IOUtils.toString(publicKey.getInputStream(), StandardCharsets.UTF_8));
+//        System.out.println(rsaKeyProperties.getPublicRsaKey());
 
 
         return sysUserMapper.insert(sysUser);
