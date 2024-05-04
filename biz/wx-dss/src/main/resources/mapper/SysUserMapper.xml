@@ -24,9 +24,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.xiaosi.wx.model.SysUser">
-    insert into sys_user (id, name, password
+    insert into sys_user (id, username, password
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.xiaosi.wx.model.SysUser">
@@ -35,8 +35,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="name != null">
-        name,
+      <if test="username != null">
+        username,
       </if>
       <if test="password != null">
         password,
