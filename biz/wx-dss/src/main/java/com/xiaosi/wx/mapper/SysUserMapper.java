@@ -10,8 +10,6 @@ import org.apache.ibatis.annotations.Param;
 public interface SysUserMapper extends BaseMapper<SysUser> {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(SysUser record);
-
     int insertSelective(SysUser record);
 
     SysUser selectByPrimaryKey(Integer id);

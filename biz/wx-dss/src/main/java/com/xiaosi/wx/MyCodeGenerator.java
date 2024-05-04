@@ -1,19 +1,17 @@
 package com.xiaosi.wx;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.fill.Column;
-import com.xiaosi.wx.base.DataEntity;
+import com.xiaosi.wx.base.BaseEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collections;
-
-public class CodeGenerator {
+//https://blog.csdn.net/duanluan/article/details/118776180
+public class MyCodeGenerator {
     public static void main(String[] args) {
         FastAutoGenerator.create("jdbc:mysql://127.0.0.1:3306/db_security?characterEncoding=UTF-8&useUnicode=true&useSSL=false", "root", "root")
                 // 全局配置
@@ -41,7 +39,7 @@ public class CodeGenerator {
                             .addTablePrefix("sys_") // 设置过滤表前缀
                             // Entity 策略配置
                             .entityBuilder()
-                            .superClass(DataEntity.class)
+                            .superClass(BaseEntity.class)
                             .enableChainModel()
                             .idType(IdType.ASSIGN_ID)    //id类型
                             .enableLombok() //开启 Lombok

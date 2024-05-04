@@ -1,7 +1,7 @@
 package com.xiaosi.wx.model;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.xiaosi.wx.base.DataEntity;
+import com.xiaosi.wx.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -11,13 +11,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @Data
 @TableName(value = "sys_user",autoResultMap = true)
 @Schema(description = "用户")
 @Accessors(chain = true)
-public class SysUser extends DataEntity implements UserDetails {
+public class SysUser extends BaseEntity implements UserDetails {
 
     /** 主键ID **/
     @Schema(description = "主键ID")
@@ -101,7 +100,7 @@ public class SysUser extends DataEntity implements UserDetails {
     /** 用户昵称 **/
     @Schema(description = "用户昵称")
     @TableField(value = "nickname")
-    private String nickname;
+    private String nickName;
 
     /** 性别：0、女 1、男 **/
     @Schema(description = "性别：0、女 1、男")
