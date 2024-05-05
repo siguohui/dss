@@ -13,7 +13,7 @@ public class CustomException extends AuthenticationException {
     }
 
     public CustomException(ResultEnum resultEnum){
-        super(resultEnum.getMsg());
+        super(String.format("%s",resultEnum.getMsg()));
         this.code = resultEnum.getCode();
     }
 

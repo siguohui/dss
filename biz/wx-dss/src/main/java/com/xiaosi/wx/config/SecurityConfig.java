@@ -1,5 +1,6 @@
 package com.xiaosi.wx.config;
 
+import com.xiaosi.wx.handler.BzAccessDeniedHandler;
 import com.xiaosi.wx.support.sms.SmsAuthenticationProvider;
 import com.xiaosi.wx.support.sms.SmsLoginConfigurer2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -55,6 +57,7 @@ public class SecurityConfig {
                                                                  AuthenticationSuccessHandler successHandler,
                                                                  AuthenticationFailureHandler failureHandler,
                                                                  AuthenticationEntryPoint entryPoint,
+                                                                 AccessDeniedHandler accessDeniedHandler,
                                                                  @Qualifier("jwtSecurityContextRepository") SecurityContextRepository securityContextRepository) throws Exception {
         ApplicationContext applicationContext =
                 http.getSharedObject(ApplicationContext.class);
@@ -116,7 +119,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityContext(s-> s.requireExplicitSave(true).securityContextRepository(securityContextRepository))
                 .cors(withDefaults())
-                .exceptionHandling(e->e.authenticationEntryPoint(entryPoint))
+                .exceptionHandling(e->e.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler))
                 .headers(h-> h.frameOptions(withDefaults()).disable())
                 .sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //        .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -10,12 +10,14 @@ import com.xiaosi.wx.pojo.JsonResult;
 import com.xiaosi.wx.pojo.ResultEnum;
 import com.xiaosi.wx.utils.ResponseUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ElementKind;
 import jakarta.validation.Path;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -57,11 +60,21 @@ public class ExceptionHandling {
      * @return
      */
     @ExceptionHandler(ServiceException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonResult<BaseResponse> handler2(ServiceException e) {
+    @ResponseStatus(HttpStatus.OK)
+    public JsonResult<BaseResponse> handler2(HttpServletRequest request,
+                                             HttpServletResponse response,
+                                             ServiceException e) {
         //处理异常
         log.warn(e.getMessage(), e);
         return JsonResult.fail(e.getMessage());
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public JsonResult<BaseResponse> bindException(HttpServletRequest request,
+                                   HttpServletResponse response,
+                                   BindException exception) {
+        return JsonResult.fail(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage());
     }
 
     /**
@@ -208,7 +221,7 @@ public class ExceptionHandling {
     @ExceptionHandler(value = Throwable.class)
     public JsonResult handleThrowable(HttpServletRequest request, Throwable throwable) {
 //        String requestURL = getUrl(request);
-        log.error("[{}] {} ", request.getMethod(), "URL地址", throwable);
+        log.error("[{}] {} ", request.getMethod(), "URL地址:"+request.getRequestURI(), throwable);
         return JsonResult.fail(ResultEnum.RESULT_FAIL.getMsg());
     }
 }

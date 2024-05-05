@@ -61,7 +61,7 @@ public class SysUser extends BaseEntity implements UserDetails {
     @Schema(description = "账号过期")
     @TableField(value = "account_non_expired")
     @Getter(AccessLevel.NONE)
-    private boolean accountNonExpired;
+    private boolean accountNonExpired = true;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -72,7 +72,7 @@ public class SysUser extends BaseEntity implements UserDetails {
     @Schema(description = "账号锁定")
     @TableField(value = "account_non_locked")
     @Getter(AccessLevel.NONE)
-    private boolean accountNonLocked;
+    private boolean accountNonLocked = true;
 
     @Override
     public boolean isAccountNonLocked() {
@@ -83,7 +83,7 @@ public class SysUser extends BaseEntity implements UserDetails {
     @Schema(description = "凭证过期")
     @TableField(value = "credentials_non_expired")
     @Getter(AccessLevel.NONE)
-    private boolean credentialsNonExpired;
+    private boolean credentialsNonExpired = true;
 
     @Override
     public boolean isCredentialsNonExpired() {
