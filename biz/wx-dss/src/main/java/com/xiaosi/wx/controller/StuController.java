@@ -43,8 +43,6 @@ public class StuController {
         Resource publicKey = rsaKeyProperties.getPublicKey();
 //        System.out.println(IOUtils.toString(publicKey.getInputStream(), StandardCharsets.UTF_8));
 //        System.out.println(rsaKeyProperties.getPublicRsaKey());
-
-
         return sysUserMapper.insert(sysUser);
     }
 }

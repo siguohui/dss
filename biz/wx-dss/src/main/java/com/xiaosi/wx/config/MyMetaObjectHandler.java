@@ -1,9 +1,10 @@
 package com.xiaosi.wx.config;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.xiaosi.wx.utils.JwtUtil;
-import com.xiaosi.wx.utils.SecurityUtils;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.security.core.Authentication;
@@ -11,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.sql.RowSet;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -24,6 +24,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Resource
     private JwtUtil jwtUtil;
+    @Resource
+    private HttpServletRequest request;
 
     private static final String CREATE_TIME_FIELD = "createTime";
     private static final String CREATE_BY_FIELD = "createBy";
@@ -44,7 +46,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
         System.out.println("----------------------------------");
 
-        System.out.println(SecurityUtils.getSession());
+        System.out.println(jwtUtil.getUserName(request.getHeader("Authorization")));
 
         System.out.println("----------------------------------");
 

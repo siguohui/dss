@@ -165,8 +165,6 @@ spring:
               strict-syntax-check: false
               multi-statement-allow: true
 
-
-
 #datasource:
 #  master:
 #    # 填写生成的加密密码
@@ -185,7 +183,8 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
     jdbc-type-for-null: 'null'
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #实体类所在包
   type-aliases-package: com.xiaosi.wx
@@ -199,6 +198,7 @@ mybatis-plus:
       logic-delete-field: deleted
       logic-not-delete-value: 0
       logic-delete-value: 1
+      co
     #控制台mybatis-plus标记
     banner: true
 
@@ -236,3 +236,10 @@ jjwt:
   token:
     expireTime: 10
     secretKey: test
+
+decorator:
+  datasource:
+    p6spy:
+      logging: slf4j
+      log-file: spy.log
+      log-format: executionTime:%(executionTime) | sql:%(sqlSingleLine)
