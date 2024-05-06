@@ -16,7 +16,7 @@ public class BzAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException AccessException) {
         log.warn("授权失败",AccessException.getMessage());
-        JsonResult res = JsonResult.fail("授权失败");
+        JsonResult res = JsonResult.fail("无权授权访问");
        /* if (AccessException instanceof CustomException) {
             res.setMsg(AccessException.getMessage());
         }*/

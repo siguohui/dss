@@ -198,7 +198,6 @@ mybatis-plus:
       logic-delete-field: deleted
       logic-not-delete-value: 0
       logic-delete-value: 1
-      co
     #控制台mybatis-plus标记
     banner: true
 

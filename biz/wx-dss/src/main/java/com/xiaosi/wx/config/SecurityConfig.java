@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -58,6 +59,7 @@ public class SecurityConfig {
                                                                  AuthenticationFailureHandler failureHandler,
                                                                  AuthenticationEntryPoint entryPoint,
                                                                  AccessDeniedHandler accessDeniedHandler,
+                                                                 AuthorizationManager authorizationManager,
                                                                  @Qualifier("jwtSecurityContextRepository") SecurityContextRepository securityContextRepository) throws Exception {
         ApplicationContext applicationContext =
                 http.getSharedObject(ApplicationContext.class);
@@ -66,6 +68,8 @@ public class SecurityConfig {
 //                                .requestMatchers(HttpMethod.POST, "/web/authenticate").permitAll()
 //                        .requestMatchers("/index").permitAll()
                         .anyRequest()
+                                .access(authorizationManager)
+//                                                        .authenticated()
                                 /*.access((authentication, object) -> {
                                     //表示请求的 URL 地址和数据库的地址是否匹配上了
                                     boolean isMatch = true;
@@ -102,7 +106,6 @@ public class SecurityConfig {
                                     }
                                     return new AuthorizationDecision(true);
                         })*/
-                                .authenticated()
                        /* .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                             public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
                                 fsi.setSecurityMetadataSource(customSecurityMetadataSource);
@@ -115,7 +118,7 @@ public class SecurityConfig {
                 .formLogin(f -> f.successHandler(successHandler)
                                 .failureHandler(failureHandler)
                                 .securityContextRepository(securityContextRepository))
-                        .httpBasic(withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityContext(s-> s.requireExplicitSave(true).securityContextRepository(securityContextRepository))
                 .cors(withDefaults())

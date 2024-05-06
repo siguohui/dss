@@ -61,9 +61,19 @@ public class ExceptionHandling {
      */
     @ExceptionHandler(ServiceException.class)
     @ResponseStatus(HttpStatus.OK)
-    public JsonResult<BaseResponse> handler2(HttpServletRequest request,
+    public JsonResult<BaseResponse> handler1(HttpServletRequest request,
                                              HttpServletResponse response,
                                              ServiceException e) {
+        //处理异常
+        log.warn(e.getMessage(), e);
+        return JsonResult.fail(e.getMessage());
+    }
+
+    @ExceptionHandler(CustomException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public JsonResult<BaseResponse> handler2(HttpServletRequest request,
+                                             HttpServletResponse response,
+                                             CustomException e) {
         //处理异常
         log.warn(e.getMessage(), e);
         return JsonResult.fail(e.getMessage());

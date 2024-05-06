@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 import com.xiaosi.wx.base.BaseEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,7 +20,7 @@ public class MyCodeGenerator {
     public static final String username = "root";
     public static final String password = "root";
     public static String module="";
-    public static String parent_package="com.xiaosi";
+    public static String parent_package="com.xiaosi.wx";
     public static String superEntity="com.xiaosi.wx.base.BaseEntity";
 
     public static void main(String[] args) {
@@ -33,7 +34,7 @@ public class MyCodeGenerator {
                             .enableSpringdoc()
                             .commentDate("yyyy-MM-dd hh:mm:ss")   //注释日期
                             .outputDir(System.getProperty("user.dir") + "\\src\\main\\java") // 指定输出目录
-                            .disableOpenDir()
+//                            .disableOpenDir()
                     ;
                 })
                 //类型映射配置
@@ -67,7 +68,7 @@ public class MyCodeGenerator {
                 })*/
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_role") // 设置需要生成的表名
+                    builder.addInclude("sys_menu") // 设置需要生成的表名
                             .addTablePrefix("sys_") // 设置过滤表前缀
                             // Entity 策略配置
                             .entityBuilder()
@@ -109,8 +110,8 @@ public class MyCodeGenerator {
                             .enableFileOverride() // 覆盖已生成文件
                     ;
                 })
-//                .templateEngine(new VelocityTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
-                .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker模板引擎
+                .templateEngine(new VelocityTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+//                .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker模板引擎
 //                .templateConfig(builder -> builder.controller(""))//关闭生成controller
                  //模板配置，如果你没有自定义的一些模板配置，这里直接使用默认即可。
 //                .templateConfig(config->config.entity("/templates/entity"))

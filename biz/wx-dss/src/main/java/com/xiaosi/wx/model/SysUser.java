@@ -1,7 +1,10 @@
 package com.xiaosi.wx.model;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.xiaosi.wx.annotation.EncryptedColumn;
+import com.xiaosi.wx.annotation.EncryptedTable;
 import com.xiaosi.wx.base.BaseEntity;
+import com.xiaosi.wx.handler.TypeControlHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -18,6 +21,7 @@ import java.util.Collection;
 @TableName(value = "sys_user",autoResultMap = true)
 @Schema(description = "用户")
 @Accessors(chain = true)
+@EncryptedTable
 public class SysUser extends BaseEntity implements UserDetails {
 
     /** 主键ID **/
@@ -101,7 +105,7 @@ public class SysUser extends BaseEntity implements UserDetails {
 
     /** 用户昵称 **/
     @Schema(description = "用户昵称")
-    @TableField(value = "nickname")
+    @TableField(value = "nick_name")
     private String nickName;
 
     /** 性别：0、女 1、男 **/
@@ -112,12 +116,17 @@ public class SysUser extends BaseEntity implements UserDetails {
     /** 手机号 **/
     @Schema(description = "手机号")
     @TableField(value = "mobile")
+    @EncryptedColumn
     private String mobile;
 
     /** 邮箱 **/
     @Schema(description = "邮箱")
     @TableField(value = "email")
     private String email;
+
+    @TableField(value = "addr")
+    @EncryptedColumn
+    private String addr;
 
     /** 部门ID **/
     @Schema(description = "部门ID")
