@@ -1,14 +1,15 @@
 package com.xiaosi.wx.mapper;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaosi.wx.model.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 @Mapper
-public interface SysRoleMapper {
+@DS("master")
+public interface SysRoleMapper extends BaseMapper<SysRole> {
     int deleteByPrimaryKey(Integer id);
-
-    int insert(SysRole record);
 
     int insertSelective(SysRole record);
 

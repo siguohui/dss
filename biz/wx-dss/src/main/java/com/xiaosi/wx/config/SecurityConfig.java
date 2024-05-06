@@ -1,6 +1,6 @@
 package com.xiaosi.wx.config;
 
-import com.xiaosi.wx.handler.BzAccessDeniedHandler;
+import com.xiaosi.wx.handler.HasPermissionEvaluator;
 import com.xiaosi.wx.support.sms.SmsAuthenticationProvider;
 import com.xiaosi.wx.support.sms.SmsLoginConfigurer2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,37 +8,33 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authorization.AuthorizationManager;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.util.AntPathMatcher;
-
-import java.util.Collection;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-//@EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true,
+//        securedEnabled = true,
+//        jsr250Enabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -53,6 +49,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // 引入自定义评估器
+   /* @Bean
+    static MethodSecurityExpressionHandler methodSecurityExpressionHandler(HasPermissionEvaluator hasPermissionEvaluator) {
+        DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
+        handler.setPermissionEvaluator(hasPermissionEvaluator);
+        return handler;
+    }*/
+
     @Bean
     public DefaultSecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
                                                                  AuthenticationSuccessHandler successHandler,
@@ -65,9 +69,10 @@ public class SecurityConfig {
                 http.getSharedObject(ApplicationContext.class);
         http
                 .authorizeHttpRequests(r -> r
-//                                .requestMatchers(HttpMethod.POST, "/web/authenticate").permitAll()
-//                        .requestMatchers("/index").permitAll()
+//                      .requestMatchers(HttpMethod.POST, "/web/authenticate").permitAll()
+//                        .requestMatchers("/login").anonymous()
                         .anyRequest()
+//                                .access("@ServiceImpl.hasPermission(request,authentication)")
                                 .access(authorizationManager)
 //                                                        .authenticated()
                                 /*.access((authentication, object) -> {

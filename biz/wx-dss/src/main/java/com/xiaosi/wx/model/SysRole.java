@@ -1,23 +1,35 @@
 package com.xiaosi.wx.model;
 
-public class SysRole {
-    private Integer id;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.xiaosi.wx.base.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TableName(value = "sys_role",autoResultMap = true)
+@Schema(description = "角色")
+@Accessors(chain = true)
+public class SysRole extends BaseEntity<SysRole> {
+    /** 主键ID **/
+    @Schema(description = "主键ID")
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
+    private Long id;
+    /** 角色名称 **/
+    @Schema(description = "角色名称")
+    @TableField(value = "name")
     private String name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+    /** 角色编码 **/
+    @Schema(description = "角色编码")
+    @TableField(value = "code")
+    private String code;
+    /** 排序 **/
+    @Schema(description = "排序")
+    @TableField(value = "sort")
+    private int sort;
 }

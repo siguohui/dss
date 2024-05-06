@@ -14,6 +14,7 @@ import com.xiaosi.wx.vo.StuVo;
 import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class StuController {
     private final RsaKeyProperties rsaKeyProperties;
     private final SysUserMapper sysUserMapper;
 
+//    @PreAuthorize("hasPermission('USER','READ') or hasRole('1ADMIN')")
     @PostMapping("/add")
     public int getList(@RequestBody SysUser sysUser) throws IOException {
 //        System.out.println(rsaKeyProperties.getPrivateRsaKey());

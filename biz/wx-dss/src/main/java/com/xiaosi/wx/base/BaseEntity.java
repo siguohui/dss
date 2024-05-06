@@ -49,6 +49,6 @@ public class BaseEntity<T> extends Model {
     @Schema(description = "删除状态：0、未删除 1、已删除")
     @TableLogic
     @TableField("deleted")
-    private int deleted;
+    private boolean deleted;
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xiaosi.wx.mapper.MenuMapper">
+<mapper namespace="com.xiaosi.wx.mapper.SysMenuMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.xiaosi.wx.model.SysMenu">
@@ -18,5 +18,27 @@
         <result column="type" property="type" />
         <result column="icon" property="icon" />
     </resultMap>
+    <select id="selectMenuByRoleId" resultType="com.xiaosi.wx.model.SysMenu">
+        select
+        m.id,
+        m.parent_id,
+        m.name,
+        m.path,
+        m.sort,
+        m.perms,
+        m.type,
+        m.icon,
+        m.create_by,
+        m.create_time,
+        m.update_by,
+        m.update_time,
+        m.deleted
+        from sys_menu m
+        left join sys_role_menu srm on m.id = srm.menu_id
+        where srm.role_id in
+        <foreach collection="roleIds" open="(" close=")" separator="," item="roleId">
+            #{roleId}
+        </foreach>
+    </select>
 
 </mapper>

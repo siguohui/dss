@@ -1,7 +1,7 @@
 package com.xiaosi.wx.handler;
 
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.xiaosi.wx.mapper.MenuMapper;
+import com.xiaosi.wx.mapper.SysMenuMapper;
 import com.xiaosi.wx.model.SysMenu;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,6 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -24,7 +23,7 @@ import java.util.function.Supplier;
 public class WxDssAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
     @Resource
-    private MenuMapper menuMapper;
+    private SysMenuMapper menuMapper;
 
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext requestAuthorizationContext) {
@@ -36,8 +35,12 @@ public class WxDssAuthorizationManager implements AuthorizationManager<RequestAu
         log.info("uri======>>>>>{}",uri);
         log.info("url======>>>>>{}",url);
 
-        if("/login".equals(uri) || "/logout".equals(uri) || "/error".equals(uri)){
+        if("/login".equals(uri) || "/logout".equals(uri) ){
         return new AuthorizationDecision(true);
+        }
+
+        if( "/error".equals(uri)){
+            return new AuthorizationDecision(false);
         }
 
         SysMenu menu = new LambdaQueryChainWrapper<>(menuMapper).eq(SysMenu::getPath, uri).one();

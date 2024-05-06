@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.xiaosi.wx.annotation.EncryptedColumn;
 import com.xiaosi.wx.annotation.EncryptedTable;
 import com.xiaosi.wx.base.BaseEntity;
-import com.xiaosi.wx.handler.TypeControlHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -12,9 +11,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -94,15 +97,6 @@ public class SysUser extends BaseEntity implements UserDetails {
         return this.credentialsNonExpired;
     }
 
-    @TableField(exist = false)
-    @Getter(AccessLevel.NONE)
-    private Collection<GrantedAuthority> authorities;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
     /** 用户昵称 **/
     @Schema(description = "用户昵称")
     @TableField(value = "nick_name")
@@ -124,14 +118,26 @@ public class SysUser extends BaseEntity implements UserDetails {
     @TableField(value = "email")
     private String email;
 
+    /** 地址 **/
+    @Schema(description = "地址")
     @TableField(value = "addr")
     @EncryptedColumn
     private String addr;
+
+    /** 头像 **/
+    @Schema(description = "头像")
+    @TableField(value = "avatar")
+    private String avatar;
 
     /** 部门ID **/
     @Schema(description = "部门ID")
     @TableField(value = "dept_id")
     private Long deptId;
+
+    /** 访问策略 **/
+    @Schema(description = "访问策略")
+    @TableField(value = "access_policy")
+    private boolean accessPolicy;
 
     /** 部门 **/
 //    @Schema(description = "部门")
@@ -144,4 +150,50 @@ public class SysUser extends BaseEntity implements UserDetails {
 //    @Schema(hidden = true)
 //    @TableField(exist = false)
 //    private List<Perm> perms;
+
+
+    @TableField(exist = false)
+    @Getter(AccessLevel.NONE)
+    private Collection<GrantedAuthority> authorities;
+
+    // 这是权限
+    /*@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
+        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList("role");
+        authorities.add(new SimpleGrantedAuthority(sysRole.getName()));
+        //authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(role);
+    }*/
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 将权限告知SpringSecurity，通过lambda表达式将Set<String>转成Collection<GrantedAuthority>
+        if(perms != null && perms.size() > 0) {
+            // 返回权限信息
+            return perms.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+        }
+        return null;
+    }
+
+    // 角色信息
+    @TableField(exist = false)
+    private Set<SysRole> roleSet = new HashSet<>();
+
+    public  Set<Long> getRoleIds() {
+        return roleSet.stream().map(m->m.getId()).collect(Collectors.toSet());
+    }
+
+    // 菜单信息
+    @TableField(exist = false)
+    private Set<SysMenu> menuSet = new HashSet<>();
+
+    //权限的信息
+    @TableField(exist = false)
+    private Set<String> perms = new HashSet<>();
+
+    public Set<String> getPerms() {
+        return menuSet.stream().map(m->m.getPerms()).collect(Collectors.toSet());
+    }
 }
