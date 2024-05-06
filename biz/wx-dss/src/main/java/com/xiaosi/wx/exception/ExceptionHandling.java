@@ -17,6 +17,7 @@ import jakarta.validation.Path;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -217,6 +218,17 @@ public class ExceptionHandling {
                 .orElse(StrUtil.EMPTY);
         log.error("[{}] {} [ex] {}", request.getMethod(),"URL:", exceptionStr);
         return JsonResult.fail(exceptionStr);
+    }
+
+    // 处理自定义异常:AbstractException
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    public JsonResult handleAccessDeniedException(HttpServletRequest request, AccessDeniedException ex) {
+
+        log.warn("授权失败",ex.getMessage());
+        JsonResult res = JsonResult.fail("无权授权访问");
+        String requestURL = "URL地址";
+        log.error("[{}] {} [ex] {}", request.getMethod(), requestURL, ex.toString());
+        return res;
     }
 
     // 处理自定义异常:AbstractException
