@@ -3,6 +3,7 @@ package com.xiaosi.wx.config;
 import com.xiaosi.wx.handler.HasPermissionEvaluator;
 import com.xiaosi.wx.support.sms.SmsAuthenticationProvider;
 import com.xiaosi.wx.support.sms.SmsLoginConfigurer2;
+import com.xiaosi.wx.token.DaoCaoPersistentTokenRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -11,10 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authorization.AuthorizationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,10 +24,10 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
@@ -43,14 +42,17 @@ public class SecurityConfig {
     @Autowired
     UrlAccessDecisionManager urlAccessDecisionManager;
 
+    @Autowired
+    private DaoCaoPersistentTokenRepositoryImpl persistentTokenRepository;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        /*return PasswordEncoderFactories.createDelegatingPasswordEncoder();*/
         return new BCryptPasswordEncoder();
     }
 
     // 引入自定义评估器
-   /* @Bean
+    /*@Bean
     static MethodSecurityExpressionHandler methodSecurityExpressionHandler(HasPermissionEvaluator hasPermissionEvaluator) {
         DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
         handler.setPermissionEvaluator(hasPermissionEvaluator);
@@ -64,6 +66,7 @@ public class SecurityConfig {
                                                                  AuthenticationEntryPoint entryPoint,
                                                                  AccessDeniedHandler accessDeniedHandler,
                                                                  AuthorizationManager authorizationManager,
+                                                                 LogoutSuccessHandler logoutSuccessHandler,
                                                                  @Qualifier("jwtSecurityContextRepository") SecurityContextRepository securityContextRepository) throws Exception {
         ApplicationContext applicationContext =
                 http.getSharedObject(ApplicationContext.class);
@@ -73,8 +76,8 @@ public class SecurityConfig {
 //                        .requestMatchers("/login").anonymous()
                         .anyRequest()
 //                                .access("@ServiceImpl.hasPermission(request,authentication)")
-                                .access(authorizationManager)
-//                                                        .authenticated()
+//                                .access(authorizationManager)
+                                                        .authenticated()
                                 /*.access((authentication, object) -> {
                                     //表示请求的 URL 地址和数据库的地址是否匹配上了
                                     boolean isMatch = true;
@@ -125,10 +128,14 @@ public class SecurityConfig {
                                 .securityContextRepository(securityContextRepository))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                // 开启默认的记住我功能
+                .rememberMe(remember -> remember.rememberMeCookieName("rememberMe").tokenRepository(persistentTokenRepository))
                 .securityContext(s-> s.requireExplicitSave(true).securityContextRepository(securityContextRepository))
                 .cors(withDefaults())
                 .exceptionHandling(e->e.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler))
                 .headers(h-> h.frameOptions(withDefaults()).disable())
+                // 配置退出登录
+                .logout(logout -> logout.logoutSuccessHandler(logoutSuccessHandler).deleteCookies("rememberMe"))
                 .sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //        .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -153,6 +160,18 @@ public class SecurityConfig {
 
     }
 
+   /* @Bean
+    public AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(sysUserDetailsService);
+        // 关联使用的密码编码器
+        provider.setPasswordEncoder(passwordEncoder);
+        // 将provider放置进 AuthenticationManager 中,包含进去
+        ProviderManager providerManager = new ProviderManager(provider);
+
+        return providerManager;
+    }*/
+
    /* @Override
     protected void configure(HttpSecurity http) throws Exception {
         ApplicationContext applicationContext =
@@ -172,7 +191,11 @@ public class SecurityConfig {
                 .csrf().disable();
     }*/
 
-
+   /* @Bean
+    public JWKSource<SecurityContext> jwkSource() {
+        JWKSet jwkSet = new JWKSet(JwtTokenUtil.getKey());
+        return new ImmutableJWKSet<>(jwkSet);
+    }*/
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

@@ -15,6 +15,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -46,10 +47,12 @@ public class BssSecurityContextRepository implements SecurityContextRepository {
 
     @Override
     public void saveContext(SecurityContext context, HttpServletRequest request, HttpServletResponse response) {
-        ValueOperations<String, Object> operations = this.redisTemplate.opsForValue();
-        String accessToken = UUID.randomUUID().toString();
-        operations.set(AUTHENTICATION_CACHE_KEY_PREFIX+accessToken,context.getAuthentication(), Duration.ofMinutes(2));
-        request.setAttribute("accessToken",accessToken);
+        Optional.ofNullable(context).map(SecurityContext::getAuthentication).ifPresent(i->{
+            ValueOperations<String, Object> operations = this.redisTemplate.opsForValue();
+            String accessToken = UUID.randomUUID().toString();
+            operations.set(AUTHENTICATION_CACHE_KEY_PREFIX+accessToken,context.getAuthentication(), Duration.ofMinutes(2));
+            request.setAttribute("accessToken",accessToken);
+        });
     }
 
     @Override

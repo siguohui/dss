@@ -38,7 +38,7 @@ public class StuController {
     private final RsaKeyProperties rsaKeyProperties;
     private final SysUserMapper sysUserMapper;
 
-//    @PreAuthorize("hasPermission('USER','READ') or hasRole('1ADMIN')")
+//    @PreAuthorize("hasPermission('USER1','READ')")
     @PostMapping("/add")
     public int getList(@RequestBody SysUser sysUser) throws IOException {
 //        System.out.println(rsaKeyProperties.getPrivateRsaKey());

@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.xiaosi.wx.annotation.EncryptedTable;
 import com.xiaosi.wx.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -21,7 +24,8 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("sys_menu")
+@EqualsAndHashCode(callSuper = true)
+@TableName(value = "sys_menu",autoResultMap = true)
 @Schema(name = "SysMenu", description = "")
 public class SysMenu extends BaseEntity {
 

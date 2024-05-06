@@ -35,7 +35,7 @@
         m.deleted
         from sys_menu m
         left join sys_role_menu srm on m.id = srm.menu_id
-        where srm.role_id in
+        where m.deleted = 0 AND srm.role_id in
         <foreach collection="roleIds" open="(" close=")" separator="," item="roleId">
             #{roleId}
         </foreach>

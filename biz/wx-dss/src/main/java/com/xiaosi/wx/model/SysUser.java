@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -152,9 +153,9 @@ public class SysUser extends BaseEntity implements UserDetails {
 //    private List<Perm> perms;
 
 
-    @TableField(exist = false)
-    @Getter(AccessLevel.NONE)
-    private Collection<GrantedAuthority> authorities;
+//    @TableField(exist = false)
+//    @Getter(AccessLevel.NONE)
+//    private Collection<GrantedAuthority> authorities;
 
     // 这是权限
     /*@Override
@@ -167,31 +168,25 @@ public class SysUser extends BaseEntity implements UserDetails {
         return AuthorityUtils.commaSeparatedStringToAuthorityList(role);
     }*/
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 将权限告知SpringSecurity，通过lambda表达式将Set<String>转成Collection<GrantedAuthority>
-        if(perms != null && perms.size() > 0) {
-            // 返回权限信息
-            return perms.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
-        }
-        return null;
-    }
-
     // 角色信息
     @TableField(exist = false)
     private Set<SysRole> roleSet = new HashSet<>();
-
-    public  Set<Long> getRoleIds() {
-        return roleSet.stream().map(m->m.getId()).collect(Collectors.toSet());
-    }
 
     // 菜单信息
     @TableField(exist = false)
     private Set<SysMenu> menuSet = new HashSet<>();
 
-    //权限的信息
-    @TableField(exist = false)
-    private Set<String> perms = new HashSet<>();
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 将权限告知SpringSecurity，通过lambda表达式将Set<String>转成Collection<GrantedAuthority>
+        return menuSet.stream().map(SysMenu::getPerms).filter(StringUtils::hasText).map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+    }
+
+
+    public  Set<Long> getRoleIds() {
+        return roleSet.stream().map(m->m.getId()).collect(Collectors.toSet());
+    }
+
 
     public Set<String> getPerms() {
         return menuSet.stream().map(m->m.getPerms()).collect(Collectors.toSet());

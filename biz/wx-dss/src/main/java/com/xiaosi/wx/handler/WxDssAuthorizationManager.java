@@ -35,12 +35,8 @@ public class WxDssAuthorizationManager implements AuthorizationManager<RequestAu
         log.info("uri======>>>>>{}",uri);
         log.info("url======>>>>>{}",url);
 
-        if("/login".equals(uri) || "/logout".equals(uri) ){
+        if("/login".equals(uri) || "/logout".equals(uri) || "/error".equals(uri) ){
         return new AuthorizationDecision(true);
-        }
-
-        if( "/error".equals(uri)){
-            return new AuthorizationDecision(false);
         }
 
         SysMenu menu = new LambdaQueryChainWrapper<>(menuMapper).eq(SysMenu::getPath, uri).one();

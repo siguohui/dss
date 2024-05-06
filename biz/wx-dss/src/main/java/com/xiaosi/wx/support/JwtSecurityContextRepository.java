@@ -10,6 +10,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,6 +29,10 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
 
     @Resource
     private JwtUtil jwtUtil;
+
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
+    private static final String AUTHENTICATION_CACHE_KEY_PREFIX = "security:authentication:";
 
     /**
      * SECRET 是签名密钥，只生成一次即可，生成方法：
@@ -69,7 +74,6 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
 
     @Override
     public void saveContext(SecurityContext context, HttpServletRequest request, HttpServletResponse response) {
-
         UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
         String token = jwtUtil.createToken(userDetails.getUsername(),String.join(",",AuthorityUtils.authorityListToSet(context.getAuthentication().getAuthorities())));
         request.setAttribute("accessToken",token);
