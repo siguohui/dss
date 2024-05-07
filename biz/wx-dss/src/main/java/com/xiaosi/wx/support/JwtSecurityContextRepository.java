@@ -20,9 +20,7 @@ import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.time.Duration;
-import java.util.Date;
+import java.util.Objects;
 
 @Component
 public class JwtSecurityContextRepository implements SecurityContextRepository {
@@ -34,15 +32,6 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
     private RedisTemplate<String,Object> redisTemplate;
     private static final String AUTHENTICATION_CACHE_KEY_PREFIX = "security:authentication:";
 
-    /**
-     * SECRET 是签名密钥，只生成一次即可，生成方法：
-     * Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-     * String secretString = Encoders.BASE64.encode(key.getEncoded()); # 本文使用 BASE64 编码
-     * */
-    private static final String SECRET = "cuAihCz53DZRjZwbsGcZJ2Ai6At+T142uphtJMsk7iQ=";
-//    SecretKey secretKey = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
-    private final SecretKey key = Jwts.SIG.HS256.key().build();
-
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
         HttpServletRequest request = requestResponseHolder.getRequest();
@@ -53,22 +42,16 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
             return securityContext;
         }
 
-        /*Jws<Claims> claimsJws = null;
         try {
-            claimsJws = Jwts.parser().verifyWith(key).build().parseSignedClaims(authorization);
-        } catch (JwtException e) {
+            Claims payload = jwtUtil.parsePayload(authorization);
+            if(Objects.isNull(payload)){
+                return securityContext;
+            }
+            JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),payload.getSubject());
+            securityContext.setAuthentication(token);
+        } catch (Exception e) {
             return securityContext;
         }
-        Claims payload = claimsJws.getPayload();*/
-
-        Claims payload = jwtUtil.parsePayload(authorization);
-
-        JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),payload.getSubject());
-
-        if(authorization == null){
-            return securityContext;
-        }
-        securityContext.setAuthentication(token);
         return securityContext;
     }
 
@@ -87,15 +70,5 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
         }
 
         return jwtUtil.validateToken(authorization);
-
-        /*Jws<Claims> claimsJws = null;
-        try {
-            claimsJws = Jwts.parser().verifyWith(key).build().parseSignedClaims(authorization);
-        } catch (JwtException e) {
-            return false;
-        }
-        Claims payload = claimsJws.getPayload();
-
-        return true;*/
     }
 }

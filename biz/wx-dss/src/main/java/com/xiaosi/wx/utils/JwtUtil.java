@@ -8,6 +8,7 @@ import io.jsonwebtoken.*;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -75,36 +76,36 @@ public class JwtUtil {
     }
 
     public Jws<Claims> parseClaim(String token) {
-
-        Jws<Claims> claimsJws;
         try {
-            claimsJws = Jwts.parser()
+            return Jwts.parser()
                     .verifyWith(rsaKeyProperties.getPublicRsaKey())
                     .build()
                     .parseSignedClaims(token);
-
-        } catch (Exception e) {
-           throw new CustomException(ResultEnum.PARAMETER_TOKEN_VALID);
+        }catch (ExpiredJwtException expiredJwtException) {
+            throw new CustomException("TOKEN已过期");
         }
-
-        return claimsJws;
+        catch (Exception e) {
+            throw new CustomException(e.getCause().getMessage());
+        }
     }
 
     public JwsHeader parseHeader(String token) {
         return parseClaim(token).getHeader();
     }
 
-    public Claims parsePayload(String token)
-    {
-        return parseClaim(token)
-                .getPayload();
+    public Claims parsePayload(String token) {
+        try {
+            return parseClaim(token).getPayload();
+        } catch (Exception e) {
+            throw new CustomException(e.getCause().getMessage());
+        }
     }
 
     public String getUserName(String token){
         String username;
         try
         {
-            username = parsePayload(token).getSubject();
+            username = Optional.ofNullable(parsePayload(token)).map(m->m.getSubject()).orElse("");
         }catch (Exception e){
             username = null;
         }
@@ -118,11 +119,11 @@ public class JwtUtil {
      * @return 过期时间
      */
     public Date getExpiration(String token) {
-        Claims claims = parsePayload(token);
-        if (claims != null) {
-            return claims.getExpiration();
+        try {
+            return parsePayload(token).getExpiration();
+        } catch (Exception e) {
+            throw new CustomException(e.getCause().getMessage());
         }
-        return null;
     }
 
     /**
@@ -130,9 +131,12 @@ public class JwtUtil {
      * @param token 需要被验证的token
      * @return true/false
      */
-    private boolean isTokenExpired(String token)
-    {
-        return getExpiration(token).before(new Date());
+    private boolean isTokenExpired(String token) {
+        try {
+           return getExpiration(token).after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean validateToken(String token) {
@@ -147,7 +151,7 @@ public class JwtUtil {
      */
     public boolean validateToken(String token,UserDetails userDetails) {
         if(Objects.isNull(userDetails)){
-            return !isTokenExpired(token);
+            return isTokenExpired(token);
         }
         return getUserName(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
