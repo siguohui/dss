@@ -1,6 +1,7 @@
 package com.xiaosi.wx.config;
 
-import com.xiaosi.wx.handler.HasPermissionEvaluator;
+import com.xiaosi.wx.handler.MenujSecurityMetadataSource;
+import com.xiaosi.wx.handler.MenuAccessDecisionManager;
 import com.xiaosi.wx.support.sms.SmsAuthenticationProvider;
 import com.xiaosi.wx.support.sms.SmsLoginConfigurer2;
 import com.xiaosi.wx.token.DaoCaoPersistentTokenRepositoryImpl;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,10 +36,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Autowired
-    CustomSecurityMetadataSource customSecurityMetadataSource;
+    MenujSecurityMetadataSource customSecurityMetadataSource;
 
     @Autowired
-    UrlAccessDecisionManager urlAccessDecisionManager;
+    MenuAccessDecisionManager urlAccessDecisionManager;
 
     @Autowired
     private DaoCaoPersistentTokenRepositoryImpl persistentTokenRepository;

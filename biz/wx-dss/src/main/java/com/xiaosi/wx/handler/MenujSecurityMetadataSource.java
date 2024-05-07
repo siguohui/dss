@@ -1,21 +1,28 @@
-package com.xiaosi.wx.config;
+package com.xiaosi.wx.handler;
 
+import com.xiaosi.wx.mapper.SysMenuMapper;
+import com.xiaosi.wx.entity.SysMenu;
+import jakarta.annotation.Resource;
+import org.apache.groovy.util.Maps;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
 
+import java.security.Permission;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Component
-public class CustomSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+public class MenujSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-//    @Autowired
-//    MenuService menuService;
-    // AntPathMatcher 是一个正则匹配工具
+    @Resource
+    SysMenuMapper sysMenuMapper;
     AntPathMatcher antPathMatcher = new AntPathMatcher();
-
     /*@Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
         String requestUrl = ((FilterInvocation) o).getFullRequestUrl();
@@ -36,9 +43,25 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        String requestUrl = ((FilterInvocation) object).getFullRequestUrl();
-        System.out.println(requestUrl);
-        return null;
+        System.out.println(((FilterInvocation) object).getFullRequestUrl());
+        String requestURI = ((FilterInvocation) object).getRequest().getRequestURI();
+
+        if(antPathMatcher.match("/captcha/**", requestURI) || antPathMatcher.match("/favicon.ico", requestURI)){
+            return SecurityConfig.createList("NO_AUTH");
+        }
+
+        List<SysMenu> sysMenus = sysMenuMapper.selectByMap(Maps.of("type", 2, "path", requestURI));
+
+        if(sysMenus.isEmpty()){
+            return SecurityConfig.createList("NO_AUTH");
+        }
+
+        for (SysMenu sysMenu : sysMenus) {
+            if (antPathMatcher.match(sysMenu.getPath(), requestURI)) {
+                return SecurityConfig.createList(sysMenu.getPerms());
+            }
+        }
+        return SecurityConfig.createList("ROLE_LOGIN");
     }
 
     @Override

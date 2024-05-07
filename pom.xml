@@ -62,6 +62,8 @@
 
     <testng.version>7.1.0</testng.version>
     <commons-lang3>3.9</commons-lang3>
+    <guava.version>33.2.0-jre</guava.version>
+    <groovy.version>4.0.21</groovy.version>
   </properties>
 
   <dependencies>
@@ -105,6 +107,19 @@
       <artifactId>hutool-all</artifactId>
       <version>${hutool.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.groovy/groovy -->
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <version>${groovy.version}</version>
+    </dependency>
+
     <!-- JAVA 17 -->
     <dependency>
       <groupId>com.sun.xml.bind</groupId>

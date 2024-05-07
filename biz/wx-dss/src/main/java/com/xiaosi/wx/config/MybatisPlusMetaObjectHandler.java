@@ -1,6 +1,5 @@
 package com.xiaosi.wx.config;
 
-import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.xiaosi.wx.utils.JwtUtil;
 import jakarta.annotation.Resource;
@@ -20,7 +19,7 @@ import java.time.ZoneId;
  */
 @Slf4j
 @Component
-public class MyMetaObjectHandler implements MetaObjectHandler {
+public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
     @Resource
     private JwtUtil jwtUtil;

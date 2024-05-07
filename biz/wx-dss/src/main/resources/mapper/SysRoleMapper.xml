@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaosi.wx.mapper.SysRoleMapper">
-  <resultMap id="BaseResultMap" type="com.xiaosi.wx.model.SysRole">
+  <resultMap id="BaseResultMap" type="com.xiaosi.wx.entity.SysRole">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
@@ -14,14 +14,14 @@
     from sys_role
     where id = #{id,jdbcType=INTEGER}
   </select>
-    <select id="selectByUserId" resultType="com.xiaosi.wx.model.SysRole">
+    <select id="selectByUserId" resultType="com.xiaosi.wx.entity.SysRole">
       SELECT sr.* FROM sys_user_role sur LEFT JOIN sys_role sr ON sur.role_id = sr.id WHERE user_id = #{userId,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insertSelective" parameterType="com.xiaosi.wx.model.SysRole">
+  <insert id="insertSelective" parameterType="com.xiaosi.wx.entity.SysRole">
     insert into sys_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -40,7 +40,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xiaosi.wx.model.SysRole">
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiaosi.wx.entity.SysRole">
     update sys_role
     <set>
       <if test="name != null">
@@ -49,7 +49,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.xiaosi.wx.model.SysRole">
+  <update id="updateByPrimaryKey" parameterType="com.xiaosi.wx.entity.SysRole">
     update sys_role
     set name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

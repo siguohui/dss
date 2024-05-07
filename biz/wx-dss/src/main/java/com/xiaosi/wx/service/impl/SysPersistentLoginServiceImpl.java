@@ -1,6 +1,6 @@
 package com.xiaosi.wx.service.impl;
 
-import com.xiaosi.wx.model.SysPersistentLogin;
+import com.xiaosi.wx.entity.SysPersistentLogin;
 import com.xiaosi.wx.mapper.SysPersistentLoginMapper;
 import com.xiaosi.wx.service.SysPersistentLoginService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

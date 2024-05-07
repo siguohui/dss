@@ -1,6 +1,6 @@
 package com.xiaosi.wx.mapper;
 
-import com.xiaosi.wx.model.SysPersistentLogin;
+import com.xiaosi.wx.entity.SysPersistentLogin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -1,4 +1,4 @@
-package com.xiaosi.wx.model;
+package com.xiaosi.wx.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.xiaosi.wx.annotation.EncryptedColumn;

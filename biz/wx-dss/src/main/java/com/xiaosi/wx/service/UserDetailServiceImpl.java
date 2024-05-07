@@ -1,11 +1,10 @@
 package com.xiaosi.wx.service;
 
-import com.google.common.collect.Sets;
 import com.xiaosi.wx.exception.CustomException;
 import com.xiaosi.wx.mapper.SysMenuMapper;
 import com.xiaosi.wx.mapper.SysUserMapper;
-import com.xiaosi.wx.model.SysMenu;
-import com.xiaosi.wx.model.SysUser;
+import com.xiaosi.wx.entity.SysMenu;
+import com.xiaosi.wx.entity.SysUser;
 import jakarta.annotation.Resource;
 
 import org.springframework.security.core.userdetails.UserDetails;

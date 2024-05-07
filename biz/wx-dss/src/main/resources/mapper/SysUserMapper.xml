@@ -23,7 +23,7 @@
     deleted,
     access_policy
   </sql>
-  <resultMap id="SysUserResultMap" type="com.xiaosi.wx.model.SysUser">
+  <resultMap id="SysUserResultMap" type="com.xiaosi.wx.entity.SysUser">
     <id column="id" property="id"/>
     <result column="username" property="username"/>
     <result column="password" property="password"/>
@@ -47,7 +47,7 @@
     <collection property="roleSet" resultMap="RoleResultMap"/>
   </resultMap>
 
-  <resultMap id="RoleResultMap" type="com.xiaosi.wx.model.SysRole">
+  <resultMap id="RoleResultMap" type="com.xiaosi.wx.entity.SysRole">
     <id column="role_id" property="id"/>
     <result column="role_name" property="name"/>
     <result column="role_code" property="code"/>

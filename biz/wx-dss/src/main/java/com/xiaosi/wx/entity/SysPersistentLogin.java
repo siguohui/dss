@@ -1,4 +1,4 @@
-package com.xiaosi.wx.model;
+package com.xiaosi.wx.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

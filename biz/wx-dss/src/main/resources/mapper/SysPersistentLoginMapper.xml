@@ -3,7 +3,7 @@
 <mapper namespace="com.xiaosi.wx.mapper.SysPersistentLoginMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.xiaosi.wx.model.SysPersistentLogin">
+    <resultMap id="BaseResultMap" type="com.xiaosi.wx.entity.SysPersistentLogin">
         <result column="series" property="series" />
         <result column="username" property="username" />
         <result column="token" property="token" />

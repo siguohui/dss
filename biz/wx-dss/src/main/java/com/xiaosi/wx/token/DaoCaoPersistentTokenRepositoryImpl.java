@@ -3,7 +3,7 @@ package com.xiaosi.wx.token;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.xiaosi.wx.mapper.SysPersistentLoginMapper;
-import com.xiaosi.wx.model.SysPersistentLogin;
+import com.xiaosi.wx.entity.SysPersistentLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;

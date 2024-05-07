@@ -3,7 +3,7 @@
 <mapper namespace="com.xiaosi.wx.mapper.SysMenuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.xiaosi.wx.model.SysMenu">
+    <resultMap id="BaseResultMap" type="com.xiaosi.wx.entity.SysMenu">
         <id column="id" property="id" />
         <result column="create_by" property="createBy" />
         <result column="create_time" property="createTime" />
@@ -18,7 +18,7 @@
         <result column="type" property="type" />
         <result column="icon" property="icon" />
     </resultMap>
-    <select id="selectMenuByRoleId" resultType="com.xiaosi.wx.model.SysMenu">
+    <select id="selectMenuByRoleId" resultType="com.xiaosi.wx.entity.SysMenu">
         select
         m.id,
         m.parent_id,

@@ -1,8 +1,5 @@
 package com.xiaosi.wx.controller;
 
-import com.xiaosi.wx.annotation.IgnoreResult;
-import com.xiaosi.wx.entity.Stu;
-import com.xiaosi.wx.mapper.StuMapper;
 import com.xiaosi.wx.pojo.JsonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +7,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,19 +19,8 @@ public class LoginController {
     @Setter(onMethod_ = @Autowired)
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Setter(onMethod_ = @Autowired)
-    private StuMapper stuMapper;
-
+//  @PreAuthorize("hasRole('ADMIN')")
     @Cacheable(value = "dept",key = "#name")
-    @Operation(summary = "登录接口")
-    @GetMapping("/login")
-    public List<Stu> login(String name){
-//        ValueOperations<String, Object> op = redisTemplate.opsForValue();
-//        op.set("name","xiaosi");
-        return stuMapper.selectList(null);
-    }
-
-//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
     public JsonResult index(String bookName) {
         return JsonResult.success("index");

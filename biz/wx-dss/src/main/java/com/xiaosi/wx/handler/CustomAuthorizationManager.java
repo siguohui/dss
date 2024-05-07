@@ -2,7 +2,7 @@ package com.xiaosi.wx.handler;
 
 import com.xiaosi.wx.annotation.Policy;
 import com.xiaosi.wx.enums.PolicyEnum;
-import com.xiaosi.wx.model.SysUser;
+import com.xiaosi.wx.entity.SysUser;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.authorization.AuthorizationDecision;

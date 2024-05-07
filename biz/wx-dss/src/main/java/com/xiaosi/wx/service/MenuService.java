@@ -1,6 +1,6 @@
 package com.xiaosi.wx.service;
 
-import com.xiaosi.wx.model.SysMenu;
+import com.xiaosi.wx.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
