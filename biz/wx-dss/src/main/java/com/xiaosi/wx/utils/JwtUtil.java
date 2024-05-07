@@ -81,10 +81,9 @@ public class JwtUtil {
                     .verifyWith(rsaKeyProperties.getPublicRsaKey())
                     .build()
                     .parseSignedClaims(token);
-        }catch (ExpiredJwtException expiredJwtException) {
+        } catch (ExpiredJwtException expiredJwtException) {
             throw new CustomException("TOKEN已过期");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(e.getCause().getMessage());
         }
     }
@@ -102,14 +101,11 @@ public class JwtUtil {
     }
 
     public String getUserName(String token){
-        String username;
-        try
-        {
-            username = Optional.ofNullable(parsePayload(token)).map(m->m.getSubject()).orElse("");
-        }catch (Exception e){
-            username = null;
+        try {
+            return parsePayload(token).getSubject();
+        }catch (CustomException e){
+            return null;
         }
-        return username;
     }
 
     /**
@@ -141,6 +137,18 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         return validateToken(token,null);
+    }
+
+    public boolean checkToken(String token) {
+        try {
+            Claims claims = parsePayload(token);
+            if(Objects.nonNull(claims)){
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
     /**

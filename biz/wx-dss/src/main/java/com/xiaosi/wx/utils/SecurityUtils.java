@@ -25,4 +25,12 @@ public class SecurityUtils {
         }
         return principal.toString();
     }
+
+    public static String getUername(Authentication authentication){
+        Object principal = authentication.getPrincipal();
+        if(principal instanceof UserDetails){
+            return  ((UserDetails) principal).getUsername();
+        }
+        return principal.toString();
+    }
 }

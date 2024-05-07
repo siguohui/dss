@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Chill
  */
+@Component
 @AllArgsConstructor
 public class RedisUtil {
 
@@ -142,6 +144,20 @@ public class RedisUtil {
         try {
             if (time > 0) {
                 redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+            } else {
+                set(key, value);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean setMinutes(String key, Object value, long num) {
+        try {
+            if (num > 0) {
+                redisTemplate.opsForValue().set(key, value, num, TimeUnit.MINUTES);
             } else {
                 set(key, value);
             }
