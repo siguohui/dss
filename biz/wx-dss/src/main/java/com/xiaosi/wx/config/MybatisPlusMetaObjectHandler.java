@@ -1,9 +1,6 @@
 package com.xiaosi.wx.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.xiaosi.wx.utils.JwtUtil;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.security.core.Authentication;
@@ -21,11 +18,6 @@ import java.time.ZoneId;
 @Component
 public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
-    @Resource
-    private JwtUtil jwtUtil;
-    @Resource
-    private HttpServletRequest request;
-
     private static final String CREATE_TIME_FIELD = "createTime";
     private static final String CREATE_BY_FIELD = "createBy";
     private static final String UPDATE_TIME_FIELD = "updateTime";
@@ -42,7 +34,6 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
         } else {
             username = principal.toString();
         }
-
         this.strictInsertFill(metaObject, CREATE_TIME_FIELD, LocalDateTime.class, LocalDateTime.now (ZoneId.of (UTC)));
         this.strictUpdateFill(metaObject, UPDATE_TIME_FIELD,  LocalDateTime.class, LocalDateTime.now (ZoneId.of (UTC)));
         this.strictInsertFill(metaObject, CREATE_BY_FIELD, String.class, username);

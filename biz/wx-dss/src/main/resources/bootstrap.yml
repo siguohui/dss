@@ -233,7 +233,7 @@ rsa:
     privateKey: classpath:/keys/rsa_key
 jjwt:
   token:
-    expireTime: 10
+    expireTime: 200
     secretKey: test
 
 decorator:
