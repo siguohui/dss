@@ -3,6 +3,7 @@ package com.xiaosi.wx.controller;
 import com.xiaosi.wx.config.RsaKeyProperties;
 import com.xiaosi.wx.mapper.SysUserMapper;
 import com.xiaosi.wx.entity.SysUser;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +29,7 @@ public class StuController {
 
 //    @PreAuthorize("hasPermission('USER1','READ')")
     @PostMapping("/add")
-    public int getList(@RequestBody SysUser sysUser) throws IOException {
+    public int getList(@RequestBody SysUser sysUser, HttpServletRequest request) throws IOException {
 //        System.out.println(rsaKeyProperties.getPrivateRsaKey());
         Resource publicKey = rsaKeyProperties.getPublicKey();
 //        System.out.println(IOUtils.toString(publicKey.getInputStream(), StandardCharsets.UTF_8));

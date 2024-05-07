@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.groovy.util.Maps;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,6 @@ public class BzSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         log.info("登录成功");
         Object token = redisUtil.get(Constant.TOKEN_KEY_PREFIX + SecurityUtils.getUername(authentication));
-        ResponseUtils.responseJson(response, JsonResult.success("登录成功",token));
+        ResponseUtils.responseJson(response, JsonResult.success("登录成功", Maps.of("token",token,"access-token","Bearer " + token)));
     }
 }

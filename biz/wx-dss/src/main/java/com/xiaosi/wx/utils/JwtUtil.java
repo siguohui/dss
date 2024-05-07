@@ -2,13 +2,10 @@ package com.xiaosi.wx.utils;
 
 import com.xiaosi.wx.config.RsaKeyProperties;
 import com.xiaosi.wx.exception.CustomException;
-import com.xiaosi.wx.pojo.ResultEnum;
 import io.jsonwebtoken.*;
-
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -72,7 +69,7 @@ public class JwtUtil {
 
     private Date expiration()
     {
-        return new Date(System.currentTimeMillis() + Duration.ofMinutes(expireTime).toMillis());
+        return new Date(System.currentTimeMillis() + Duration.ofSeconds(expireTime).toMillis());
     }
 
     public Jws<Claims> parseClaim(String token) {

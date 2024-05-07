@@ -43,14 +43,6 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
             username = principal.toString();
         }
 
-        System.out.println("----------------------------------");
-
-        System.out.println(jwtUtil.getUserName(request.getHeader("Authorization")));
-
-        System.out.println("----------------------------------");
-
-
-
         this.strictInsertFill(metaObject, CREATE_TIME_FIELD, LocalDateTime.class, LocalDateTime.now (ZoneId.of (UTC)));
         this.strictUpdateFill(metaObject, UPDATE_TIME_FIELD,  LocalDateTime.class, LocalDateTime.now (ZoneId.of (UTC)));
         this.strictInsertFill(metaObject, CREATE_BY_FIELD, String.class, username);

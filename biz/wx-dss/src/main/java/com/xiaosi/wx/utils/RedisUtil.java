@@ -1,7 +1,7 @@
 package com.xiaosi.wx.utils;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
@@ -18,11 +18,12 @@ import java.util.concurrent.TimeUnit;
  * @author Chill
  */
 @Component
-@AllArgsConstructor
 public class RedisUtil {
 
     @Qualifier("dssRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
+    @Value("${jjwt.token.expireTime}")
+    private long expireTime;
 
     //=============================common============================
     void init() {
@@ -154,10 +155,10 @@ public class RedisUtil {
         }
     }
 
-    public boolean setMinutes(String key, Object value, long num) {
+    public boolean setBySecond(String key, Object value, long num) {
         try {
             if (num > 0) {
-                redisTemplate.opsForValue().set(key, value, num, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(key, value, num, TimeUnit.SECONDS);
             } else {
                 set(key, value);
             }
