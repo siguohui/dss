@@ -16,6 +16,7 @@ import jakarta.validation.ElementKind;
 import jakarta.validation.Path;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
@@ -232,6 +233,13 @@ public class ExceptionHandling {
     }
 
     // 处理自定义异常:AbstractException
+    @ExceptionHandler(value = {DuplicateKeyException.class})
+    public JsonResult handleDuplicateKeyException(HttpServletRequest request, DuplicateKeyException ex) {
+        log.error("[{}] {} [ex] {}", request.getMethod(), request.getRequestURI(), ex.toString());
+        return JsonResult.fail("外键约束:"+ex.getCause().getMessage());
+    }
+
+    // 处理自定义异常:AbstractException
     @ExceptionHandler(value = {AbstractException.class})
     public JsonResult handleAbstractException(HttpServletRequest request, AbstractException ex) {
         String requestURL = "URL地址";
@@ -242,7 +250,6 @@ public class ExceptionHandling {
     // 兜底处理：Throwable
     @ExceptionHandler(value = Throwable.class)
     public JsonResult handleThrowable(HttpServletRequest request, Throwable throwable) {
-//        String requestURL = getUrl(request);
         log.error("[{}] {} ", request.getMethod(), "URL地址:"+request.getRequestURI(), throwable);
         return JsonResult.fail(ResultEnum.RESULT_FAIL.getMsg());
     }
