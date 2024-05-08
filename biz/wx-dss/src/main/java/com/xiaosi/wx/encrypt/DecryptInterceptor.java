@@ -1,12 +1,12 @@
-package com.xiaosi.wx.handler;
+package com.xiaosi.wx.encrypt;
 
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xiaosi.wx.annotation.EncryptedColumn;
-import com.xiaosi.wx.annotation.EncryptedTable;
+import com.xiaosi.wx.encrypt.annotation.EncryptedColumn;
+import com.xiaosi.wx.encrypt.annotation.EncryptedTable;
 import com.xiaosi.wx.utils.DBAesUtils;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.plugin.*;

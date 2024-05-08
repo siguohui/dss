@@ -1,4 +1,4 @@
-package com.xiaosi.wx.handler;
+package com.xiaosi.wx.encrypt;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.update.Update;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import com.xiaosi.wx.annotation.EncryptedColumn;
-import com.xiaosi.wx.annotation.EncryptedTable;
+import com.xiaosi.wx.encrypt.annotation.EncryptedColumn;
+import com.xiaosi.wx.encrypt.annotation.EncryptedTable;
 import com.xiaosi.wx.utils.DBAesUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;

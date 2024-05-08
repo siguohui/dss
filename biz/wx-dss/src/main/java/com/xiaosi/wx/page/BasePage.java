@@ -1,6 +1,6 @@
 package com.xiaosi.wx.page;
 
-import com.xiaosi.wx.annotation.PageX;
+import com.xiaosi.wx.page.annotation.PageX;
 import lombok.Data;
 
 import java.io.Serializable;

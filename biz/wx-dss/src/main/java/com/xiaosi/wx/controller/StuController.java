@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>
@@ -29,11 +30,11 @@ public class StuController {
 
 //    @PreAuthorize("hasPermission('USER1','READ')")
     @PostMapping("/add")
-    public int getList(@RequestBody SysUser sysUser, HttpServletRequest request) throws IOException {
+    public List<SysUser> getList(@RequestBody SysUser sysUser, HttpServletRequest request) throws IOException {
 //        System.out.println(rsaKeyProperties.getPrivateRsaKey());
         Resource publicKey = rsaKeyProperties.getPublicKey();
 //        System.out.println(IOUtils.toString(publicKey.getInputStream(), StandardCharsets.UTF_8));
 //        System.out.println(rsaKeyProperties.getPublicRsaKey());
-        return sysUserMapper.insert(sysUser);
+        return sysUserMapper.selectList(null);
     }
 }

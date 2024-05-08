@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.xiaosi.wx.annotation.IgnoreResult;
-import com.xiaosi.wx.annotation.PageX;
+import com.xiaosi.wx.page.annotation.PageX;
 import com.xiaosi.wx.pojo.JsonResult;
 import com.xiaosi.wx.utils.ResponseUtils;
 import lombok.SneakyThrows;

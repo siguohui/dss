@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class PageAspect {
 
-    @Pointcut("@annotation(com.xiaosi.wx.annotation.PageX) || execution(* *..*Service.*Page(..))")
+    @Pointcut("@annotation(com.xiaosi.wx.page.annotation.PageX) || execution(* *..*Service.*Page(..))")
     public void point(){}
 
     @Around("point()")

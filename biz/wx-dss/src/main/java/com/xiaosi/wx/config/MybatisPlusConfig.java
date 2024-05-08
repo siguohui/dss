@@ -4,6 +4,7 @@ package com.xiaosi.wx.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.xiaosi.wx.encrypt.EncryptInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,9 @@ public class MybatisPlusConfig {
         PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
         paginationInnerInterceptor.setDbType(DbType.MYSQL);
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
+
+        EncryptInterceptor encryptInterceptor = new EncryptInterceptor();
+        interceptor.addInnerInterceptor(encryptInterceptor);
         return interceptor;
     }
 }

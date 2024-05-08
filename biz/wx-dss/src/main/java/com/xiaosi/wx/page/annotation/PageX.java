@@ -1,4 +1,4 @@
-package com.xiaosi.wx.annotation;
+package com.xiaosi.wx.page.annotation;
 
 import java.lang.annotation.*;
 
