@@ -25,8 +25,6 @@ public class MyCodeGenerator {
 
     public static void main(String[] args) {
 
-
-
         FastAutoGenerator.create(jdbcUrl, username, password)
                 // 全局配置
                 .globalConfig(builder -> {

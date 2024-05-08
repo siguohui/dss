@@ -233,6 +233,8 @@ rsa:
     privateKey: classpath:/keys/rsa_key
 jjwt:
   token:
+    tokenHeader: Authorization
+    tokenPrefix: Bearer
     tokenExpiredMs: 200
     jwtTokenSecret: 1234567890abcdef1234567890abcdef
 

@@ -4,11 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.xiaosi.wx.common.Constant;
 import com.xiaosi.wx.entity.SysUser;
-import com.xiaosi.wx.exception.CustomException;
 import com.xiaosi.wx.vo.SysUserDetails;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -74,10 +70,10 @@ public class TokenUtils {
 
     public String getHeaderToken()  {
         /*HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();*/
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(jwtUtil.getTokenParam().getTokenHeader());
         if(StrUtil.isNotBlank(token)) {
             List<String> tokenList = StrUtil.splitTrim(token, StrUtil.SPACE);
-            if(CollUtil.size(tokenList) == 2 && StrUtil.equals(tokenList.get(0), "Bearer")) {
+            if(CollUtil.size(tokenList) == 2 && StrUtil.equals(tokenList.get(0), jwtUtil.getTokenParam().getTokenPrefix())) {
                 token = tokenList.get(1);
             }
         } else if((StrUtil.equalsIgnoreCase(request.getMethod(),"POST") && StrUtil.containsIgnoreCase(request.getHeader("Content-Type"),"application/x-www-form-urlencoded"))) {

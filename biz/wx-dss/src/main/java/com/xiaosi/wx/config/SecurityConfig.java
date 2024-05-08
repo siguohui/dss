@@ -37,13 +37,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 //        securedEnabled = true,
 //        jsr250Enabled = true)
 public class SecurityConfig {
-
     @Autowired
     MenujSecurityMetadataSource customSecurityMetadataSource;
-
     @Autowired
     MenuAccessDecisionManager urlAccessDecisionManager;
-
     @Autowired
     private WxDssPersistentTokenRepositoryImpl persistentTokenRepository;
     @Autowired

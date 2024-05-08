@@ -180,8 +180,8 @@ public class JwtUtil {
                 .compact();
     }
 
-    public final static String getToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+    public String getToken(HttpServletRequest request) {
+        String token = request.getHeader(tokenParam.getTokenHeader());
         return token;
     }
 

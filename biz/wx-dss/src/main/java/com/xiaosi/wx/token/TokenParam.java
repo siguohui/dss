@@ -10,4 +10,6 @@ import org.springframework.context.annotation.Configuration;
 public class TokenParam {
     private String jwtTokenSecret;
     private long tokenExpiredMs;
+    private String tokenPrefix;
+    private String tokenHeader;
 }
