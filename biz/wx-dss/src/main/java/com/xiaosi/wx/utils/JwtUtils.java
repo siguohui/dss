@@ -140,6 +140,11 @@ public class JwtUtils {
                 .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
                 // 设置需要解析的jwt
                 .parseClaimsJws(token).getBody();
+
+
+                Jwts.parser()
+                    .setSigningKey(tokenParam.getJwtTokenSecret())
+                    .getClass(token);
         return claims;
     }*/
 

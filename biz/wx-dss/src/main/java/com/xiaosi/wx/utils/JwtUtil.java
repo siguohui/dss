@@ -2,11 +2,10 @@ package com.xiaosi.wx.utils;
 
 import com.xiaosi.wx.config.RsaKeyProperties;
 import com.xiaosi.wx.exception.CustomException;
+import com.xiaosi.wx.token.TokenParam;
 import io.jsonwebtoken.*;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,31 +14,27 @@ import java.util.*;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "jjwt.token")
 public class JwtUtil {
 
-    @Resource
-    private RsaKeyProperties rsaKeyProperties;
+    private final RsaKeyProperties rsaKeyProperties;
+    private final TokenParam tokenParam;
 
-    private String secretKey;
-
-    private long expireTime;
     /**
      * 创建JWT Token
      *
      * @param username
      * @return JWT Token
      */
-    public String createToken(String username,String authorities) {
+    public String createToken(String username) {
         return Jwts.builder()
-                .claims(initClaims(username, authorities))
+                .claims(initClaims(username))
                 .expiration(expiration())
                 .signWith(rsaKeyProperties.getPrivateRsaKey(),Jwts.SIG.RS512)
 //                .compressWith(CompressionCodecs.DEFLATE)
                 .compact();
     }
 
-    private Map<String,Object> initClaims(String username,String authorities){
+    private Map<String,Object> initClaims(String username){
 
        /* iss (issuer)：签发人
         sub (subject)：主题
@@ -63,13 +58,12 @@ public class JwtUtil {
         //"jti" (JWT ID): JWT 的唯一标识符。这个字段可以用来标识 JWT 的唯一性，避免重放攻击等问题。
         claims.put("jti", UUID.randomUUID().toString());
         //"nbf" (Not Before): 代表 JWT 的生效时间。在这个时间之前 JWT 不会生效，通常也是一个 UNIX 时间戳。我这里不填，没这个需求
-        claims.put("authorities",authorities);
         return claims;
     }
 
     private Date expiration()
     {
-        return new Date(System.currentTimeMillis() + Duration.ofSeconds(expireTime).toMillis());
+        return new Date(System.currentTimeMillis() + Duration.ofSeconds(tokenParam.getTokenExpiredMs()).toMillis());
     }
 
     public Jws<Claims> parseClaim(String token) {
@@ -79,7 +73,7 @@ public class JwtUtil {
                     .build()
                     .parseSignedClaims(token);
         } catch (ExpiredJwtException expiredJwtException) {
-            throw new CustomException("TOKEN已过期");
+            throw expiredJwtException;
         } catch (Exception e) {
             throw new CustomException(e.getCause().getMessage());
         }
@@ -177,7 +171,7 @@ public class JwtUtil {
      */
     public String refreshToken(String token){
         Claims claims = parsePayload(token);
-        Map<String, Object> initClaims = initClaims((String) claims.get("username"),(String) claims.get("authorities"));
+        Map<String, Object> initClaims = initClaims((String) claims.get("username"));
         initClaims.put("iat",new Date());
         return Jwts.builder()
                 .claims(initClaims)

@@ -1,6 +1,5 @@
 package com.xiaosi.wx.support;
 
-import com.xiaosi.wx.common.Constant;
 import com.xiaosi.wx.utils.JwtUtil;
 import com.xiaosi.wx.utils.RedisUtil;
 import com.xiaosi.wx.utils.TokenUtils;
@@ -9,15 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
-import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
@@ -30,17 +25,9 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
 
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
-        /*try {
-            Claims payload = jwtUtil.parsePayload(authorization);
-            if(Objects.isNull(payload)){
-                return securityContext;
-            }
-
-            JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),payload.getSubject());
-            securityContext.setAuthentication(token);
-        } catch (Exception e) {
-            return securityContext;
-        }*/
+        /*Claims payload = jwtUtil.parsePayload(authorization);
+        JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),payload.getSubject());
+        securityContext.setAuthentication(token);*/
         return tokenUtils.getSecurityContext();
     }
 

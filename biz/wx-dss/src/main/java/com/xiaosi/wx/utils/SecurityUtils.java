@@ -6,6 +6,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class SecurityUtils {
 
     public static SecurityContext getContext(){
@@ -13,14 +16,17 @@ public class SecurityUtils {
     }
 
     public static Authentication getAuthentication() {
-        return getContext().getAuthentication();
+        return Optional.ofNullable(getContext()).map(m->m.getAuthentication()).orElse(null);
     }
 
     public static Object getPrincipal() {
-        return getAuthentication().getPrincipal();
+        return Optional.ofNullable(getAuthentication()).map(m->m.getPrincipal()).orElse(null);
     }
     public static String getUername(){
         Object principal = getPrincipal();
+        if(Objects.isNull(principal)){
+            return "";
+        }
         if(principal instanceof UserDetails){
            return  ((UserDetails) principal).getUsername();
         }

@@ -1,15 +1,17 @@
 package com.xiaosi.wx.config;
 
+import com.xiaosi.wx.filter.JwtAuthenticationFilter;
 import com.xiaosi.wx.handler.MenujSecurityMetadataSource;
 import com.xiaosi.wx.handler.MenuAccessDecisionManager;
 import com.xiaosi.wx.support.sms.SmsAuthenticationProvider;
 import com.xiaosi.wx.support.sms.SmsLoginConfigurer2;
-import com.xiaosi.wx.token.DaoCaoPersistentTokenRepositoryImpl;
+import com.xiaosi.wx.token.WxDssPersistentTokenRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +25,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 
@@ -42,7 +45,9 @@ public class SecurityConfig {
     MenuAccessDecisionManager urlAccessDecisionManager;
 
     @Autowired
-    private DaoCaoPersistentTokenRepositoryImpl persistentTokenRepository;
+    private WxDssPersistentTokenRepositoryImpl persistentTokenRepository;
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -71,12 +76,12 @@ public class SecurityConfig {
                 http.getSharedObject(ApplicationContext.class);
         http
                 .authorizeHttpRequests(r -> r
-//                      .requestMatchers(HttpMethod.POST, "/web/authenticate").permitAll()
+                      .requestMatchers(HttpMethod.POST, "/refresh").permitAll()
 //                        .requestMatchers("/login").anonymous()
                         .anyRequest()
 //                                .access("@ServiceImpl.hasPermission(request,authentication)")
-//                                .access(authorizationManager)
-                                                        .authenticated()
+                                .access(authorizationManager)
+//                                                        .authenticated()
                                 /*.access((authentication, object) -> {
                                     //表示请求的 URL 地址和数据库的地址是否匹配上了
                                     boolean isMatch = true;
@@ -135,6 +140,7 @@ public class SecurityConfig {
                 .headers(h-> h.frameOptions(withDefaults()).disable())
                 // 配置退出登录
                 .logout(logout -> logout.logoutSuccessHandler(logoutSuccessHandler).deleteCookies("rememberMe"))
+                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //        .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

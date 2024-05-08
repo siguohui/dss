@@ -1,10 +1,9 @@
 package com.xiaosi.wx.handler;
 
-import com.xiaosi.wx.common.Constant;
 import com.xiaosi.wx.pojo.JsonResult;
-import com.xiaosi.wx.utils.RedisUtil;
+import com.xiaosi.wx.token.JwtTokenProvider;
 import com.xiaosi.wx.utils.ResponseUtils;
-import com.xiaosi.wx.utils.SecurityUtils;
+import com.xiaosi.wx.utils.TokenUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +18,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BzSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final RedisUtil redisUtil;
+    private final TokenUtils tokenUtils;
+    private final JwtTokenProvider tokenProvider;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         log.info("登录成功");
-        Object token = redisUtil.get(Constant.TOKEN_KEY_PREFIX + SecurityUtils.getUername(authentication));
-        ResponseUtils.responseJson(response, JsonResult.success("登录成功", Maps.of("token",token,"access-token","Bearer " + token)));
+        String token = tokenUtils.getRedisToken();
+        System.out.println(tokenProvider.createJwtToken(authentication));
+        ResponseUtils.responseJson(response, JsonResult.success("登录成功", Maps.of(  "tokenType","Bearer", "token", token, "access-token", "Bearer " + token)));
     }
 }

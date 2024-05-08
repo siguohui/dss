@@ -13,11 +13,11 @@ import java.util.Date;
 
 @Component
 @Slf4j
-public class DaoCaoPersistentTokenRepositoryImpl implements PersistentTokenRepository {
+public class WxDssPersistentTokenRepositoryImpl implements PersistentTokenRepository {
 
     private final SysPersistentLoginMapper sysPersistentLoginMapper;
 
-    public DaoCaoPersistentTokenRepositoryImpl(SysPersistentLoginMapper persistentLoginsMapper) {
+    public WxDssPersistentTokenRepositoryImpl(SysPersistentLoginMapper persistentLoginsMapper) {
         this.sysPersistentLoginMapper = persistentLoginsMapper;
     }
 

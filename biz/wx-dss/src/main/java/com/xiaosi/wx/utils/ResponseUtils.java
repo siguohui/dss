@@ -22,10 +22,11 @@ public final class ResponseUtils {
     }
 
     public static void responseJson(HttpServletResponse response, JsonResult<?> jsonResult) {
-        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         try {
-
             response.getWriter().write(objectMapper.writeValueAsString(jsonResult));
         } catch (IOException e) {
             throw new ServiceException(ResultEnum.SERIAL_ERROR,"序列化失败： {} " + e.getMessage(), e);
