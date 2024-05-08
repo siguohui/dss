@@ -22,7 +22,7 @@ public class BaseEntity<T> extends Model {
     /** 创建者 **/
     @Schema(description = "创建者")
     @TableField(value = CREATE_BY_FIELD, fill = FieldFill.INSERT)
-    private String createBy;
+    private Long createBy;
 
     /** 创建时间 **/
     @Schema(description = "创建时间")
@@ -36,7 +36,7 @@ public class BaseEntity<T> extends Model {
     /** 更新者 **/
     @Schema(description = "更新者")
     @TableField(value = UPDATE_BY_FIELD,fill = FieldFill.INSERT_UPDATE, select = false)
-    private String updateBy;
+    private Long updateBy;
 
     /** 创建时间 **/
     @Schema(description = "更新时间")

@@ -1,6 +1,7 @@
 package com.xiaosi.wx.token;
 
 import com.xiaosi.wx.entity.SysUser;
+import com.xiaosi.wx.utils.ServletUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -96,5 +97,10 @@ public class JwtTokenProvider {
 
     public SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(tokenParam.getJwtTokenSecret().getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String getUsernameFromToken(){
+        String token = ServletUtils.getRequest().getHeader(tokenParam.getTokenHeader());
+        return getUsername(token);
     }
 }

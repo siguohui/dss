@@ -88,6 +88,14 @@ public class TokenUtils {
         return  (SysUserDetails) redisUtil.get(Constant.AUTH_KEY_PREFIX + SecurityUtils.getUername());
     }
 
+    public SysUser getSysUser() {
+        return getSysUserDetails().getSysUser();
+    }
+
+    public Long getUserId() {
+        return getSysUser().getId();
+    }
+
     public String getRedisToken(){
         return Optional.ofNullable(getSysUserDetails()).map(m->m.getToken()).orElse("");
     }
