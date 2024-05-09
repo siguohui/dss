@@ -29,6 +29,15 @@ public class EncryptInterceptor extends JsqlParserSupport implements InnerInterc
      */
     private static final Pattern PARAM_PAIRS_RE = Pattern.compile("#\\{ew\\.paramNameValuePairs\\.(" + Constants.WRAPPER_PARAM + "\\d+)\\}");
 
+    /**
+     * {@link Executor#update(MappedStatement, Object)} 操作前置处理
+     * <p>
+     * 改改sql啥的
+     *
+     * @param executor  Executor(可能是代理对象)
+     * @param mappedStatement        MappedStatement
+     * @param parameterObject parameter
+     */
     @Override
     public void beforeUpdate(Executor executor, MappedStatement mappedStatement, Object parameterObject) throws SQLException {
         if (Objects.isNull(parameterObject)) {

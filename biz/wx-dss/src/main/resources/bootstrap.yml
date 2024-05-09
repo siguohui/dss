@@ -235,7 +235,7 @@ jjwt:
   token:
     tokenHeader: Authorization
     tokenPrefix: Bearer
-    tokenExpiredMs: 200
+    tokenExpiredMs: 20000000000
     jwtTokenSecret: 1234567890abcdef1234567890abcdef
 
 decorator:

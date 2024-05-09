@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @TableName(value = "sys_user",autoResultMap = true)
 @Schema(description = "用户")
 @Accessors(chain = true)
-@EncryptedTable
+@EncryptedTable("user")
 public class SysUser extends BaseEntity implements UserDetails {
 
     /** 主键ID **/
