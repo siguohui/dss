@@ -1,5 +1,6 @@
 package com.xiaosi.wx.utils;
 
+import com.xiaosi.wx.entity.SysUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,10 @@ public class SecurityUtils {
 
     public static Object getPrincipal() {
         return Optional.ofNullable(getAuthentication()).map(m->m.getPrincipal()).orElse(null);
+    }
+
+    public static SysUser getSysUser(){
+        return getPrincipal() instanceof SysUser ? (SysUser) getPrincipal() : null;
     }
     public static String getUername(){
         Object principal = getPrincipal();

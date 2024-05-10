@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface MenuService extends IService<SysMenu> {
 
-    List<SysMenu> getPage(SysMenu sysMenu);
+    List<SysMenu> getList();
 
 }

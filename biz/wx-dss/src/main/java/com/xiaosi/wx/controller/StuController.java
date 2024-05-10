@@ -44,13 +44,13 @@ public class StuController {
 //    }
 
     @PostMapping("/add")
-    public List<SysMenu> getList(@RequestBody SysMenu sysMenu) throws IOException {
+    public List<SysMenu> getList() throws IOException {
 //        System.out.println(rsaKeyProperties.getPrivateRsaKey());
         Resource publicKey = rsaKeyProperties.getPublicKey();
 //        System.out.println(IOUtils.toString(publicKey.getInputStream(), StandardCharsets.UTF_8));
 //        System.out.println(rsaKeyProperties.getPublicRsaKey());
 //        Page<SysMenu> pageList = menuService.page(query.toMpPageDefaultSortByCreateTimeDesc());
-        return menuService.getPage(sysMenu);
+        return menuService.getList();
     }
 
 }

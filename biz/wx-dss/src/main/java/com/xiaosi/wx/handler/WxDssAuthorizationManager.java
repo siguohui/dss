@@ -1,5 +1,6 @@
 package com.xiaosi.wx.handler;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.xiaosi.wx.mapper.SysMenuMapper;
 import com.xiaosi.wx.entity.SysMenu;
@@ -40,6 +41,8 @@ public class WxDssAuthorizationManager implements AuthorizationManager<RequestAu
         }
 
         SysMenu menu = new LambdaQueryChainWrapper<>(menuMapper).eq(SysMenu::getPath, uri).one();
+
+//        menuMapper.selectOne(new QueryWrapper<SysMenu>().eq("path", uri));
 
         if(Objects.isNull(menu)) {
             return new AuthorizationDecision(false);

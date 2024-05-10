@@ -12,7 +12,7 @@ public class GitEggAuthUtils {
      *
      * @return GitEggUser
      */
-    public static GitEggUser getCurrentUser() {
+    /*public static GitEggUser getCurrentUser() {
         HttpServletRequest request = GitEggWebUtils.getRequest();
         if (request == null) {
             return null;
@@ -31,14 +31,14 @@ public class GitEggAuthUtils {
             return null;
         }
 
-    }
+    }*/
 
     /**
      * 获取租户Id
      *
      * @return tenantId
      */
-    public static String getTenantId() {
+    /*public static String getTenantId() {
         HttpServletRequest request = GitEggWebUtils.getRequest();
         if (request == null) {
             return null;
@@ -62,5 +62,5 @@ public class GitEggAuthUtils {
             return null;
         }
 
-    }
+    }*/
 }

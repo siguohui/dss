@@ -5,6 +5,7 @@ import com.xiaosi.wx.mapper.SysMenuMapper;
 import com.xiaosi.wx.mapper.SysUserMapper;
 import com.xiaosi.wx.entity.SysMenu;
 import com.xiaosi.wx.entity.SysUser;
+import com.xiaosi.wx.permission.annotation.DssDataPermission;
 import jakarta.annotation.Resource;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class UserDetailServiceImpl  implements UserDetailsService {
     private SysUserMapper sysUserMapper;
     @Resource
     private SysMenuMapper sysMenuMapper;
+    @DssDataPermission
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

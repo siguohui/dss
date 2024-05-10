@@ -52,4 +52,7 @@ public class SysMenu extends BaseEntity {
 
     @TableField("icon")
     private String icon;
+
+    @TableField(value = "creator_code")
+    private String creatorCode;
 }

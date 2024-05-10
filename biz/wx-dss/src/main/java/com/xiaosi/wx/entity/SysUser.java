@@ -144,6 +144,9 @@ public class SysUser extends BaseEntity implements UserDetails {
     @TableField(value = "version")
     private int version;
 
+    @TableField(value = "creator_code")
+    private String creatorCode;
+
     /** 部门 **/
 //    @Schema(description = "部门")
 //    @TableField(exist = false)

@@ -1,10 +1,11 @@
 package com.xiaosi.wx.config;
 
-
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
 import com.xiaosi.wx.encrypt.EncryptInterceptor;
+import com.xiaosi.wx.permission.handler.DssDataPermissionHandler;
+import com.xiaosi.wx.permission.interceptor.DssDataPermissionInterceptor;
 import com.xiaosi.wx.tenant.TenantProperties;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.annotation.MapperScan;
@@ -32,6 +33,12 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        //添加数据权限插件
+        DssDataPermissionInterceptor dssDataPermissionInterceptor = new DssDataPermissionInterceptor();
+        //添加自定义的数据权限处理器
+        dssDataPermissionInterceptor.setDataPermissionHandler(new DssDataPermissionHandler());
+        interceptor.addInnerInterceptor(dssDataPermissionInterceptor);
+
         interceptor.addInnerInterceptor(new EncryptInterceptor());
         //多租户插件
         if (tenantProperties.getEnable()) {
@@ -47,6 +54,11 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
+    /*@Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
+    }*/
+
     /**
      * 乐观锁插件 当要更新一条记录的时候，希望这条记录没有被别人更新
      * https://mybatis.plus/guide/interceptor-optimistic-locker.html#optimisticlockerinnerinterceptor
@@ -55,4 +67,17 @@ public class MybatisPlusConfig {
     public OptimisticLockerInnerInterceptor optimisticLockerInterceptor() {
         return new OptimisticLockerInnerInterceptor();
     }
+
+    /*@Bean
+    public DssDataPermissionInterceptor myInterceptor(MybatisPlusInterceptor mybatisPlusInterceptor) {
+        DssDataPermissionInterceptor sql = new DssDataPermissionInterceptor();
+        sql.setDataPermissionHandler(new DssDataPermissionHandler());
+        List<InnerInterceptor> list = new ArrayList<>();
+        // 添加数据权限插件
+        list.add(sql);
+        // 分页插件
+        mybatisPlusInterceptor.setInterceptors(list);
+        list.add(new PaginationInnerInterceptor(DbType.MYSQL));
+        return sql;
+    }*/
 }
