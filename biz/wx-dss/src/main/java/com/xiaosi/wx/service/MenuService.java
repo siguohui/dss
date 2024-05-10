@@ -2,7 +2,6 @@ package com.xiaosi.wx.service;
 
 import com.xiaosi.wx.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xiaosi.wx.page.BasePage;
 
 import java.util.List;
 

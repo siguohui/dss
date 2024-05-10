@@ -1,17 +1,10 @@
 package com.xiaosi.wx.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaosi.wx.config.RsaKeyProperties;
 import com.xiaosi.wx.entity.SysMenu;
-import com.xiaosi.wx.mapper.SysUserMapper;
-import com.xiaosi.wx.entity.SysUser;
-import com.xiaosi.wx.page.BasePage;
-import com.xiaosi.wx.page.mybatisplus.PageQuery;
 import com.xiaosi.wx.service.MenuService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

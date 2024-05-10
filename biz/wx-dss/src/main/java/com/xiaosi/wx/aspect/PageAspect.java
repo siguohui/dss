@@ -26,7 +26,7 @@ public class PageAspect {
             }
         }
         if (basePage != null && basePage.isPage()) {
-            PageHelper.startPage(basePage.getNo(), basePage.getSize());
+            PageHelper.startPage(basePage.getPageNo(), basePage.getPageSize());
         }
         Object returnValue = joinPoint.proceed(args);
         if (basePage != null && basePage.isPage()) {

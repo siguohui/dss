@@ -48,7 +48,7 @@ public class MyCodeGenerator {
                 // 包配置
                 .packageConfig(builder -> {
                     builder.parent(parent_package) // 设置父包名
-                            .entity("model")               // 实体包名
+                            .entity("entity")               // 实体包名
                             .service("service")             // service包名
                             .serviceImpl("service.impl")    // service实现类包名
                             .xml("mapper")                  // dao层包名
@@ -66,7 +66,7 @@ public class MyCodeGenerator {
                 })*/
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_persistent_login") // 设置需要生成的表名
+                    builder.addInclude("sys_office") // 设置需要生成的表名
                             .addTablePrefix("") // 设置过滤表前缀
                             // Entity 策略配置
                             .entityBuilder()

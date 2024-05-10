@@ -1,7 +1,6 @@
 package com.xiaosi.wx.vo;
 
 import com.xiaosi.wx.entity.SysUser;
-import com.xiaosi.wx.page.BasePage;
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.Tolerate;
