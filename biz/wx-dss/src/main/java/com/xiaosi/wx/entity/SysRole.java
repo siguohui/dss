@@ -24,6 +24,10 @@ public class SysRole extends BaseEntity<SysRole> {
     @Schema(description = "角色名称")
     @TableField(value = "name")
     private String name;
+    /** 角色英文名称 **/
+    @Schema(description = "角色英文名称")
+    @TableField(value = "enname")
+    private String enname;
     /** 角色编码 **/
     @Schema(description = "角色编码")
     @TableField(value = "code")
@@ -32,4 +36,8 @@ public class SysRole extends BaseEntity<SysRole> {
     @Schema(description = "排序")
     @TableField(value = "sort")
     private int sort;
+    /** 数据范围 **/
+    @Schema(description = "数据范围")
+    @TableField(value = "data_scope")
+    private String dataScope;
 }

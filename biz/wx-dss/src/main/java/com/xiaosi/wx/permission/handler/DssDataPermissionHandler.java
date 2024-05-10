@@ -2,6 +2,8 @@ package com.xiaosi.wx.permission.handler;
 
 import com.xiaosi.wx.entity.SysUser;
 import com.xiaosi.wx.permission.annotation.DssDataPermission;
+import com.xiaosi.wx.permission.enums.DataPermission;
+import com.xiaosi.wx.permission.enums.DataScope;
 import com.xiaosi.wx.utils.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +13,18 @@ import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.InExpression;
+import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class DssDataPermissionHandler {
@@ -55,12 +63,38 @@ public class DssDataPermissionHandler {
                 }
                 // 1、当前用户Code
                 SysUser user = SecurityUtils.getSysUser();
+                // 2、当前角色即角色或角色类型（可能多种角色）
+                Set<String> roleTypeSet = user.getRoleSet().stream().map(d->d.getDataScope()).collect(Collectors.toSet());
+                DataScope scopeType = DataPermission.getScope(roleTypeSet);
+                switch (scopeType) {
+                    // 查看全部
+                    case ALL:
+                        return where;
+                    case DEPT:
+                        // 查看本部门用户数据
+                        // 创建IN 表达式
+                        // 创建IN范围的元素集合
+                        List<String> deptUserList = remoteUserService.listUserCodesByDeptCodes(user.getDeptCode());
+                        // 把集合转变为JSQLParser需要的元素列表
+                        ItemsList deptList = new ExpressionList(deptUserList.stream().map(StringValue::new).collect(Collectors.toList()));
+                        InExpression inExpressiondept = new InExpression(new Column(mainTableName + ".creator_code"), deptList);
+                        return new AndExpression(where, inExpressiondept);
+                    case MYSELF:
+                        // 查看自己的数据
+                        //  = 表达式
+                        EqualsTo usesEqualsTo = new EqualsTo();
+                        usesEqualsTo.setLeftExpression(new Column(mainTableName + ".creator_code"));
+                        usesEqualsTo.setRightExpression(new StringValue(user.getUserCode()));
+                        return new AndExpression(where, usesEqualsTo);
+                    default:
+                        break;
+                }
                 // 查看自己的数据
                 //  = 表达式
-                EqualsTo usesEqualsTo = new EqualsTo();
-                usesEqualsTo.setLeftExpression(new Column(mainTableName + ".creator_code"));
-                usesEqualsTo.setRightExpression(new StringValue(user.getCreatorCode()));
-                return new AndExpression(where, usesEqualsTo);
+//              EqualsTo usesEqualsTo = new EqualsTo();
+//              usesEqualsTo.setLeftExpression(new Column(mainTableName + ".creator_code"));
+//              usesEqualsTo.setRightExpression(new StringValue(user.getCreatorCode()));
+//              return new AndExpression(where, usesEqualsTo);
             }
         }
         //说明无权查看，
