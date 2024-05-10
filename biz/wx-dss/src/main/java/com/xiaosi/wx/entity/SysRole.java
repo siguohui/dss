@@ -40,4 +40,12 @@ public class SysRole extends BaseEntity<SysRole> {
     @Schema(description = "数据范围")
     @TableField(value = "data_scope")
     private String dataScope;
+    /** 角色类型 **/
+    @Schema(description = "角色类型")
+    @TableField(value = "role_type")
+    private String roleType;
+    /** 是否可用(0-不可用 1-可用) **/
+    @Schema(description = "是否可用(0-不可用 1-可用)")
+    @TableField(value = "is_enable")
+    private Boolean enable;
 }

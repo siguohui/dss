@@ -25,28 +25,31 @@
   </sql>
   <resultMap id="SysUserResultMap" type="com.xiaosi.wx.entity.SysUser">
     <id column="id" property="id"/>
+    <result column="company_id" property="companyId"/>
+    <result column="office_id" property="officeId"/>
+    <result column="dept_id" property="deptId"/>
     <result column="username" property="username"/>
     <result column="password" property="password"/>
     <result column="enabled" property="enabled"/>
     <result column="account_non_locked" property="accountNonLocked"/>
     <result column="account_non_expired" property="accountNonExpired"/>
     <result column="credentials_non_expired" property="credentialsNonExpired"/>
+    <result column="no" property="no"/>
     <result column="nick_name" property="nickName"/>
     <result column="sex" property="sex"/>
     <result column="mobile" property="mobile"/>
+    <result column="phone" property="phone"/>
     <result column="email" property="email"/>
     <result column="addr" property="addr"/>
     <result column="avatar" property="avatar"/>
-    <result column="dept_id" property="deptId"/>
+    <result column="user_type" property="userType"/>
     <result column="access_policy" property="accessPolicy"/>
     <result column="create_by" property="createBy"/>
     <result column="create_time" property="createTime"/>
     <result column="update_by" property="updateBy"/>
     <result column="update_time" property="updateTime"/>
     <result column="deleted" property="deleted"/>
-    <result column="access_policy" property="accessPolicy"/>
     <result column="version" property="version"/>
-    <result column="creator_code" property="creatorCode"/>
     <collection property="roleSet" resultMap="RoleResultMap"/>
   </resultMap>
 
@@ -57,6 +60,8 @@
     <result column="role_code" property="code"/>
     <result column="role_sort" property="sort"/>
     <result column="role_data_scope" property="dataScope"/>
+    <result column="role_role_type" property="roleType"/>
+    <result column="role_is_enable" property="enable"/>
     <result column="role_create_by" property="createBy"/>
     <result column="role_create_time" property="createTime"/>
     <result column="role_update_by" property="updateBy"/>
@@ -66,33 +71,39 @@
     <select id="selectByUserName" resultMap="SysUserResultMap">
       select
         u.id,
+        u.company_id,
+        u.office_id,
+        u.dept_id,
         u.username,
         u.password,
         u.enabled,
         u.account_non_locked,
         u.account_non_expired,
         u.credentials_non_expired,
+        u.no,
         u.nick_name,
         u.sex,
         u.mobile,
+        u.phone,
         u.email,
         u.addr,
         u.avatar,
-        u.dept_id,
+        u.user_type,
+        u.access_policy,
         u.create_by,
         u.create_time,
         u.update_by,
         u.update_time,
         u.deleted,
-        u.access_policy,
         u.version,
-        u.creator_code,
         r.id AS role_id,
         r.name AS role_name,
         r.enname AS role_enname,
         r.code AS role_code,
         r.sort AS role_sort,
         r.data_scope AS role_data_scope,
+        r.role_type AS role_role_type,
+        r.is_enable AS role_is_enable,
         r.create_by AS role_create_by,
         r.create_time AS role_create_time,
         r.update_by AS role_update_by,

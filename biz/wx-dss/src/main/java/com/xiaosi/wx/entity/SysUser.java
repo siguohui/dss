@@ -34,6 +34,19 @@ public class SysUser extends BaseEntity implements UserDetails {
     @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
 
+    /** 归属公司 **/
+    @Schema(description = "归属公司")
+    @TableField(value = "company_id")
+    private Long companyId;
+    /** 归属部门 **/
+    @Schema(description = "归属部门")
+    @TableField(value = "office_id")
+    private Long officeId;
+    /** 具体部门 **/
+    @Schema(description = "具体部门")
+    @TableField(value = "dept_id")
+    private Long deptId;
+
     @Schema(description = "用户名")
     @TableField(value = "username")
     @Getter(AccessLevel.NONE)
@@ -99,6 +112,11 @@ public class SysUser extends BaseEntity implements UserDetails {
         return this.credentialsNonExpired;
     }
 
+    /** 工号 **/
+    @Schema(description = "工号")
+    @TableField(value = "no")
+    private String no;
+
     /** 用户昵称 **/
     @Schema(description = "用户昵称")
     @TableField(value = "nick_name")
@@ -113,6 +131,11 @@ public class SysUser extends BaseEntity implements UserDetails {
     @Schema(description = "手机号")
     @TableField(value = "mobile",typeHandler = TypeControlHandler.class)
     private String mobile;
+
+    /** 电话 **/
+    @Schema(description = "电话")
+    @TableField(value = "phone",typeHandler = TypeControlHandler.class)
+    private String phone;
 
     /** 邮箱 **/
     @Schema(description = "邮箱")
@@ -130,10 +153,10 @@ public class SysUser extends BaseEntity implements UserDetails {
     @TableField(value = "avatar")
     private String avatar;
 
-    /** 部门ID **/
-    @Schema(description = "部门ID")
-    @TableField(value = "dept_id")
-    private Long deptId;
+    /** 用户类型 **/
+    @Schema(description = "用户类型")
+    @TableField(value = "user_type")
+    private String userType;
 
     /** 访问策略 **/
     @Schema(description = "访问策略")
@@ -143,9 +166,6 @@ public class SysUser extends BaseEntity implements UserDetails {
     @Version
     @TableField(value = "version")
     private int version;
-
-    @TableField(value = "creator_code")
-    private String creatorCode;
 
     /** 部门 **/
 //    @Schema(description = "部门")

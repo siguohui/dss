@@ -1,5 +1,6 @@
 package com.xiaosi.wx.permission.handler;
 
+import com.google.common.collect.Lists;
 import com.xiaosi.wx.entity.SysUser;
 import com.xiaosi.wx.permission.annotation.DssDataPermission;
 import com.xiaosi.wx.permission.enums.DataPermission;
@@ -7,10 +8,7 @@ import com.xiaosi.wx.permission.enums.DataScope;
 import com.xiaosi.wx.utils.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.expression.Alias;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.HexValue;
-import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -71,20 +69,15 @@ public class DssDataPermissionHandler {
                     case ALL:
                         return where;
                     case DEPT:
-                        // 查看本部门用户数据
-                        // 创建IN 表达式
-                        // 创建IN范围的元素集合
-                        List<String> deptUserList = remoteUserService.listUserCodesByDeptCodes(user.getDeptCode());
-                        // 把集合转变为JSQLParser需要的元素列表
+                        List<String> deptUserList = Lists.newArrayList();
+//                        List<String> deptUserList = remoteUserService.listUserCodesByDeptCodes(user.getId());
                         ItemsList deptList = new ExpressionList(deptUserList.stream().map(StringValue::new).collect(Collectors.toList()));
-                        InExpression inExpressiondept = new InExpression(new Column(mainTableName + ".creator_code"), deptList);
+                        InExpression inExpressiondept = new InExpression(new Column(mainTableName + ".create_by"), deptList);
                         return new AndExpression(where, inExpressiondept);
                     case MYSELF:
-                        // 查看自己的数据
-                        //  = 表达式
                         EqualsTo usesEqualsTo = new EqualsTo();
-                        usesEqualsTo.setLeftExpression(new Column(mainTableName + ".creator_code"));
-                        usesEqualsTo.setRightExpression(new StringValue(user.getUserCode()));
+                        usesEqualsTo.setLeftExpression(new Column(mainTableName + ".create_by"));
+                        usesEqualsTo.setRightExpression(new LongValue(user.getId()));
                         return new AndExpression(where, usesEqualsTo);
                     default:
                         break;
