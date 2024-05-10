@@ -140,6 +140,10 @@ public class SysUser extends BaseEntity implements UserDetails {
     @TableField(value = "access_policy")
     private boolean accessPolicy;
 
+    @Version
+    @TableField(value = "version")
+    private int version;
+
     /** 部门 **/
 //    @Schema(description = "部门")
 //    @TableField(exist = false)

@@ -244,3 +244,12 @@ decorator:
       logging: slf4j
       log-file: spy.log
       log-format: executionTime:%(executionTime) | sql:%(sqlSingleLine)
+tenant:
+  # 是否开启租户模式
+  enable: true
+  # 需要排除的多租户的表
+  exclusionTable:
+    - "sys_role"
+    - "sys_menu"
+  # 租户字段名称
+  column: tenant_id
