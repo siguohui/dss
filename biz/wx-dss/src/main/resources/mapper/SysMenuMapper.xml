@@ -40,8 +40,5 @@
             #{roleId}
         </foreach>
     </select>
-    <select id="getList" resultType="com.xiaosi.wx.entity.SysMenu">
-        SELECT * FROM sys_menu WHERE sys_menu.deleted = 0
-    </select>
 
 </mapper>

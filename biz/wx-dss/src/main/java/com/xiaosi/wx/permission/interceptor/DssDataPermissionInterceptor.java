@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import com.xiaosi.wx.entity.SysUser;
-import com.xiaosi.wx.permission.annotation.DssDataPermission;
+
 import com.xiaosi.wx.permission.handler.DssDataPermissionHandler;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -14,19 +13,14 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.SelectBody;
 import net.sf.jsqlparser.statement.select.SetOperationList;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @Slf4j
@@ -35,6 +29,11 @@ import java.util.Objects;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class DssDataPermissionInterceptor extends JsqlParserSupport implements InnerInterceptor {
+
+    /*继承抽象类JsqlParserSupport并重写processSelect方法。JSqlParser是一个SQL语句解析器，它将SQL转换为Java类的可遍历层次结构。plus中也引入了JSqlParser包，processSelect可以对Select语句进行处理。
+    实现InnerInterceptor接口并重写beforeQuery方法。InnerInterceptor是plus的插件接口，beforeQuery可以对查询语句执行前进行处理。
+    DataPermissionHandler作为数据权限处理器，是一个接口，提供getSqlSegment方法添加数据权限 SQL 片段。
+    由上可知，我们只需要实现DataPermissionHandler接口，并按照业务规则处理SQL，就可以实现数据权限的功能。*/
 
     /*willDoQuery: 当执行查询操作时，MyBatis 会调用该方法，判断是否需要执行查询操作。默认返回true，表示继续执行查询操作，如果需要阻止查询操作，则可以在实现该方法时返回false。
     beforeQuery: 在执行查询操作之前，MyBatis 会调用该方法。通过实现该方法，可以在查询之前进行一些必要的操作，例如设置数据范围、修改 SQL 等。
@@ -76,9 +75,7 @@ public class DssDataPermissionInterceptor extends JsqlParserSupport implements I
     //设置数据范围、修改 SQL
     @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
-        if (InterceptorIgnoreHelper.willIgnoreDataPermission(ms.getId())) {
-            return;
-        }
+        if (InterceptorIgnoreHelper.willIgnoreDataPermission(ms.getId())) return;
         PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
         mpBs.sql(this.parserSingle(mpBs.sql(), ms.getId()));
     }
@@ -108,6 +105,7 @@ public class DssDataPermissionInterceptor extends JsqlParserSupport implements I
      * @param whereSegment 查询条件片段
      */
     private void setWhere(PlainSelect plainSelect, String whereSegment) {
+        /*Expression sqlSegment = dataPermissionHandler.getSqlSegment(plainSelect.getWhere(), whereSegment);*/
         Expression sqlSegment = this.dataPermissionHandler.getSqlSegment(plainSelect, whereSegment);
         if (null != sqlSegment) {
             plainSelect.setWhere(sqlSegment);

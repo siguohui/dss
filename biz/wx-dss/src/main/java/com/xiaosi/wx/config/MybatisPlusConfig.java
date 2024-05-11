@@ -35,10 +35,7 @@ public class MybatisPlusConfig {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         //添加数据权限插件
-        DssDataPermissionInterceptor dssDataPermissionInterceptor = new DssDataPermissionInterceptor();
-        //添加自定义的数据权限处理器
-        dssDataPermissionInterceptor.setDataPermissionHandler(new DssDataPermissionHandler());
-        interceptor.addInnerInterceptor(dssDataPermissionInterceptor);
+        interceptor.addInnerInterceptor(new DssDataPermissionInterceptor(new DssDataPermissionHandler()));
 
         interceptor.addInnerInterceptor(new EncryptInterceptor());
         //多租户插件
