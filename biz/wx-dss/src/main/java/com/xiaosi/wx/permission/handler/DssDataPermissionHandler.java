@@ -1,11 +1,18 @@
 package com.xiaosi.wx.permission.handler;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.google.common.collect.Lists;
 import com.xiaosi.wx.entity.SysUser;
+import com.xiaosi.wx.mapper.SysUserMapper;
 import com.xiaosi.wx.permission.annotation.DssDataPermission;
 import com.xiaosi.wx.permission.enums.DataPermission;
 import com.xiaosi.wx.permission.enums.DataScope;
+import com.xiaosi.wx.utils.ApplicationContextUtils;
 import com.xiaosi.wx.utils.SecurityUtils;
+import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.*;
@@ -17,6 +24,7 @@ import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.PlainSelect;
+import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -69,9 +77,11 @@ public class DssDataPermissionHandler {
                     case ALL:
                         return where;
                     case DEPT:
-                        List<String> deptUserList = Lists.newArrayList();
-//                        List<String> deptUserList = remoteUserService.listUserCodesByDeptCodes(user.getId());
-                        ItemsList deptList = new ExpressionList(deptUserList.stream().map(StringValue::new).collect(Collectors.toList()));
+                        SysUserMapper sysUserMapper = ApplicationContextUtils.getApplicationContext().getBean(SysUserMapper.class);
+                        List<SysUser> list = new LambdaQueryChainWrapper<>(sysUserMapper)
+                                .eq(SysUser::getCompanyId, user.getCompanyId())
+                                .eq(SysUser::getOfficeId, user.getOfficeId()).list();
+                        ItemsList deptList = new ExpressionList(list.stream().map(SysUser::getId).map(LongValue::new).collect(Collectors.toList()));
                         InExpression inExpressiondept = new InExpression(new Column(mainTableName + ".create_by"), deptList);
                         return new AndExpression(where, inExpressiondept);
                     case MYSELF:

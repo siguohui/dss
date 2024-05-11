@@ -23,7 +23,6 @@ public class UserDetailServiceImpl  implements UserDetailsService {
     private SysUserMapper sysUserMapper;
     @Resource
     private SysMenuMapper sysMenuMapper;
-    @DssDataPermission
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

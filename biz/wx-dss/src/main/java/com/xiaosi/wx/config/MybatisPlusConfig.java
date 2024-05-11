@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
 import com.xiaosi.wx.encrypt.EncryptInterceptor;
+import com.xiaosi.wx.mapper.SysUserMapper;
 import com.xiaosi.wx.permission.handler.DssDataPermissionHandler;
 import com.xiaosi.wx.permission.interceptor.DssDataPermissionInterceptor;
 import com.xiaosi.wx.tenant.TenantProperties;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,6 @@ public class MybatisPlusConfig {
 
     private final TenantLineInnerInterceptor tenantLineInnerInterceptor;
     private final TenantProperties tenantProperties;
-
     /**
      * 新的分页插件,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false
      * 避免缓存出现问题(该属性会在旧插件移除后一同移除)
