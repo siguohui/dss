@@ -28,7 +28,7 @@ public class JwtSecurityContextRepository implements SecurityContextRepository {
         /*Claims payload = jwtUtil.parsePayload(authorization);
         JwtAuthenticationToken token = new JwtAuthenticationToken(AuthorityUtils.commaSeparatedStringToAuthorityList((String) payload.get("authorities")),payload.getSubject());
         securityContext.setAuthentication(token);*/
-        return tokenUtils.getSecurityContext();
+        return tokenUtils.getSecurityContext(requestResponseHolder.getRequest());
     }
 
     @Override

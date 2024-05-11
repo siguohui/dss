@@ -208,6 +208,12 @@ public class ExceptionHandling {
         return JsonResult.fail(ResultEnum.NO_HANDLER_FOUND, requestURL);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public JsonResult handler8(IllegalStateException e) {
+        //处理异常
+        return JsonResult.fail(ResultEnum.NO_HANDLER_FOUND, e);
+    }
 
     //1、处理参数验证异常 MethodArgumentNotValidException
     @SneakyThrows

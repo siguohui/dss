@@ -20,10 +20,9 @@ import java.util.Optional;
 public class TokenUtils {
 
     private final JwtUtil jwtUtil;
-    private final HttpServletRequest request;
     private final RedisUtil redisUtil;
 
-    public SecurityContext getSecurityContext() {
+    public SecurityContext getSecurityContext(HttpServletRequest request) {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 
         /*String refreshToken = getRefreshToken();
@@ -38,7 +37,7 @@ public class TokenUtils {
             }
         }*/
 
-        String authorization = getHeaderToken();
+        String authorization = getHeaderToken(request);
         if(StringUtils.isNotBlank(authorization)&& jwtUtil.checkToken(authorization)){
             SysUserDetails sysUserDetails = (SysUserDetails) redisUtil.get(Constant.AUTH_KEY_PREFIX + jwtUtil.getUserName(authorization));
             securityContext.setAuthentication(sysUserDetails.getAuthentication());
@@ -62,13 +61,15 @@ public class TokenUtils {
     }
 
     public String getRefreshToken(){
+        HttpServletRequest request = ServletUtils.getRequest();
         if((StrUtil.equalsIgnoreCase(request.getMethod(),"POST") && "/refresh".equals(request.getRequestURI()))) {
             return request.getHeader("Refresh");
         }
         return "";
     }
 
-    public String getHeaderToken()  {
+    public String getHeaderToken(HttpServletRequest request)  {
+//        HttpServletRequest request = ServletUtils.getRequest();
         /*HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();*/
         String token = request.getHeader(jwtUtil.getTokenParam().getTokenHeader());
         if(StrUtil.isNotBlank(token)) {

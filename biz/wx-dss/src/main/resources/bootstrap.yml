@@ -248,7 +248,7 @@ decorator:
       log-format: executionTime:%(executionTime) | sql:%(sqlSingleLine)
 tenant:
   # 是否开启租户模式
-  enable: false
+  enable: true
   # 需要排除的多租户的表
   exclusionTable:
     - "sys_role"
