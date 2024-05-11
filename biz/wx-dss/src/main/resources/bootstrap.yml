@@ -257,6 +257,7 @@ tenant:
   exclusionTable:
     - "sys_role"
     - "sys_menu"
+    - "sys_user"
   # 租户字段名称
   column: tenant_id
   tables:

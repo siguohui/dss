@@ -45,7 +45,7 @@ public class WxDssAuthorizationManager implements AuthorizationManager<RequestAu
 //        menuMapper.selectOne(new QueryWrapper<SysMenu>().eq("path", uri));
 
         if(Objects.isNull(menu)) {
-            return new AuthorizationDecision(false);
+            return new AuthorizationDecision(true);
         }
 
         String menuPerm = menu.getPerms();

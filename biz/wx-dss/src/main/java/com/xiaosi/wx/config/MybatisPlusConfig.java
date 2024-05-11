@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.time.Year;
+
 /**
  * @Description: mybatis常用配置
  */
@@ -41,7 +43,15 @@ public class MybatisPlusConfig {
             interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(dssTenantHandler));
         }
         //多租户,动态表名
-//        interceptor.addInnerInterceptor(new DynamicTableNameInnerInterceptor());
+        //动态表名插件
+        DynamicTableNameInnerInterceptor dynamicTableNameInnerInterceptor = new DynamicTableNameInnerInterceptor();
+        dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) -> {
+            if(tableName.equals("stu")){
+               return tableName +"_"+ Year.now().getValue();
+            }
+            return tableName;
+        });
+        interceptor.addInnerInterceptor(dynamicTableNameInnerInterceptor);
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         /*interceptor.addInnerInterceptor(new IllegalSQLInnerInterceptor());*/

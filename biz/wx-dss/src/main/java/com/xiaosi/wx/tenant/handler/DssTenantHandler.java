@@ -68,17 +68,22 @@ public class DssTenantHandler implements TenantLineHandler {
      */
     @Override
     public boolean ignoreTable(String tableName) {
-        Long tenantId = tenantContextHolder.getTenantId();
-        // 租户中ID 为空，查询全部，不进行过滤
-        if (ObjectUtil.isEmpty(tenantId)) {
-            return Boolean.TRUE;
-        }
+
 
         if(tenantProperties.getExclusionTable().contains(tableName)){
             return Boolean.TRUE;
         }
 
-        return !tenantProperties.getTables().contains(tableName);
+        if(!tenantProperties.getTables().contains(tableName)){
+            return Boolean.TRUE;
+        }
+
+        Long tenantId = tenantContextHolder.getTenantId();
+        // 租户中ID 为空，查询全部，不进行过滤
+        if (ObjectUtil.isEmpty(tenantId)) {
+            return Boolean.TRUE;
+        }
+        return Boolean.TRUE;
     }
 
     /**

@@ -66,7 +66,7 @@ public class MyCodeGenerator {
                 })*/
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_office") // 设置需要生成的表名
+                    builder.addInclude("stu") // 设置需要生成的表名
                             .addTablePrefix("") // 设置过滤表前缀
                             // Entity 策略配置
                             .entityBuilder()
