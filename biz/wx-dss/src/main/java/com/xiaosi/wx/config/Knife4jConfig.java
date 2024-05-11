@@ -14,17 +14,17 @@ public class Knife4jConfig {
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
                 // 接口文档标题
-                .info(new Info().title("一个API接口文档")
+                .info(new Info().title("API接口文档")
                         // 接口文档简介
-                        .description("这是基于Knife4j OpenApi3的测试接口文档")
+                        .description("这是基于Knife4j OpenApi3的接口文档")
                         // 接口文档版本
-                        .version("1.0版本")
+                        .version("2.0版本")
                         // 开发者联系方式
-                        .contact(new Contact().name("张乔")
-                                .email("000000000@qq.com")))
+                        .contact(new Contact().name("开发者")
+                                .email("8857807@163.com")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("SpringBoot3测试knife4j")
-                        .url("http://127.0.0.1:8888"));
+                        .description("SpringBoot3-knife4j")
+                        .url("http://127.0.0.1:8080"));
     }
 
 }

@@ -30,7 +30,7 @@ public class RestResponseBodyAdviceHandler implements ResponseBodyAdvice<Object>
         log.info("supports:{}",returnType.getDeclaringClass().getName());
         return !returnType.hasMethodAnnotation(IgnoreResult.class)
                 && !returnType.getParameterType().isAssignableFrom(JsonResult.class)
-                && !returnType.getDeclaringClass().getName().contains("springfox");
+                && !returnType.getDeclaringClass().getName().contains("springdoc");
 
     }
     @SneakyThrows

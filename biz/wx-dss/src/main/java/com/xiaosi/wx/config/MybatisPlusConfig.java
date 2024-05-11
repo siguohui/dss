@@ -2,7 +2,6 @@ package com.xiaosi.wx.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
 import com.xiaosi.wx.encrypt.EncryptInterceptor;
 import com.xiaosi.wx.permission.handler.DssDataPermissionHandler;
@@ -10,7 +9,6 @@ import com.xiaosi.wx.permission.interceptor.DssDataPermissionInterceptor;
 import com.xiaosi.wx.tenant.config.TenantProperties;
 import com.xiaosi.wx.tenant.handler.DssTenantHandler;
 import lombok.RequiredArgsConstructor;
-import net.sf.jsqlparser.expression.Expression;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
