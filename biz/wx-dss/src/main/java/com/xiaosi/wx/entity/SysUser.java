@@ -6,6 +6,8 @@ import com.xiaosi.wx.encrypt.annotation.EncryptedTable;
 import com.xiaosi.wx.base.BaseEntity;
 import com.xiaosi.wx.handler.TypeControlHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -128,6 +130,9 @@ public class SysUser extends BaseEntity implements UserDetails {
     private int sex;
 
     /** 手机号 **/
+    @Pattern(regexp = "^[1][3,4,5,7,8][0-9]{9}$", message = "手机号不合法")
+    @NotBlank(message = "手机号不能为空")
+    /*@ExcelProperty(value = "手机号")*/
     @Schema(description = "手机号")
     @TableField(value = "mobile",typeHandler = TypeControlHandler.class)
     private String mobile;

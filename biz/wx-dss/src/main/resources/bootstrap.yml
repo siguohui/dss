@@ -1,6 +1,8 @@
 jasypt:
   encryptor:
     password: xiongbangwen
+
+
 spring:
   cache:
     redis:
@@ -35,6 +37,8 @@ spring:
     suffix: .html
   mvc:
     static-path-pattern: /static/**
+    pathmatch:
+      matching-strategy: ant_path_matcher
   web:
     resources:
       static-locations: classpath:/static
