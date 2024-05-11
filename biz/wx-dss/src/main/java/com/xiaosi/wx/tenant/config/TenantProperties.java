@@ -1,4 +1,4 @@
-package com.xiaosi.wx.tenant;
+package com.xiaosi.wx.tenant.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

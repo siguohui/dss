@@ -158,6 +158,11 @@ public class SysUser extends BaseEntity implements UserDetails {
     @TableField(value = "user_type")
     private String userType;
 
+    /** 租户 **/
+    @Schema(description = "租户")
+    @TableField(value = "tenant_id")
+    private Long tenantId;
+
     /** 访问策略 **/
     @Schema(description = "访问策略")
     @TableField(value = "access_policy")

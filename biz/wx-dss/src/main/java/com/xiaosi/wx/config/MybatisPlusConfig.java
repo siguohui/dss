@@ -2,14 +2,14 @@ package com.xiaosi.wx.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
 import com.xiaosi.wx.encrypt.EncryptInterceptor;
-import com.xiaosi.wx.mapper.SysUserMapper;
 import com.xiaosi.wx.permission.handler.DssDataPermissionHandler;
 import com.xiaosi.wx.permission.interceptor.DssDataPermissionInterceptor;
-import com.xiaosi.wx.tenant.TenantProperties;
-import jakarta.annotation.Resource;
+import com.xiaosi.wx.tenant.config.TenantProperties;
 import lombok.RequiredArgsConstructor;
+import net.sf.jsqlparser.expression.Expression;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +42,37 @@ public class MybatisPlusConfig {
         if (tenantProperties.getEnable()) {
             interceptor.addInnerInterceptor(tenantLineInnerInterceptor);
         }
+
+        /*if (tenantProperties.getEnable()) {
+            interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
+                @Override
+                public Expression getTenantId() {
+
+                    String merchantCode = SystemContext.getUserInfo().getMerchantCode();
+                    if (Objects.isNull(merchantCode)) {
+                        return new StringValue("-1");
+                    } else {
+                        return new StringValue(SystemContext.getUserInfo().getMerchantCode());
+                    }
+                }
+
+                // 这是 default 方法,默认返回 false 表示所有表都需要拼多租户条件
+                @Override
+                public boolean ignoreTable(String tableName) {
+                    return tenantProperties.getExclusionTable().stream().anyMatch(
+                            (t) -> t.equalsIgnoreCase(tableName));
+                }
+
+                *//**
+                 * 获取多租户的字段名
+                 * @return String
+                 *//*
+                @Override
+                public String getTenantIdColumn() {
+                    return tenantProperties.getColumn();
+                }
+            }));
+        }*/
         //多租户,动态表名
 //        interceptor.addInnerInterceptor(new DynamicTableNameInnerInterceptor());
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));

@@ -43,6 +43,7 @@
     <result column="addr" property="addr"/>
     <result column="avatar" property="avatar"/>
     <result column="user_type" property="userType"/>
+    <result column="tenant_id" property="tenantId"/>
     <result column="access_policy" property="accessPolicy"/>
     <result column="create_by" property="createBy"/>
     <result column="create_time" property="createTime"/>
@@ -89,6 +90,7 @@
         u.addr,
         u.avatar,
         u.user_type,
+        u.tenant_id,
         u.access_policy,
         u.create_by,
         u.create_time,
