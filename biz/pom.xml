@@ -16,6 +16,7 @@
     <modules>
         <module>wx-dss</module>
         <module>ss-dss</module>
+        <module>doc-dss</module>
     </modules>
 
 </project>

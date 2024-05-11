@@ -20,7 +20,7 @@ public class TenantProperties {
     private Boolean enable;
 
     /**
-     * 多租户字段名称
+     * 多租户字段名称 多租户标识
      */
     private String column;
 

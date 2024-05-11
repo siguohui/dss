@@ -36,7 +36,7 @@ public class WxDssAuthorizationManager implements AuthorizationManager<RequestAu
         log.info("uri======>>>>>{}",uri);
         log.info("url======>>>>>{}",url);
 
-        if("/login".equals(uri) || "/logout".equals(uri) || "/error".equals(uri) ){
+        if("/login".equals(uri) || "/logout".equals(uri) || "/error".equals(uri)  || "/doc.html".equals(uri)  || "/favicon.ico".equals(uri)){
         return new AuthorizationDecision(true);
         }
 

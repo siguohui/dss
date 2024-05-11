@@ -32,6 +32,8 @@ public class SysMenu extends BaseEntity {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
+    /** 父ID **/
+    @Schema(description = "父ID")
     @TableField("parent_id")
     private Long parentId;
 
@@ -53,6 +55,10 @@ public class SysMenu extends BaseEntity {
     @TableField("icon")
     private String icon;
 
-    @TableField(value = "creator_code")
-    private String creatorCode;
+    /** 租户 **/
+    @Schema(description = "租户")
+    @TableField(value = "tenant_id")
+    private Long tenantId;
 }
+
+

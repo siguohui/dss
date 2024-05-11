@@ -28,6 +28,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -74,6 +75,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(r -> r
                       .requestMatchers(HttpMethod.POST, "/refresh").permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/doc.html"),
+                                        new AntPathRequestMatcher("/favicon.ico"),
+                                        new AntPathRequestMatcher("/webjars/**"),
+                                        new AntPathRequestMatcher("/swagger-resources/**"),
+                                        new AntPathRequestMatcher("/v3/**")).permitAll()
 //                        .requestMatchers("/login").anonymous()
                         .anyRequest()
 //                                .access("@ServiceImpl.hasPermission(request,authentication)")
@@ -201,7 +207,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/index","/list");
+        return (web) -> web.ignoring().requestMatchers("/css/**","doc.html","/webjars/**", "/swagger-resources/**", "/v3/**","/favicon.ico");
     }
 
    /* @Bean
