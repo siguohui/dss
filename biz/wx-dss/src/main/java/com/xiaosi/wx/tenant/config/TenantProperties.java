@@ -29,4 +29,10 @@ public class TenantProperties {
      */
     private List<String> exclusionTable;
 
+    /**
+     * 多租户的数据表集合
+     */
+    private List<String> tables;
+
+
 }

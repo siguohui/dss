@@ -255,3 +255,5 @@ tenant:
     - "sys_menu"
   # 租户字段名称
   column: tenant_id
+  tables:
+    - "sys_persistent_login"
