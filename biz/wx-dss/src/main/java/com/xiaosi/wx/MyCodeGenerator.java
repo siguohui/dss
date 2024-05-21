@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
-import com.xiaosi.wx.base.BaseEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Types;
@@ -16,12 +15,12 @@ import java.util.Collections;
 //https://blog.csdn.net/duanluan/article/details/118776180
 public class MyCodeGenerator {
 
-    public static final String jdbcUrl = "jdbc:mysql://127.0.0.1:3306/db_security?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8";
+    public static final String jdbcUrl = "jdbc:mysql://127.0.0.1:3306/emos?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8";
     public static final String username = "root";
     public static final String password = "root";
     public static String module="";
-    public static String parent_package="com.xiaosi.wx";
-    public static String superEntity="com.xiaosi.wx.base.BaseEntity";
+    public static String parent_package="com.boya.emos";
+    public static String superEntity="com.boya.common.base.DataEntity";
 
     public static void main(String[] args) {
 
@@ -66,7 +65,7 @@ public class MyCodeGenerator {
                 })*/
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("stu") // 设置需要生成的表名
+                    builder.addInclude("emos_key_parts_sbom_define") // 设置需要生成的表名
                             .addTablePrefix("") // 设置过滤表前缀
                             // Entity 策略配置
                             .entityBuilder()

@@ -17,6 +17,7 @@
         <module>wx-dss</module>
         <module>ss-dss</module>
         <module>doc-dss</module>
+        <module>wx-gongzhonghao</module>
     </modules>
 
 </project>
