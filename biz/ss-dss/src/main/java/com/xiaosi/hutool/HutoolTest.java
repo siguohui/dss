@@ -1,5 +1,7 @@
 package com.xiaosi.hutool;
 
+import cn.hutool.core.text.UnicodeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import org.testng.annotations.Test;
@@ -17,5 +19,9 @@ public class HutoolTest {
         System.out.println(rows);
 //在获取到所有的数据后，要关闭reader(切记)，操作文件总是失败，最后才发现在service调用没有关闭流，粗心大意了！
         reader.close();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(UnicodeUtil.toUnicode("四国辉"));
     }
 }
