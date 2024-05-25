@@ -239,6 +239,11 @@ public class ExceptionHandling {
         return res;
     }
 
+    @ExceptionHandler(ImportException.class)
+    public JsonResult businessException(ImportException importException) {
+        return JsonResult.fail(importException.getMsg());
+    }
+
     // 处理自定义异常:AbstractException
     @ExceptionHandler(value = {DuplicateKeyException.class})
     public JsonResult handleDuplicateKeyException(HttpServletRequest request, DuplicateKeyException ex) {

@@ -6,6 +6,8 @@ import com.xiaosi.wx.pojo.IResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.stream.Stream;
+
 @Getter
 @AllArgsConstructor
 public enum LevelEnum implements IResult {
@@ -22,4 +24,10 @@ public enum LevelEnum implements IResult {
         return this.msg;
     }
 
+    public static LevelEnum getIResult1(String lable) {
+        return Stream.of(values())
+                .filter(bean -> bean.msg.equals(lable))
+                .findAny()
+                .orElse(null);
+    }
 }

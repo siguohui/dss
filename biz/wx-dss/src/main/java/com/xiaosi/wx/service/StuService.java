@@ -2,6 +2,7 @@ package com.xiaosi.wx.service;
 
 import com.xiaosi.wx.entity.Stu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StuService extends IService<Stu> {
 
+    void upload(MultipartFile file);
 }

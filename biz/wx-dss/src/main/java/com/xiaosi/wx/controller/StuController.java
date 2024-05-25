@@ -4,7 +4,9 @@ import com.xiaosi.wx.entity.Stu;
 import com.xiaosi.wx.enums.LevelEnum;
 import com.xiaosi.wx.service.StuService;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,5 +34,11 @@ public class StuController {
     public Stu addStu(@RequestBody Stu stu){
         stuService.save(stu);
         return stu;
+    }
+
+    @SneakyThrows
+    @PostMapping("/upload")
+    public void upload(@RequestPart("file") MultipartFile file) {
+        stuService.upload(file);
     }
 }
