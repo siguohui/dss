@@ -18,6 +18,8 @@
         <module>ss-dss</module>
         <module>doc-dss</module>
         <module>wx-gongzhonghao</module>
+        <module>lock-dss</module>
+        <module>easy-excel-dss</module>
     </modules>
 
 </project>
