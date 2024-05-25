@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.xiaosi.wx.entity.Stu">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="level" property="level" jdbcType="INTEGER"/>
     </resultMap>
 
 </mapper>

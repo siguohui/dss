@@ -2,6 +2,7 @@ package com.xiaosi.wx.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.Serializable;
 

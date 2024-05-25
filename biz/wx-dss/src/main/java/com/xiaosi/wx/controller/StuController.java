@@ -1,11 +1,10 @@
 package com.xiaosi.wx.controller;
 
 import com.xiaosi.wx.entity.Stu;
+import com.xiaosi.wx.enums.LevelEnum;
 import com.xiaosi.wx.service.StuService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,4 +28,9 @@ public class StuController {
         return stuService.list();
     }
 
+    @PostMapping("/add")
+    public Stu addStu(@RequestBody Stu stu){
+        stuService.save(stu);
+        return stu;
+    }
 }
