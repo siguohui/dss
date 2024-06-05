@@ -74,7 +74,8 @@ public class SecurityConfig {
                 http.getSharedObject(ApplicationContext.class);
         http
                 .authorizeHttpRequests(r -> r
-                      .requestMatchers(HttpMethod.POST, "/refresh").permitAll()
+                      .requestMatchers(HttpMethod.GET, "/refresh","/excel/template")
+                                .permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/doc.html"),
                                         new AntPathRequestMatcher("/favicon.ico"),
                                         new AntPathRequestMatcher("/webjars/**"),

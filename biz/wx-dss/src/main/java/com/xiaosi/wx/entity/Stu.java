@@ -8,7 +8,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.xiaosi.wx.base.BaseEntity;
 
 import com.xiaosi.wx.easyexcel.annotation.CheckValid;
+import com.xiaosi.wx.easyexcel.annotation.ExcelSelected;
 import com.xiaosi.wx.easyexcel.converter.LevelEnumConverter;
+import com.xiaosi.wx.enums.CacheContentEnum;
 import com.xiaosi.wx.enums.LevelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -50,6 +52,13 @@ public class Stu extends BaseEntity {
 //    @NotBlank(message = "等级不能为空")
     /*@JSONField(serialzeFeatures= SerializerFeature.WriteEnumUsingToString) 如果springmvc中json转换改成fastjson，需要此注解*/
     private LevelEnum level;
+
+    private CacheContentEnum cacheContentEnum;
+
+
+    @ExcelSelected(source = {"男","女", "未知"})
+    @ExcelProperty("性别")
+    private String gender;
 
     /*@Pattern(regexp = "^[1][3,4,5,7,8][0-9]{9}$$", message = "手机号不合法")
     @NotBlank(message = "手机号不能为空")
