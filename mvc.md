@@ -29,3 +29,21 @@ HandlerMethodReturnValueHandlerComposite#handleReturnValue
 HandlerMethodReturnValueHandlerComposite#selectHandler
 // 处理返回值
 HandlerMethodReturnValueHandler#handleReturnValue
+
+
+RequestCondition
+DispatchServlet
+HanderMapping 
+
+在 spring mvc 中，通过DispatchServlet接收客户端发起的一个请求之后，
+会通过 HanderMapping 来获取对应的请求处理器；
+而 HanderMapping 如何找到可以处理这个请求的处理器呢，这就需要 RequestCondition 来决定了。
+https://www.jianshu.com/p/50531a355f97
+
+
+AbstractHandlerMethodMapping
+
+
+HandlerMapping
+
+AbstractHandlerMethodMapping
