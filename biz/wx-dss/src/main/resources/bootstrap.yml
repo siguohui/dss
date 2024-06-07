@@ -192,7 +192,7 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #实体类所在包
-  type-aliases-package: com.xiaosi.wx
+  type-aliases-package: com.xiaosi.wx.entity
   # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
   mapper-locations: classpath:mapper/**.xml,classpath:/mapper/**/*.xml
   global-config:
