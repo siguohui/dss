@@ -1,7 +1,11 @@
 package com.xiaosi.wx.config;
 
+import com.google.common.base.Joiner;
 import com.xiaosi.wx.utils.JacksonRedisUtils;
 import com.xiaosi.wx.utils.RedisUtil;
+//import org.redisson.Redisson;
+//import org.redisson.api.RedissonClient;
+//import org.redisson.config.Config;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -18,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.*;
@@ -64,8 +69,13 @@ public class LettuceRedisConfig extends CachingConfigurerSupport implements Bean
         return redisTemplate;
     }*/
 
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory();
+    }
+
     @Bean("dssRedisTemplate")
-    public RedisTemplate<?, ?> dssRedisTemplate(LettuceConnectionFactory factory) {
+    public RedisTemplate<?, ?> dssRedisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         /*RedisSerializer<String> redisKeySerializer = new StringRedisSerializer();*/
         redisTemplate.setKeySerializer(RedisSerializer.string());
@@ -80,7 +90,7 @@ public class LettuceRedisConfig extends CachingConfigurerSupport implements Bean
     }
 
     @Bean
-    public RedisTemplate<?,?> redisTemplate(LettuceConnectionFactory factory) {
+    public RedisTemplate<?,?> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<?,?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
         redisTemplate.setKeySerializer( RedisSerializer.string());
@@ -144,16 +154,12 @@ public class LettuceRedisConfig extends CachingConfigurerSupport implements Bean
     @Bean
     public RedissonClient redissonClient(RedisProperties redisProperties) {
         Config config = new Config();
-        // 这里假设你使用单节点的Redis服务器
-        System.out.println(redisProperties.getHost());;
-        System.out.println(redisProperties.getUrl());;
-        System.out.println(redisProperties.getPort());;
-        System.out.println(redisProperties.getPassword());;
+        String url = Joiner.on("").join("redis://", redisProperties.getHost(), ":", redisProperties.getPort());
         config.useSingleServer()
                 // 使用与Spring Data Redis相同的地址
-                .setAddress("redis://127.0.0.1:6379")
+                .setAddress(url)
         // 如果有密码
-        .setPassword("123456");
+        .setPassword(redisProperties.getPassword());
         // 其他配置参数
         //.setDatabase(0)
         //.setConnectionPoolSize(10)
