@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(r -> r
                 .requestMatchers(new AntPathRequestMatcher("/doc.html"),
                         new AntPathRequestMatcher("/favicon.ico"),
+                        new AntPathRequestMatcher("/index"),
                         new AntPathRequestMatcher("/webjars/**"),
                         new AntPathRequestMatcher("/swagger-resources/**"),
                         new AntPathRequestMatcher("/v3/**")

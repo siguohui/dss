@@ -1,8 +1,10 @@
 package com.xiaosi.doc;
 
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ public class MapTest {
         }
         //等待全部线程执行完毕
         try {
+
             latch.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -45,7 +48,14 @@ public class MapTest {
             System.out.println(entry.getKey());
         }
         map.forEach((key,value)-> list.addAll(value));
-        System.out.println(list.size());//集合大小小于8000
+    }
+
+    @Test
+    public void test() {
+        System.out.println(Validator.isNumber("1"));;
+        System.out.println(Validator.isNumber("1.1"));;
+        System.out.println(Validator.isNumber("-1"));;
+
     }
 
 }
