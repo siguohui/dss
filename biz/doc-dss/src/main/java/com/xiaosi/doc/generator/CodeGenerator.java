@@ -21,7 +21,7 @@ public class CodeGenerator {
         String url = "jdbc:mysql://localhost:3306/wx_dss?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai";
         String username = "root";
         String password = "root";
-        List<String> tables = List.of("stu");//需要生成对应代码的表名的集合
+        List<String> tables = List.of("tea");//需要生成对应代码的表名的集合
 
         FastAutoGenerator.create(url, username, password)
                 //全局配置----------------------------------------------------------------------------------------

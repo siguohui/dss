@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaosi.doc.mapper.StuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xiaosi.doc.entity.Stu">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+    </resultMap>
+    <select id="selectAll" resultType="com.xiaosi.doc.entity.Stu">
+        SELECT s.*,t.name AS tea_name
+        from stu s
+                 left join tea t on t.id = s.tea_id
+                 where s.name = #{name}
+    </select>
+
+</mapper>
