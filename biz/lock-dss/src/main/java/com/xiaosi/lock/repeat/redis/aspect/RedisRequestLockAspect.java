@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +27,8 @@ import org.springframework.util.StringUtils;
  * @author kyle0432
  * @date 2024/03/01 16:01
  */
-//@Aspect
-//@Configuration
+@Aspect
+@Configuration
 @Order(2)
 @RequiredArgsConstructor
 public class RedisRequestLockAspect {
@@ -40,7 +41,19 @@ public class RedisRequestLockAspect {
     private final StringRedisTemplate stringRedisTemplate;
     private final CacheKeyGenerator cacheKeyGenerator;
 
+//    execution(* com.*.service..*.*(..))
+//    execution(* com..service..*.*(..))
+//    execution(* com.example.service..*.*(..))
+//    execution(* *(..))
+//    @Pointcut("execution(* com.xiaosi.lock.controller..*(..))")
+    public void pt(){
+    }
+
+//    @Around("execution(* *..*.*(..))")
+//    @Around("execution(public * * (..))")
+//    @Around("execution(* *(..))")
     @Around("execution(public * * (..)) && @annotation(com.xiaosi.lock.repeat.redis.annotation.RequestLock)")
+//    @Around("pt()")
     public Object interceptor(ProceedingJoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         Method method = methodSignature.getMethod();

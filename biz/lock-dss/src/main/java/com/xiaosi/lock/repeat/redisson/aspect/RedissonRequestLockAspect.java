@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
  * @author kyle0432
  * @date 2024/03/01 14:36
  */
-@Aspect
-@Configuration
+//@Aspect
+//@Configuration
 @RequiredArgsConstructor
 @Order(2)
 public class RedissonRequestLockAspect {

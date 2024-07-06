@@ -1,5 +1,7 @@
 package com.xiaosi.lock.controller;
 
+import cn.shuibo.annotation.Decrypt;
+import cn.shuibo.annotation.Encrypt;
 import com.xiaosi.lock.pojo.JsonResult;
 import com.xiaosi.lock.repeat.redis.annotation.RequestLock;
 import com.xiaosi.lock.repeat.redis.param.AddReq;
@@ -43,5 +45,20 @@ public class TestController {
     @RequestLock
     public JsonResult<AddReq> add(@RequestBody AddReq addReq) {
         return JsonResult.success(addReq);
+    }
+
+    @Encrypt
+    @GetMapping("/encrypt")
+    public AddReq encrypt(){
+        AddReq testBean = new AddReq();
+        testBean.setUserName("shuibo.cn");
+        testBean.setUserPhone("18810194498");
+        return testBean;
+    }
+
+    @Decrypt
+    @PostMapping("/decryption")
+    public AddReq decrypt(@RequestBody AddReq addReq){
+        return addReq;
     }
 }
