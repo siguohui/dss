@@ -1,0 +1,47 @@
+
+#wx:
+#  mp:
+#    appId:
+#    secret:
+#    redirectUri:
+# 自定义微信相关配置信息
+wx:
+  # 消息模板ID
+  templateId: 8kmETolj-KYzHyUD2-8wmE6PyBwUuvyk3E3GE_a_PuI
+  mp:
+    appId: wx19b0485d2bd92651
+    secret: 31e37f4fa06e1ac3accec00daf9a3b3b
+    # 微信公众号的toke
+    token: token
+    # 微信公众号的EncodingAESKey
+    aesKey: #B2Y1F7HYo5H5mSQ2nz0MdVESP8d568CH8JQou5f1rm3
+    config-storage:
+      redis:
+        host: 127.0.0.1
+        port: 6379
+        password: 123456
+        database: 0
+      type: RedisTemplate
+      key-prefix: wx
+      http-client-type: httpclient
+      http-proxy-host:
+      http-proxy-port:
+      http-proxy-username:
+      http-proxy-password:
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      password: 123456
+      timeout: 6000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1
+#server:
+#  port: 80
