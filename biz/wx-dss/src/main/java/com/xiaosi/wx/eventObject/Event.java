@@ -2,7 +2,7 @@ package com.xiaosi.wx.eventObject;
 
 public class Event {
 
-    private Source source;
+    private final Source source;
 
     public Event(Source source) {
         if(source == null)

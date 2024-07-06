@@ -21,6 +21,8 @@ public class RsaUtils {
 
     private static final int DEFAULT_KEY_SIZE = 2048;
     private static final String ALGORITHM_RSA = "RSA";
+    private static final String SIGNATRUE_RSA = "SHA256withRSA";
+    public static final String SIGN_ALGORITHMS = "MD5WithRSA";
 
     /**从文件中读取公钥
      * @author 赖柄沣 bingfengdev@aliyun.com
@@ -84,6 +86,14 @@ public class RsaUtils {
 
     }
 
+    public static KeyPair getKeyPair(String secret, int keySize) throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM_RSA);
+        SecureRandom secureRandom = new SecureRandom(secret.getBytes());
+        keyPairGenerator.initialize(Math.max(keySize, DEFAULT_KEY_SIZE), secureRandom);
+        KeyPair keyPair = keyPairGenerator.genKeyPair();
+        return keyPair;
+    }
+
     /**
      * 根据密文，生存rsa公钥和私钥,并写入指定文件
      *@author 赖柄沣 bingfengdev@aliyun.com
@@ -93,10 +103,7 @@ public class RsaUtils {
      * @param secret             生成密钥的密文
      */
     public static void generateKey(String publicKeyFilename, String privateKeyFilename, String secret, int keySize) throws Exception {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM_RSA);
-        SecureRandom secureRandom = new SecureRandom(secret.getBytes());
-        keyPairGenerator.initialize(Math.max(keySize, DEFAULT_KEY_SIZE), secureRandom);
-        KeyPair keyPair = keyPairGenerator.genKeyPair();
+        KeyPair keyPair = getKeyPair(secret,keySize);
         // 获取公钥并写出
         byte[] publicKeyBytes = keyPair.getPublic().getEncoded();
         publicKeyBytes = Base64.getEncoder().encode(publicKeyBytes);
@@ -138,6 +145,22 @@ public class RsaUtils {
 
     }
 
+    //加签
+    public static byte[] sign(String signatrue, PrivateKey privateKey, String msg) throws Exception {
+        Signature signature = Signature.getInstance(signatrue);
+        signature.initSign(privateKey);
+        signature.update(msg.getBytes());
+        return signature.sign();
+    }
+
+    //验签
+    public static Boolean verify(String signatrue, PublicKey publicKey, String msg, byte[] msgBytes) throws Exception {
+        Signature verification = Signature.getInstance(signatrue);
+        verification.initVerify(publicKey);
+        verification.update(msg.getBytes());
+        return verification.verify(msgBytes);
+    }
+
     /**构造器私有化
      * @author 赖柄沣 bingfengdev@aliyun.com
      * @date 2020-09-04 13:16:29
@@ -162,6 +185,69 @@ public class RsaUtils {
     @Test
     public void generateKey() throws Exception{
         RsaUtils.generateKey(publicFile,privateFile,"test123",2048);
+        KeyPair keyPair = getKeyPair("test123", 2048);
+
+        // 待签名的字符串
+        String message = "Hello, World!";
+        byte[] sign = sign(SIGNATRUE_RSA, keyPair.getPrivate(), message);
+        System.out.println(verify(SIGNATRUE_RSA, keyPair.getPublic(),message,sign));
+
+        String test = sign("123456", keyPair.getPrivate().toString());
+        boolean res = doCheck("123456", test, keyPair.getPublic().toString());
+        System.out.println(res);
     }
 
+    /**
+     * @param content:签名的参数内容
+     * @param privateKey：私钥
+     * @return
+     */
+    public static String sign(String content, String privateKey) {
+        String charset = "utf-8";
+        try {
+            PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(com.xiaosi.wx.utils.Base64.decode(privateKey));
+            KeyFactory keyf = KeyFactory.getInstance("RSA");
+            PrivateKey priKey = keyf.generatePrivate(priPKCS8);
+
+            java.security.Signature signature = java.security.Signature.getInstance(SIGN_ALGORITHMS);
+
+            signature.initSign(priKey);
+            signature.update(content.getBytes(charset));
+
+            byte[] signed = signature.sign();
+
+            return com.xiaosi.wx.utils.Base64.encode(signed);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param content：验证参数的内容
+     * @param sign：签名
+     * @param publicKey：公钥
+     * @return
+     */
+    public static boolean doCheck(String content, String sign, String publicKey) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            byte[] encodedKey = com.xiaosi.wx.utils.Base64.decode(publicKey);
+            PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+
+            java.security.Signature signature = java.security.Signature.getInstance(SIGN_ALGORITHMS);
+
+            signature.initVerify(pubKey);
+            signature.update(content.getBytes("utf-8"));
+
+            boolean bverify = signature.verify(com.xiaosi.wx.utils.Base64.decode(sign));
+            return bverify;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }
