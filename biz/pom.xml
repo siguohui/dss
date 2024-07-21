@@ -23,6 +23,7 @@
         <module>wx-java</module>
         <module>jacob-audio</module>
         <module>water-dss</module>
+        <module>spi</module>
     </modules>
 
     <build>

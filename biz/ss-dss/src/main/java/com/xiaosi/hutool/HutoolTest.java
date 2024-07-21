@@ -22,6 +22,7 @@ public class HutoolTest {
     }
 
     public static void main(String[] args) {
-        System.out.println(UnicodeUtil.toUnicode("四国辉"));
+//        double result = MathUtil.pow(number, 2);
+//        System.out.println(UnicodeUtil.toUnicode("四国辉"));
     }
 }
