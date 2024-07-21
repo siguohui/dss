@@ -17,11 +17,12 @@ public class CodeGenerator {
     }
 
     public static void getCode() {
-        String projectPath = System.getProperty("user.dir")+"\\biz\\doc-dss";
-        String url = "jdbc:mysql://localhost:3306/wx_dss?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai";
+//        String projectPath = System.getProperty("user.dir")+"\\biz\\doc-dss";
+        String projectPath ="D:\\sgh\\other\\workspace\\idea\\boya\\Source\\boya-science-emos";
+        String url = "jdbc:mysql://localhost:3306/emos?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai";
         String username = "root";
         String password = "root";
-        List<String> tables = List.of("tea");//需要生成对应代码的表名的集合
+        List<String> tables = List.of("emos_maintain_task_step");//需要生成对应代码的表名的集合
 
         FastAutoGenerator.create(url, username, password)
                 //全局配置----------------------------------------------------------------------------------------
@@ -35,8 +36,8 @@ public class CodeGenerator {
 
                 //包名配置--------------------------------------------------------------------------------------------
                 .packageConfig(builder ->
-                        builder.parent("com.xiaosi.doc")//TODO 修改为自己项目的路径
-                                // .moduleName("practice")//模块名，设置该项会在输出路径上增加一层模块名目录
+                        builder.parent("com.boya.emos")//TODO 修改为自己项目的路径
+                                 .moduleName("maintain")//模块名，设置该项会在输出路径上增加一层模块名目录
                                 .entity("entity")
                                 .service("service")
                                 .serviceImpl("service.impl")
