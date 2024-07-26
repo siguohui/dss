@@ -24,6 +24,7 @@
         <module>jacob-audio</module>
         <module>water-dss</module>
         <module>spi</module>
+        <module>wx-ws</module>
     </modules>
 
     <build>

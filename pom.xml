@@ -48,7 +48,6 @@
     <git.commit.plugin>6.0.0</git.commit.plugin>
     <spring.checkstyle.plugin>0.0.39</spring.checkstyle.plugin>
 
-
     <spring.authorization.version>1.2.2</spring.authorization.version>
     <screw.version>0.0.3</screw.version>
     <captcha.version>2.2.3</captcha.version>
