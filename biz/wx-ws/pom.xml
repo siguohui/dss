@@ -14,5 +14,6 @@
     <url>http://maven.apache.org</url>
     <modules>
         <module>spring-stomp-back</module>
+        <module>stomp-thymeleaf</module>
     </modules>
 </project>

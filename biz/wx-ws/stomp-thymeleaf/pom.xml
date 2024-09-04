@@ -7,10 +7,10 @@
         <version>2.0</version>
     </parent>
 
-    <artifactId>spring-stomp-back</artifactId>
+    <artifactId>stomp-thymeleaf</artifactId>
     <packaging>jar</packaging>
 
-    <name>spring-stomp-back</name>
+    <name>stomp-thymeleaf</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -31,13 +31,8 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.83</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -7,6 +7,8 @@ package com.xiaosi.stomp.model;
  * @Date: 2022/5/18 14:46
  */
 
+import lombok.EqualsAndHashCode;
+
 import java.security.Principal;
 
 /**
@@ -15,8 +17,10 @@ import java.security.Principal;
  * @author dengsx
  * @create 2021/07/22
  **/
+@EqualsAndHashCode
 public class UserInfo implements Principal {
     private String userName;
+    private String message;
 
     @Override
     public String getName() {
@@ -25,5 +29,13 @@ public class UserInfo implements Principal {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
