@@ -40,7 +40,7 @@ public class WebsocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
         // endpoint用来建立ws连接的
         registry.addEndpoint("/gs-guide-websocket", "/test2")
 //                .setHandshakeHandler(userHandleShake())
-                .setHandshakeHandler(defaultHandshakeHandler())
+//                .setHandshakeHandler(defaultHandshakeHandler())
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
@@ -60,12 +60,13 @@ public class WebsocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
         // 总结  broker可以用来向客户端发送数据，destination可以用来向服务器发送数据 ，区别在于，客户端得先发起订阅
         //方法用于设置应用程序的目的地前缀，这里我们将其设置为"/app"，表示所有以"/app"开头的消息都会被路由到控制器上。
         registry.setApplicationDestinationPrefixes("/app");
+//        registry.setUserDestinationPrefix("/user");
     }
 
-    @Bean
-    public UserHandleShake userHandleShake() {
-        return new UserHandleShake();
-    }
+//    @Bean
+//    public UserHandleShake userHandleShake() {
+//        return new UserHandleShake();
+//    }
 
     private DefaultHandshakeHandler defaultHandshakeHandler() {
         return new DefaultHandshakeHandler() {

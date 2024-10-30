@@ -24,7 +24,6 @@ public class WsController {
     @MessageMapping("/message")
     @SendTo("/topic/msg")
     public String testWs(Map<String, Object> params) {
-
         UserInfo userInfo = new UserInfo();
         userInfo.setMessage((String) params.getOrDefault("content", "内容提取失败，我是默认消息"));
         template.convertAndSendToUser(String.valueOf(params.get("userName")), "/chat", params.getOrDefault("content", "内容提取失败，我是默认消息"));
@@ -35,8 +34,9 @@ public class WsController {
     @GetMapping("/message")
     public String testWs1() {
         UserInfo userInfo = new UserInfo();
-        userInfo.setMessage("内容提取失败，我是默认消息");
-        template.convertAndSend("/topic/msg", userInfo);
+        userInfo.setMessage("内容提取失败，我是默认消息11111");
+//        template.convertAndSend("/topic/noapp", userInfo);
+        template.convertAndSendToUser("60", "/message", "内容提取失败，我是默认消息2222");
         return JsonUtil.parseObjToJson(userInfo);
     }
 }
