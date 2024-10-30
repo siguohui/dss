@@ -44,7 +44,7 @@ public class MyCronTask {
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
     private RedisUtil redisUtil;
-//    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0/10 * * * * *")
     void cronSchedule(){
         String sz = getSZ();
 //        String sz = getShSz();

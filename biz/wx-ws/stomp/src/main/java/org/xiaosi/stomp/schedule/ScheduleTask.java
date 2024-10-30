@@ -31,15 +31,10 @@ public class ScheduleTask implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         // 动态使用cron表达式设置循环间隔
-        taskRegistrar.addTriggerTask(new Runnable() {
-            @Override
-            public void run() {
-                log.info("Current time： {}", LocalDateTime.now());
-            }
-        }, triggerContext -> {
+        taskRegistrar.addTriggerTask(() -> log.info("Current time： {}", LocalDateTime.now()),
+                triggerContext -> {
             CronTrigger cronTrigger = new CronTrigger(cron);
-            Instant instant = cronTrigger.nextExecution(triggerContext);
-            return instant;
+                    return cronTrigger.nextExecution(triggerContext);
         });
     }
 }
