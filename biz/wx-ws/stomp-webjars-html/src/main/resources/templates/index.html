@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单聊</title>
+    <!--引入外部的 JS 库，这些 JS 库在 pom.xml 文件中通过依赖加入进来-->
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <!--自定义js-->
+    <script src="/js/chat.js"></script>
+</head>
+<body>
+
+<div id="chat">
+    <div id="chatsContent">
+        <div>
+            请输入聊天内容：
+            <input type="text" id="content" placeholder="聊天内容">
+            目标用户：
+            <input type="text" id="to" placeholder="目标用户">
+            <button id="send" type="button">发送</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

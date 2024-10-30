@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My WebSocket</title>
+</head>
+
+<body style="text-align:center">
+我是用户11111111111111<br/>
+我从MQ读取到的消息是：
+<span id="msg"></span>
+<div id="message">
+</div>
+</body>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    // 初始化 ws 对象
+    var ws = new WebSocket('ws://localhost:15674/chat');
+
+    // 获得Stomp client对象
+    var client = Stomp.over(ws);
+
+    // 定义连接成功回调函数
+    var on_connect = function(x) {
+//data.body是接收到的数据
+        client.subscribe("/exchange/testMsg", function(data) {
+            var msg = data.body;
+            $("#msg").text(msg);
+        });
+
+        client.subscribe("/user/queue/errors", function(data) {
+            var msg = data.body;
+            alert("收到数据：" + msg);
+        });
+        client.subscribe("/user/queue/reply", function(data) {
+            var msg = data.body;
+            alert("收到数据：" + msg);
+        });
+    };
+
+    // 定义错误时回调函数
+    var on_error =  function() {
+        console.log('error');
+    };
+    // 连接RabbitMQ
+    client.connect('guest', 'guest', on_connect, on_error, '/');
+    console.log(">>>连接上http://localhost:15674");
+</script>
+</html>
