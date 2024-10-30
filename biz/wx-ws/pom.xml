@@ -15,5 +15,9 @@
     <modules>
         <module>spring-stomp-back</module>
         <module>stomp-thymeleaf</module>
+        <module>java-ws</module>
+        <module>stomp-webjars-html</module>
+        <module>rabbitmq-stomp</module>
+        <module>stomp</module>
     </modules>
 </project>

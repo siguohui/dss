@@ -13,6 +13,12 @@
     <module>common</module>
     <module>biz</module>
       <module>biz/spi</module>
+      <module>biz/i18n</module>
+      <module>biz/springmvc</module>
+      <module>learn</module>
+    <module>learn/spring</module>
+    <module>learn/bigfile</module>
+      <module>learn/sensitive-word</module>
   </modules>
 
   <properties>
@@ -131,6 +137,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
