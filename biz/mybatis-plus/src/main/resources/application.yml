@@ -1,0 +1,114 @@
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/wx_dss?serverTimezone=GMT%2B8&characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&useAffectedRows=true&allowMultiQueries=true&rewriteBatchedStatements=true
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      #     CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+      maxActive: 8
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      #     设置从连接池获取连接时是否检查连接有效性，true检查，false不检查
+      testOnBorrow: false
+      #     设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,slf4j #,wall
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+      #     保持长连接
+      keepAlive: true
+      useGlobalDataSourceStat: true
+      stat:
+        enabled: true
+        # 慢SQL记录
+        log-slow-sql: true
+        slow-sql-millis: 30000
+        merge-sql: false
+      wall:
+        function-check: false
+        strict-syntax-check: false
+        multi-statement-allow: true
+      web-stat-filter:
+        # 是否启用StatFilter默认值true
+        enabled: true
+        # 添加过滤规则
+        url-pattern: /*
+        # 忽略过滤的格式
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico
+      stat-view-servlet:
+        # 是否启用StatViewServlet默认值true
+        enabled: true
+        # 访问路径为/druid时，跳转到StatViewServlet
+        url-pattern: /druid/*
+        # 是否能够重置数据
+        reset-enable: false
+        # 需要账号密码才能访问控制台，默认为root
+        login-username: druid
+        login-password: druid
+        # IP白名单
+        allow: 127.0.0.1
+        # IP黑名单（共同存在时，deny优先于allow）
+        deny:
+      filter:
+        stat:
+          enabled: true # 开启DruidDataSource状态监控
+          log-slow-sql: true # 开启慢SQL记录功能,启用后如果遇到执行很慢的 SQL，便会输出到日志中，
+          slow-sql-millis: 5000  # 默认3000毫秒，这里超过5s，就是慢，记录到日志
+          merge-sql: true
+          db-type: mysql
+        # 防御SQL注入
+        wall:
+          config:
+            multi-statement-allow: true
+
+# mybatis-plus相关配置
+mybatis-plus:
+  configuration:
+    cache-enabled: false #开启二级缓存
+    #开启sql日志
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    map-underscore-to-camel-case: true
+    # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
+    jdbc-type-for-null: 'null'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #实体类所在包
+  type-aliases-package: com.xiaosi.wx.entity
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:mapper/**.xml,classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      #id自增类型配置
+      id-type: ASSIGN_ID
+      #逻辑删除字段配置
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+    #控制台mybatis-plus标记
+    banner: true
+  check-config-location: true # 检查xml是否存在
+  type-enums-package: com.xiaosi.wx.enums  #通用枚举开启
+# 设置日志级别
+logging:
+  level:
+    root: INFO
+    #com.example.demo.dao: debug，可以控制单个包下日志级别
+    #config: classpath:log/logback.xml
+server:
+  port: 8888

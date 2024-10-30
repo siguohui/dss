@@ -19,6 +19,7 @@
     <module>learn/spring</module>
     <module>learn/bigfile</module>
       <module>learn/sensitive-word</module>
+      <module>biz/mybatis-plus</module>
   </modules>
 
   <properties>
