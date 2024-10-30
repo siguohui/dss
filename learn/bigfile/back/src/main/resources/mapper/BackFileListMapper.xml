@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaosi.back.mapper.BackFileListMapper">
+
+    <resultMap type="BackFileList" id="BackFileListResult">
+        <result property="id"    column="id"    />
+        <result property="filename"    column="filename"    />
+        <result property="identifier"    column="identifier"    />
+        <result property="url"    column="url"    />
+        <result property="location"    column="location"    />
+        <result property="totalSize"    column="total_size"    />
+    </resultMap>
+
+    <sql id="selectBackFileListVo">
+        select id, filename, identifier, url, location, total_size from t_file_list
+    </sql>
+
+    <select id="selectBackFileListList" parameterType="BackFileList" resultMap="BackFileListResult">
+        <include refid="selectBackFileListVo"/>
+        <where>
+            <if test="filename != null  and filename != ''"> and filename = #{filename}</if>
+            <if test="identifier != null  and identifier != ''"> and identifier = #{identifier}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+            <if test="totalSize != null "> and total_size = #{totalSize}</if>
+        </where>
+    </select>
+
+    <select id="selectBackFileListById" parameterType="Long" resultMap="BackFileListResult">
+        <include refid="selectBackFileListVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectSingleBackFileList" parameterType="BackFileList" resultType="int">
+        select count(1) from t_file_list
+        <where>
+            <if test="filename != null  and filename != ''"> and filename = #{filename}</if>
+            <if test="identifier != null  and identifier != ''"> and identifier = #{identifier}</if>
+        </where>
+    </select>
+
+    <insert id="insertBackFileList" parameterType="BackFileList" useGeneratedKeys="true" keyProperty="id">
+        insert into t_file_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="filename != null  and filename != ''">filename,</if>
+            <if test="identifier != null  and identifier != ''">identifier,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="location != null  and location != ''">location,</if>
+            <if test="totalSize != null ">total_size,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="filename != null  and filename != ''">#{filename},</if>
+            <if test="identifier != null  and identifier != ''">#{identifier},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="location != null  and location != ''">#{location},</if>
+            <if test="totalSize != null ">#{totalSize},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBackFileList" parameterType="BackFileList">
+        update t_file_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filename != null  and filename != ''">filename = #{filename},</if>
+            <if test="identifier != null  and identifier != ''">identifier = #{identifier},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="location != null  and location != ''">location = #{location},</if>
+            <if test="totalSize != null ">total_size = #{totalSize},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBackFileListById" parameterType="Long">
+        delete from t_file_list where id = #{id}
+    </delete>
+
+    <delete id="deleteBackFileListByIds" parameterType="String">
+        delete from t_file_list where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

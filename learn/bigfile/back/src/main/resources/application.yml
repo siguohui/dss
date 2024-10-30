@@ -1,0 +1,44 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: point-upload
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: defaultDataSource
+    url: jdbc:mysql://localhost:3306/big-file?serverTimezone=UTC
+    username: root
+    password: root
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+mybatis-plus:
+  configuration:
+    cache-enabled: false #开启二级缓存
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: 'null'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #实体类所在包
+  type-aliases-package: com.xiaosi.back.entity
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:mapper/**.xml,classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      #id自增类型配置
+      id-type: ASSIGN_ID
+      #逻辑删除字段配置
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+    #控制台mybatis-plus标记
+    banner: true
+config:
+  upload-path: D:/Wolfe/uploadPath
+minio:
+  endpoint: http://localhost:9000
+  accessKey: admin
+  secretKey: 12345678
+  bucketName: test
