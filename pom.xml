@@ -20,6 +20,7 @@
     <module>learn/bigfile</module>
       <module>learn/sensitive-word</module>
       <module>biz/mybatis-plus</module>
+      <module>biz/oracle</module>
   </modules>
 
   <properties>
