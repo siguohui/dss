@@ -1,0 +1,13 @@
+server:
+  port: 8888
+xxl:
+  job:
+    accessToken: boya20230824
+    executor:
+      appname: xxl-job-emos
+      ip:
+      logpath: /data/emos/xxl-job/jobhandler
+      logretentiondays: 30
+      port: 18785
+    admin:
+      addresses: http://127.0.0.1:8985/xxl-job
