@@ -25,6 +25,7 @@
         <module>water-dss</module>
         <module>spi</module>
         <module>wx-ws</module>
+        <module>xxl-job-client</module>
     </modules>
 
     <build>
