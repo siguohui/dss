@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      master:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&useAffectedRows=true
+        username: root
+        password: root
+      slave1:
+        url: jdbc:oracle:thin:@192.168.100.201:1521/ORCLPDB
+        username: ghby
+        password: ghby
+        driver-class-name: oracle.jdbc.driver.OracleDriv
+      slave2:
+        url: jdbc:postgresql://127.0.0.1:5432/ghby
+        username: ghby
+        password: ghby
+        driver-class-name: org.postgresql.Driver
+      initial-size: 15
+      min-idle: 15
+      max-active: 200
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: false
+      connection-properties: false
