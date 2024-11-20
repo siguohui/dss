@@ -1,0 +1,37 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+#    db1:
+#      jdbc-url: jdbc:oracle:thin:@192.168.100.201:1521/ORCLPDB
+#      username: ghby
+#      password: ghby
+#      driver-class-name: oracle.jdbc.OracleDriver
+#      type: com.alibaba.druid.pool.DruidDataSource
+    db1:
+      url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&useAffectedRows=true
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+#      type: com.alibaba.druid.pool.DruidDataSource
+    db2:
+      jdbc-url: jdbc:postgresql://127.0.0.1:5432/ghby
+      username: ghby
+      password: ghby
+      driver-class-name: org.postgresql.Driver
+#      type: com.alibaba.druid.pool.DruidDataSource
+    druid-pool:
+      #连接池的最大数据库连接数。设为0表示无限制
+      max-active: 20
+      #初始化数量
+      initial-size: 2
+      #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制
+      max-wait: 60000
+      #最小空闲连接:连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接
+      min-idle: 2
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis:
