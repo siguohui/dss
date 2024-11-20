@@ -11,7 +11,7 @@ spring:
         url: jdbc:oracle:thin:@192.168.100.201:1521/ORCLPDB
         username: ghby
         password: ghby
-        driver-class-name: oracle.jdbc.driver.OracleDriv
+        driver-class-name: oracle.jdbc.driver.OracleDriver
       slave2:
         url: jdbc:postgresql://127.0.0.1:5432/ghby
         username: ghby

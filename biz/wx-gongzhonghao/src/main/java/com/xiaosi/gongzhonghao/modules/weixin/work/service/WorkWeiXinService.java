@@ -7,6 +7,7 @@ import me.chanjar.weixin.cp.api.WxCpMessageService;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.api.impl.WxCpMessageServiceImpl;
 import me.chanjar.weixin.cp.bean.message.WxCpMessage;
+import me.chanjar.weixin.cp.config.impl.WxCpDefaultConfigImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,6 +29,7 @@ public class WorkWeiXinService {
      */
     public void sendTextMessage(String message) {
         WxCpMessageService wxCpMessageService = new WxCpMessageServiceImpl(wxCpService);
+        WxCpDefaultConfigImpl storage = new WxCpDefaultConfigImpl();
         WxCpMessage wxCpMessage = WxCpMessage
                 .TEXT()
                 .toUser("@all")

@@ -2,13 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.xiaosi</groupId>
+
+
+  <name>dss</name>
+  <url>http://maven.apache.org</url> <groupId>com.xiaosi</groupId>
   <artifactId>dss</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
-
-  <name>dss</name>
-  <url>http://maven.apache.org</url>
   <modules>
     <module>common</module>
     <module>biz</module>
@@ -21,6 +21,8 @@
       <module>learn/sensitive-word</module>
       <module>biz/mybatis-plus</module>
       <module>biz/oracle</module>
+      <module>db</module>
+      <module>web</module>
   </modules>
 
   <properties>
