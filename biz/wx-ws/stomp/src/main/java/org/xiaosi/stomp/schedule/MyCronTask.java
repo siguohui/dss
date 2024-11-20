@@ -29,9 +29,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.testng.annotations.Test;
 import org.xiaosi.stomp.utils.RedisUtil;
+import org.xiaosi.stomp.work.config.LoveConfig;
+import org.xiaosi.stomp.work.domain.DailyPush;
+import org.xiaosi.stomp.work.service.DailyPushService;
+import org.xiaosi.stomp.work.service.WorkWeiXinService;
+import org.xiaosi.stomp.work.util.KcacoUtil;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,13 +51,72 @@ public class MyCronTask {
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private WorkWeiXinService workWeiXinService;
+    @Autowired
+    private LoveConfig loveConfig;
+    @Autowired
+    private DailyPushService dailyPushService;
+
     @Scheduled(cron = "0/10 * * * * *")
     void cronSchedule(){
         String sz = getSZ();
+        List<String> split = StrUtil.split(sz, " ");
 //        String sz = getShSz();
-        redisUtil.set("sz",sz);
+        String szzs = split.get(1);
+        BigDecimal decimal = new BigDecimal(szzs);
+        if(decimal.compareTo(new BigDecimal("3360")) > -1){
+            pushMsgWx(szzs);
+        }
+
+        String fromUser="oKIee6K9bDb7hT-Q8SNnAXnx3rfo";
+        String touser="gh_38e9b4eba3d2";
+        redisUtil.set("sz",decimal);
         log.info(sz);
         simpMessagingTemplate.convertAndSend("/topic/sz",sz);
+
+    }
+
+    public void pushMsgWx(String szzs) {
+        // 获取消息模板
+        String messageTemplate = getLoveMsgTemp();
+
+        // 获取推送数据
+        DailyPush dailyPush = dailyPushService.getDailyPushData(loveConfig.getDay(), loveConfig.getGirlBirthday(), loveConfig.getBoyBirthday());
+        dailyPush.setSzzs(szzs);
+        // 填充消息模板
+        Map<String, String> objectFieldValueMap = KcacoUtil.getObjectFieldValueMap(DailyPush.class, dailyPush);
+        String message = StrUtil.format(messageTemplate, objectFieldValueMap);
+        // 发送消息
+        workWeiXinService.sendTextMessage(message);
+    }
+
+
+    /**
+     * 获取推送模板
+     */
+    public String getLoveMsgTemp() {
+        return "上证指数: {szzs} \n"+
+                "📅 {date} \n" +
+                "城市: {city} \n" +
+                "天气: {weather} \n" +
+                "最低气温: {tempMin} \n" +
+                "最高气温: {tempMax} \n" +
+                "穿衣指数: {dress} \n" +
+                "防晒指数: {sunscreen} \n" +
+                "\n" +
+                "今天是恋爱的第 {loveDay} ❤️ \n" +
+                "{girlBirthday} \n" +
+                "{boyBirthday} \n" +
+                "\n" +
+                "🌈: {rainbowFart}";
+    }
+
+    @Test
+    public void mytest(){
+        BigDecimal big1 = new BigDecimal(3000);
+        BigDecimal big2 = new BigDecimal(3400);
+        System.out.println(big1.compareTo(big2));
     }
 
     @Test

@@ -1,7 +1,15 @@
 package org.xiaosi.stomp.config;
 
+import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.common.session.WxSessionManager;
+import me.chanjar.weixin.mp.api.WxMpMessageHandler;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -11,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Collections;
+import java.util.Map;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -80,5 +89,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
 }
+
+
+
