@@ -1,0 +1,28 @@
+
+spring:
+  # datasource
+  datasource:
+    driver-class-name: com.kingbase8.Driver
+    url: jdbc:kingbase8://192.168.100.201:54321/test
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+
+
+# mybatis-plus
+mybatis-plus:
+  # log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/**.xml
+  #开启驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: 'null'
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: DELETE_FLAG
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      column-format: "`%s`"
