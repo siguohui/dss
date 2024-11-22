@@ -15,6 +15,7 @@
     <modules>
         <module>dynamicDatasource</module>
         <module>mulDatasource</module>
+        <module>rddb</module>
     </modules>
 
 </project>

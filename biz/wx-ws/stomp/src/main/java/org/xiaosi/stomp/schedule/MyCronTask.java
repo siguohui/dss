@@ -82,7 +82,9 @@ public class MyCronTask {
         String messageTemplate = getLoveMsgTemp();
 
         // 获取推送数据
-        DailyPush dailyPush = dailyPushService.getDailyPushData(loveConfig.getDay(), loveConfig.getGirlBirthday(), loveConfig.getBoyBirthday());
+//        DailyPush dailyPush = dailyPushService.getDailyPushData(loveConfig.getDay(), loveConfig.getGirlBirthday(), loveConfig.getBoyBirthday());
+
+        DailyPush dailyPush = new DailyPush();
         dailyPush.setSzzs(szzs);
         // 填充消息模板
         Map<String, String> objectFieldValueMap = KcacoUtil.getObjectFieldValueMap(DailyPush.class, dailyPush);
