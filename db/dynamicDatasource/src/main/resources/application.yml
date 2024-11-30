@@ -1,3 +1,5 @@
+server:
+  port: 8000
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -28,3 +30,31 @@ spring:
       test-on-return: false
       pool-prepared-statements: false
       connection-properties: false
+mybatis-plus:
+  configuration:
+    cache-enabled: false #开启二级缓存
+    #开启sql日志
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    map-underscore-to-camel-case: true
+    # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
+    jdbc-type-for-null: 'null'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #实体类所在包
+  type-aliases-package: com.xiaosi.wx.entity
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:mapper/**.xml,classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      #id自增类型配置
+      id-type: ASSIGN_ID
+      #逻辑删除字段配置
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+    #控制台mybatis-plus标记
+    banner: true
+  check-config-location: true # 检查xml是否存在
+  type-enums-package: com.xiaosi.wx.enums  #通用枚举开启

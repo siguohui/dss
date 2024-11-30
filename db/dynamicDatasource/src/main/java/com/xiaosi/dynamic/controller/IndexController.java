@@ -1,12 +1,10 @@
 package com.xiaosi.dynamic.controller;
 
-import com.xiaosi.dynamic.annotation.DS;
+import com.google.common.collect.Lists;
 import com.xiaosi.dynamic.entity.Stu;
-import com.xiaosi.dynamic.config.DataSourceContextHolder;
-import com.xiaosi.dynamic.mapper.StuMapper;
+import com.xiaosi.dynamic.service.StuService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,14 +13,17 @@ import java.util.List;
 public class IndexController {
 
     @Resource
-    private StuMapper stuMapper;
+    private StuService stuService;
 
-    @DS("slave1")
     @GetMapping("/index")
     public List<Stu> getMasterData(){
-//        DataSourceContextHolder.setDataSource(datasourceName);
-        List<Stu> list = stuMapper.selectList(null);
-        DataSourceContextHolder.removeDataSource();
+//      DataSourceContextHolder.setDataSource(datasourceName);
+        List<Stu> list = Lists.newArrayList();
+        list.add(Stu.build(1L,50, null));
+        list.add(Stu.build(2L,50, null));
+        list.add(Stu.build(3L,50, null));
+        list.add(Stu.build(4L,50, null));
+        stuService.updateBatchById(list);
         return list;
     }
 }

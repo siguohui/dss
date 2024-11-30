@@ -55,7 +55,7 @@ public class DataSource1 {
     public SqlSessionFactory sqlSessionFactory1(@Qualifier("db1DataSource") DataSource dataSource) throws Exception {
 //        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 //        bean.setDataSource(dataSource);
-//        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/db1/*.xml"));
+//        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/db1/*.xml"));
 //        return bean.getObject();
         MybatisSqlSessionFactoryBean mybatisSqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         mybatisSqlSessionFactoryBean.setDataSource(dataSource);

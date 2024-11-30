@@ -1,16 +1,14 @@
 package com.xiaosi.rd.entity;
 
-import jakarta.persistence.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
 
-@Entity
 @Data
-@Table(name = "user")
 public class User implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 }
