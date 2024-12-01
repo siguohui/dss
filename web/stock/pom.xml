@@ -3,20 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xiaosi</groupId>
-        <artifactId>dss</artifactId>
-        <version>${revision}</version>
+        <artifactId>web</artifactId>
+        <version>2.0</version>
     </parent>
 
-    <artifactId>db</artifactId>
-    <packaging>pom</packaging>
-    <version>${revision}</version>
+    <artifactId>stock</artifactId>
+    <packaging>jar</packaging>
 
-    <name>db</name>
+    <name>stock</name>
     <url>http://maven.apache.org</url>
-    <modules>
-        <module>dynamicDatasource</module>
-        <module>mulDatasource</module>
-        <module>rddb</module>
-    </modules>
 
 </project>
