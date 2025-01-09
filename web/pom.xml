@@ -15,6 +15,7 @@
     <modules>
         <module>html</module>
         <module>stock</module>
+        <module>designPattern</module>
     </modules>
 
 </project>

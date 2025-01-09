@@ -6,6 +6,7 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -39,6 +40,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,16 +69,14 @@ public class MyCronTask {
 //        String sz = getShSz();
         String szzs = split.get(1);
         BigDecimal decimal = new BigDecimal(szzs);
-        if(decimal.compareTo(new BigDecimal("3360")) > -1){
-            pushMsgWx(szzs);
-        }
-
+//        if(decimal.compareTo(new BigDecimal("3360")) > -1){
+//            pushMsgWx(szzs);
+//        }
         String fromUser="oKIee6K9bDb7hT-Q8SNnAXnx3rfo";
         String touser="gh_38e9b4eba3d2";
         redisUtil.set("sz",decimal);
         log.info(sz);
         simpMessagingTemplate.convertAndSend("/topic/sz",sz);
-
     }
 
     public void pushMsgWx(String szzs) {
@@ -247,5 +249,14 @@ public class MyCronTask {
         String text = webElement.getText();
         webDriver.quit();
         return text;
+    }
+
+    @SneakyThrows
+    @Test
+    public void mytest1(){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<String> future = executorService.submit(() -> "三友");
+        System.out.println(future.get());
+        executorService.shutdown();
     }
 }
