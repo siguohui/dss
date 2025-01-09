@@ -56,7 +56,7 @@ public class IndexController {
     @SneakyThrows
     @PostMapping("/upload")
     public Result<FileInfo> upload(@RequestPart MultipartFile image){
-        FileInfo file = FileUtils.upload(image);
+        FileInfo file = FileUtils.uploadImage(image);
         fileInfoRepository.save(file);
         return Result.success(file);
     }

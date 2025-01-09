@@ -1,5 +1,13 @@
-
+static:
+  prefix: http://117.72.71.62:7001/static/
 spring:
+  mvc:
+    static-path-pattern: /static/**
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  web:
+    resources:
+      static-locations: classpath:/static
   servlet:
     multipart:
       max-file-size: 100MB
