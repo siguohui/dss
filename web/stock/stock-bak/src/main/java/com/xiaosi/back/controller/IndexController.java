@@ -5,8 +5,10 @@ import com.xiaosi.back.entity.FileInfo;
 import com.xiaosi.back.entity.Result;
 import com.xiaosi.back.entity.Stock;
 import com.xiaosi.back.entity.User;
+import com.xiaosi.back.mapper.FileInfoMapper;
 import com.xiaosi.back.mapper.StockMapper;
 import com.xiaosi.back.repository.FileInfoRepository;
+import com.xiaosi.back.repository.UserRepository;
 import com.xiaosi.back.service.StockService;
 import com.xiaosi.back.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ public class IndexController {
     private final StockMapper stockMapper;
     private final StockService stockService;
     private final FileInfoRepository fileInfoRepository;
+    private final FileInfoMapper fileInfoMapper;
+    private final UserRepository userRepository;
 
     @Transactional(rollbackFor = Exception.class)
     @GetMapping("/index")
@@ -61,4 +65,31 @@ public class IndexController {
         return Result.success(file);
     }
 
+    @GetMapping("/image/list")
+    public Result<List<FileInfo>> getList(){
+        List<FileInfo> list = fileInfoRepository.findAll();
+//        List<FileInfo> list = fileInfoMapper.selectList(null);
+        return Result.success(list);
+    }
+
+    @DeleteMapping("/image/del/{id}")
+    public Result del(@PathVariable("id") Long id){
+        fileInfoRepository.deleteById(id);
+        return Result.success(null);
+    }
+
+    @GetMapping("/add")
+    public String addUser(){
+        User user = new User();
+        user.setUsername("admin");
+        user.setPassword("123456");
+        userRepository.save(user);
+        return "success";
+    }
+
+    @GetMapping("/del")
+    public String delUser(){
+        userRepository.logicDelete(1L);
+        return "success";
+    }
 }
