@@ -32,6 +32,18 @@ spring:
     url: jdbc:kingbase8://localhost:54321/db1?currentSchema=sgh&rewriteBatchedStatements=true
     username: sgh
     password: 123456
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 123456
+      timeout: 10000
+      lettuce:
+          pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
 
 # mybatis-plus
 mybatis-plus:
