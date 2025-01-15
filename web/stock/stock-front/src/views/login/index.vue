@@ -1,13 +1,13 @@
 <script setup>
 import { post, get, del } from '@/utils/request';
-import {onMounted,reactive} from 'vue'
+import {onMounted,reactive,ref} from 'vue'
 import {ElMessage} from "element-plus";
+import LoginForm from './LoginForm.vue'
 // onMounted(async () => {
 //   console.log('挂载完毕');
 //   const {data} = await get('/image/list', {page: 1, size: 10});
 //   console.log(data);
 // });
-
 const state = reactive({
   tableData: {
     data: [],
@@ -19,7 +19,7 @@ const state = reactive({
 });
 
 const deleteFile =  async (id) => {
-  const {code} = await del('/image/del/' + id);
+  await del('/image/del/' + id);
   ElMessage.success('删除成功');
   const {data} = await get('/image/list');
   state.tableData.data = data;
@@ -46,6 +46,10 @@ onMounted(() => {
   getTableData();
 })
 
+const openForm = (type, id) => {
+  formRef.value.open(type, id)
+}
+
 const tableRowClassName = ({rowIndex}) => {
   if (rowIndex === 1) {
     return 'warning-row'
@@ -54,9 +58,20 @@ const tableRowClassName = ({rowIndex}) => {
   }
   return ''
 }
+/** 添加/修改操作 */
+const formRef = ref()
+const sectionRef = ref()
+let height = 100;
+
+const higherAction = () => {
+  height += 50;
+  sectionRef.value.style = `height: ${height}px`;
+}
 </script>
 
 <template>
+  <div ref="sectionRef" class="ref-section"></div>
+  <button @click="higherAction" class="btn">变高</button>
   <el-table :data="state.tableData.data"
             v-loading="state.tableData.loading"
             stripe border style="width: 1500px" :row-class-name="tableRowClassName">
@@ -86,10 +101,20 @@ const tableRowClassName = ({rowIndex}) => {
     <el-table-column label="操作" width="200">
       <template #default="scope">
         <el-button  size="small" @click="editUser(scope.row)">编辑</el-button>
+        <el-button
+            link
+            size="small"
+            type="primary"
+            @click="openForm('update', scope.row.id)"
+            v-hasPermi="['system:dept:update']"
+        >
+          修改
+        </el-button>
         <el-button  size="small" @click="deleteFile(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
+  <LoginForm ref="formRef" />
 </template>
 
 <style scoped>
