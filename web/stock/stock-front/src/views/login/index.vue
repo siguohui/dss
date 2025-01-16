@@ -23,7 +23,6 @@ const deleteFile =  async (id) => {
   ElMessage.success('删除成功');
   const {data} = await get('/image/list');
   state.tableData.data = data;
-
 }
 
 const editUser = (row) => {
