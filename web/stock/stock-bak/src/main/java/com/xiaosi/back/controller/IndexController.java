@@ -61,7 +61,8 @@ public class IndexController {
     @PostMapping("/upload")
     public Result<FileInfo> upload(@RequestPart MultipartFile image){
         FileInfo file = FileUtils.uploadImage(image);
-        fileInfoRepository.save(file);
+//        fileInfoRepository.save(file);
+        fileInfoMapper.insert(file);
         return Result.success(file);
     }
 

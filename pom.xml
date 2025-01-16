@@ -23,6 +23,7 @@
       <module>biz/oracle</module>
       <module>db</module>
       <module>web</module>
+      <module>learn/lock</module>
   </modules>
 
   <properties>

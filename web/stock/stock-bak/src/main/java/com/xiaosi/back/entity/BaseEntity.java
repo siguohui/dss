@@ -1,5 +1,9 @@
 package com.xiaosi.back.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -7,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.xiaosi.back.common.CommonConstant;
+import com.xiaosi.back.config.MetaObjectHandler;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.SoftDelete;
@@ -27,15 +32,25 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static final String CREATE_BY_FIELD = "create_by";
+    private static final String CREATE_TIME_FIELD = "create_time";
+    private static final String UPDATE_BY_FIELD = "update_by";
+    private static final String UPDATE_TIME_FIELD = "update_time";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
+//    @Schema(description = "创建者")
     @CreatedBy
     @Column(name = "create_by", nullable = false, updatable = false)
+    @TableField(value = CREATE_BY_FIELD, fill = FieldFill.INSERT)
     @JsonIgnore
     private Long createBy; //创建人
 
+//    @Schema(description = "创建时间")
+    @TableField(value = CREATE_TIME_FIELD, fill = FieldFill.INSERT)
     @CreatedDate
     @Column(name = "create_time", nullable = false, updatable = false)
     @JsonIgnore
@@ -45,11 +60,15 @@ public abstract class BaseEntity implements Serializable {
 //    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;  //创建时间
 
+//    @Schema(description = "更新者")
+    @TableField(value = UPDATE_BY_FIELD,fill = FieldFill.INSERT_UPDATE, select = false)
     @LastModifiedBy
     @Column(name = "update_by", nullable = false)
     @JsonIgnore
     private Long updateBy;  //更新人
 
+//    @Schema(description = "更新时间")
+    @TableField(value = UPDATE_TIME_FIELD, fill = FieldFill.INSERT_UPDATE, select = false)
     @LastModifiedDate
     @Column(name = "update_time", nullable = false)
     @JsonIgnore
