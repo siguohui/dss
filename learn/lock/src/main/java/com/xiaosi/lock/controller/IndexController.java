@@ -19,7 +19,7 @@ public class IndexController {
     public ResponseEntity<?> processOrder(@PathVariable String userId) {
         try {
             orderService.processOrder(userId);
-            return ResponseEntity.ok("Order processed successfully");
+            return ResponseEntity.ok("success");
         } catch (LockFailureException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Failed to acquire lock");
         } catch (InterruptedException e) {

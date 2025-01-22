@@ -1,4 +1,9 @@
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&useAffectedRows=true
+    username: root
+    password: root
   data:
     redis:
         database: 0
@@ -21,3 +26,32 @@ lock4j:
   acquire-timeout: 5000
   expire: 5000
   primary-executor: com.baomidou.lock.executor.RedisTemplateLockExecutor
+# mybatis-plus
+mybatis-plus:
+  configuration:
+    cache-enabled: true #开启二级缓存
+    #开启sql日志
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    map-underscore-to-camel-case: true
+    # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
+    jdbc-type-for-null: 'null'
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #实体类所在包
+  type-aliases-package: com.xiaosi.lock.entity
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:mapper/**.xml,classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      #id自增类型配置
+      id-type: ASSIGN_ID
+      #逻辑删除字段配置
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+      column-format: "`%s`"
+    #控制台mybatis-plus标记
+    banner: true
+  check-config-location: true # 检查xml是否存在
