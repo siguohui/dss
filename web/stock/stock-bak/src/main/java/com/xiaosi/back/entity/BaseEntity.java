@@ -89,5 +89,6 @@ public abstract class BaseEntity implements Serializable {
     // 版本号（用于乐观锁， 默认为 1）
     @Basic
     @Column(name = "version")
+    @Version
     protected Integer version;
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.experimental.Tolerate;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 @Data
 @Entity
 @Builder
+@Accessors(chain = true)
 @Table(schema = "sgh",name = "stock")
 public class Stock implements Serializable {
 

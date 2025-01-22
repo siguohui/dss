@@ -29,7 +29,7 @@ spring:
   # datasource
   datasource:
     driver-class-name: com.kingbase8.Driver
-    url: jdbc:kingbase8://localhost:54321/db1?currentSchema=sgh&rewriteBatchedStatements=true
+    url: jdbc:kingbase8://localhost:54321/db1?currentSchema=sgh&rewriteBatchedStatements=true&characterEncoding=UTF-8&client_encoding=utf8&serverTimezone=GMT%2B8
     username: sgh
     password: 123456
   data:

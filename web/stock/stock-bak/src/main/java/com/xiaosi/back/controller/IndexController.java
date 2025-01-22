@@ -1,14 +1,13 @@
 package com.xiaosi.back.controller;
 
 
-import com.xiaosi.back.entity.FileInfo;
-import com.xiaosi.back.entity.Result;
-import com.xiaosi.back.entity.Stock;
-import com.xiaosi.back.entity.User;
+import com.google.common.collect.Lists;
+import com.xiaosi.back.entity.*;
 import com.xiaosi.back.mapper.FileInfoMapper;
 import com.xiaosi.back.mapper.StockMapper;
 import com.xiaosi.back.repository.FileInfoRepository;
 import com.xiaosi.back.repository.UserRepository;
+import com.xiaosi.back.service.BankAccountService;
 import com.xiaosi.back.service.StockService;
 import com.xiaosi.back.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +29,8 @@ public class IndexController {
     private final FileInfoRepository fileInfoRepository;
     private final FileInfoMapper fileInfoMapper;
     private final UserRepository userRepository;
+    private final BankAccountService bankAccountService;
+
 
     @Transactional(rollbackFor = Exception.class)
     @GetMapping("/index")
@@ -92,5 +95,31 @@ public class IndexController {
     public String delUser(){
         userRepository.logicDelete(1L);
         return "success";
+    }
+
+    public static void main(String[] args) {
+        List<User> list = Lists.newArrayList();
+        list.add(User.of("张三","123456"));
+        list.add(User.of("李四","123456"));
+        list.add(User.of("张三","123456"));
+        list.add(User.of("王五","123456"));
+        list.add(User.of("刘六","123456"));
+        list.add(User.of("李四","123456"));
+
+        HashMap<String, String> collect1 = list.stream().collect(HashMap::new, (m, v) -> m.put(v.getUsername(), v.getPassword()), HashMap::putAll);
+
+        System.out.println(collect1);
+
+        Map<String, List<User>> collect = list.stream().collect(Collectors.groupingBy(User::getUsername));
+    }
+
+    @PutMapping("/{id}/deposit")
+    public BankAccount deposit(@PathVariable Long id, @RequestParam BigDecimal amount) throws InterruptedException {
+        return bankAccountService.deposit(id, amount);
+    }
+
+    @PutMapping("/{id}/deposit1")
+    public BankAccount deposit1(@PathVariable Long id, @RequestParam BigDecimal amount) {
+        return bankAccountService.deposit1(id, amount);
     }
 }
