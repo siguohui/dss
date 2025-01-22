@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -18,6 +19,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -133,12 +135,59 @@ public class MyCronTask {
         return split.get(0);
     }
 
+    @Test
+    public void mysend() {
+        WebDriver webDriver = getWebDriver();
+        webDriver.get("https://finance.sina.com.cn/realstock/company/sh000001/nc.shtml");
+        String pageSource = webDriver.getPageSource();
+        webDriver.quit();
+        System.out.println(pageSource);
+    }
+
     public static void main(String[] args) throws IOException {
         try (WebClient webClient = getWebClient()) {
             HtmlPage page = webClient.getPage("https://finance.sina.com.cn/realstock/company/sh000001/nc.shtml");
-            HtmlElement body = page.getBody();
-            System.out.println(body);
+
         }
+
+        // 屏蔽HtmlUnit等系统 log
+        LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log","org.apache.commons.logging.impl.NoOpLog");
+        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
+        java.util.logging.Logger.getLogger("org.apache.http.client").setLevel(Level.OFF);
+
+        String url = "https://quote.eastmoney.com/zs000001.html";
+        System.out.println("Loading page now-----------------------------------------------: "+url);
+
+        // HtmlUnit 模拟浏览器
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setJavaScriptEnabled(true);              // 启用JS解释器，默认为true
+        webClient.getOptions().setCssEnabled(false);                    // 禁用css支持
+        webClient.getOptions().setThrowExceptionOnScriptError(false);   // js运行错误时，是否抛出异常
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setTimeout(10 * 1000);                   // 设置连接超时时间
+        HtmlPage page = webClient.getPage(url);
+        webClient.waitForBackgroundJavaScript(30 * 1000);               // 等待js后台执行30秒
+
+        String pageAsXml = page.asXml();
+
+        // Jsoup解析处理
+        Document doc = Jsoup.parse(pageAsXml, "https://quote.eastmoney.com/zs000001.html");
+//        Elements pngs = doc.select("img[src$=.png]");                   // 获取所有图片元素集
+        // 此处省略其他操作
+        System.out.println(doc.toString());
+    }
+
+    @Test
+    public void joupTest() throws IOException {
+//        Document doc = Jsoup.connect("https://finance.sina.com.cn/realstock/company/sh000001/nc.shtml").get();
+//        String title = doc.html();
+//        System.out.println("Title is: " + title);
+
+
+        WebDriver webDriver = getWebDriver();
+        webDriver.get("https://finance.sina.com.cn/realstock/company/sh000001/nc.shtml");
+        String pageSource = webDriver.getTitle();
+        System.out.println(pageSource);
     }
 
 //    public static void main(String[] args) {
